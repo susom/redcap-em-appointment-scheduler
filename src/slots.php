@@ -15,13 +15,22 @@ if(isset($_GET['date'])){
              * Get first array element
              */
             $slot = array_pop(array_reverse($record));
+
+            /**
+             * get appointment type
+             */
+            $typeText = $module->getTypeText($slot['type']);
+
+
             ?>
             <button type="button"
                     data-record-id="<?php echo $slot['record_id'] ?>" <?php echo $slot['booked'] ? 'disabled' : '' ?>
                     data-date="<?php echo date('Ymd', strtotime($slot['start'])) ?>"
                     data-start="<?php echo date('Hi', strtotime($slot['start'])) ?>"
                     data-end="<?php echo date('Hi', strtotime($slot['end'])) ?>"
-                    class="time-slot btn btn-block <?php echo $slot['booked'] ? 'disabled btn-secondary' : 'btn-success' ?>"><?php echo date('H:i',
+                    data-modal-title="<?php echo date('H:i',
+                        strtotime($slot['start'])) ?> – <?php echo date('H:i', strtotime($slot['end'])) ?>"
+                    class="time-slot btn btn-block <?php echo $slot['booked'] ? 'disabled btn-secondary' : 'btn-success' ?>"><?php echo $typeText . '<br>' . date('H:i',
                     strtotime($slot['start'])) ?> – <?php echo date('H:i', strtotime($slot['end'])) ?></button>
             <?php
         }

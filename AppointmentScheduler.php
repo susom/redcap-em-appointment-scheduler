@@ -17,7 +17,17 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 
 use Twilio\Rest\Client;
 
+/**
+ * Constants where appointment  is located
+ */
+define('CAMPUS_AND_VIRTUAL', 0);
+define('VIRTUAL_ONLY', 1);
+define('CAMPUS_ONLY', 2);
 
+
+define('CAMPUS_AND_VIRTUAL_TEXT', 'Redwood City Campus , or Virtual via Zoom Meeting.');
+define('VIRTUAL_ONLY_TEXT', 'Virtual via Zoom Meeting.');
+define('CAMPUS_ONLY_TEXT', 'Redwood City Campus');
 /**
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
@@ -215,7 +225,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
 
-    public function getMonthSummary($event_id)
+    public function getCurrentMonthSlots($event_id)
     {
         try {
             if ($event_id) {
@@ -335,5 +345,24 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $data['booked'] = "1";
 
         return $data;
+    }
+
+    /**
+     * @param $type
+     * @return string
+     */
+    public function getTypeText($type)
+    {
+        switch ($type) {
+            case VIRTUAL_ONLY:
+                $typeText = VIRTUAL_ONLY_TEXT;
+                break;
+            case CAMPUS_ONLY:
+                $typeText = CAMPUS_ONLY_TEXT;
+                break;
+            default:
+                $typeText = CAMPUS_AND_VIRTUAL_TEXT;
+        }
+        return $typeText;
     }
 }

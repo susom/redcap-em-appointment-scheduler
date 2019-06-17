@@ -17,73 +17,24 @@ $types = $module->getInstances();
 <?php
 foreach ($types as $key => $type){
     ?>
-    <div class="row">
-        <a class="type" data-key="<?php echo $key ?>" href="javascript:;" data-url="<?php echo $url . '&config=' . $key . '&event_id=' . $type['event_id']?>"><div class="btn btn-block btn-info"><?php echo $type['title']?></div></a>
+    <div class="row  p-3 mb-2">
+        <a class="type" data-key="<?php echo $type['event_id'] ?>" href="javascript:;"
+           data-url="<?php echo $url . '&config=' . $key . '&event_id=' . $type['event_id'] ?>">
+            <div class="btn btn-block btn-info"><?php echo $type['title'] ?></div>
+        </a>
     </div>
     <div class="row">
-        <div id="<?php echo $key ?>-calendar"></div>
+        <div class="slots-container" id="<?php echo $type['event_id'] ?>-calendar" style="width: 100%;"></div>
     </div>
-    <hr/>
     <?php
 }
 ?>
 </div>
-<script>
-    var record = {};
-    /**
-     * Show Form to complete for selected time
-     */
-    jQuery(document).on('click', '.type', function(){
-        var url = jQuery(this).data('url');
-        var key = jQuery(this).data('key');
 
-        jQuery.ajax({
-            'url' : url,
-            'type' : 'GET',
-            'success' : function(data) {
-                jQuery("#" + key + "-calendar").html(data);
+    <!-- LOAD JS -->
+    <script src="<?php echo $module->getUrl('src/js/types.js') ?>"></script>
 
-                setTimeout(function () {
-                    populateMonthSummary();
-                }, 100);
-            },
-            'error' : function(request,error)
-            {
-                alert("Request: "+JSON.stringify(request));
-            }
-        });
-    });
-
-
-    function populateMonthSummary() {
-        setTimeout(function () {
-            var url = jQuery("#summary-url").val();
-            jQuery.ajax({
-                'url': url + '&event_id=' + jQuery("#event-id").val(),
-                'type': 'GET',
-                'success': function (response) {
-                    response = JSON.parse(response);
-
-                    jQuery(".ui-datepicker-calendar td").each(function (index, item) {
-                        var day = jQuery(this).text();
-                        if (response[day] != undefined) {
-                            /**
-                             * if date has open time slots
-                             */
-                            if (response[day].available != undefined) {
-                                jQuery(this).find("a").attr('data-content', response[day].availableText);
-                            } else {
-                                jQuery(this).find("a").attr('data-content', "All slots are booked for this date");
-                            }
-                            jQuery(this).find("a").toggleClass('changed');
-                        }
-                    });
-                },
-                'error': function (request, error) {
-                    alert("Request: " + JSON.stringify(request));
-                }
-            });
-
-        }, 0)
-    }
-</script>
+    <!-- LOAD MODALS -->
+    <?php
+require_once 'models.php';
+?>

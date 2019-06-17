@@ -23,7 +23,8 @@
     "src/calendar",
     "src/slots",
     "src/summary",
-    "src/book"
+    "src/book",
+    "src/list"
   ],
   "links": {
     "project": [
@@ -52,9 +53,15 @@
         "show-header-and-footer" : false
       },
       {
-        "name": "Book Appointment",
+        "name": "Date Summary",
         "icon": "brick",
         "url": "src/summary.php",
+        "show-header-and-footer": false
+      },
+      {
+        "name": "List View",
+        "icon": "brick",
+        "url": "src/list.php",
         "show-header-and-footer": false
       }
     ]
