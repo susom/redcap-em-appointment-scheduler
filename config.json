@@ -22,6 +22,7 @@
     "src/types",
     "src/calendar",
     "src/slots",
+    "src/summary",
     "src/book"
   ],
   "links": {
@@ -30,7 +31,7 @@
         "name": "Appointment Scheduler",
         "icon": "brick",
         "url": "src/types.php",
-        "show-header-and-footer" : true
+        "show-header-and-footer": false
       },
       {
         "name": "Appointment Slots",
@@ -49,6 +50,12 @@
         "icon": "brick",
         "url": "src/book.php",
         "show-header-and-footer" : false
+      },
+      {
+        "name": "Book Appointment",
+        "icon": "brick",
+        "url": "src/summary.php",
+        "show-header-and-footer": false
       }
     ]
   },

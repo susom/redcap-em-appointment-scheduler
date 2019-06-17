@@ -1,4 +1,33 @@
-<div class=" col-md-4">
+<style>
+
+    .date-picker-2, .ui-datepicker {
+        width: 100%; /*what ever width you want*/
+    }
+
+    .ui-datepicker .weekend .ui-state-default {
+        background: #FEA;
+    }
+
+
+    .ui-datepicker-next, .ui-datepicker-prev {
+        display: none;
+    }
+
+    .ui-state-default, .ui-datepicker td {
+        min-height: 150px;
+        max-width: 150px;
+        width: 128px;
+    }
+
+    .ui-datepicker td a.changed:after {
+        content: attr(data-content);
+        display: block;
+        text-align: center;
+        font-size: small;
+        font-weight: bold;
+    }
+</style>
+<div class="container">
     <div  class="date-picker-2" data-toggle="popover" data-html="true" data-content="" placeholder="Recipient's username" id="ttry" aria-describedby="basic-addon2"></div>
     <span class="" id="example-popover-2"></span>
 </div>
@@ -85,6 +114,8 @@
 <input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', TRUE, TRUE) ?>" class="hidden"/>
 <input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', TRUE, TRUE) ?>" class="hidden"/>
 <input type="hidden" id="book-submit-url" value="<?php echo $module->getUrl('src/book.php', FALSE, TRUE) ?>" class="hidden"/>
+<input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', true, true) ?>"
+       class="hidden"/>
 <input type="hidden" id="event-id" value="<?php echo filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT) ?>" class="hidden"/>
 <script>
 
@@ -93,6 +124,12 @@
      * Show list of all available time slots
      */
     jQuery(".date-picker-2").datepicker({
+        //numberOfMonths: [4,3],
+        changeMonth: false,
+        changeYear: false,
+        duration: 'fast',
+        stepMonths: 0,
+        beforeShowDay: $.datepicker.noWeekends,
         onSelect: function(dateText) {
             var url = jQuery("#slots-url").val();
             var event_id = jQuery("#event-id").val();
@@ -110,6 +147,9 @@
                 'error' : function(request,error)
                 {
                     alert("Request: "+JSON.stringify(request));
+                },
+                'complete': function () {
+                    populateMonthSummary();
                 }
             });
         },
@@ -173,4 +213,5 @@
             }
         });
     });
+
 </script>

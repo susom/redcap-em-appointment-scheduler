@@ -2,7 +2,6 @@
 
 namespace Stanford\AppointmentScheduler;
 
-use mysql_xdevapi\Exception;
 use REDcap;
 
 
@@ -161,7 +160,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * @param mixed $instances
+     * save $instances
      */
     public function setInstances()
     {
@@ -188,6 +187,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * Get available time slots for specific date
      * @param string $date
+     * @param int $event_id
      * @return array
      */
     public function getDateAvailableSlots($date, $event_id)
@@ -199,7 +199,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  * TODO Check if date within allowed window
                  */
                 $filter = "[start] > '" . date('Y-m-d', strtotime($date)) . "' AND " . "[start] < '" . date('Y-m-d',
-                        strtotime($date . ' + 1 DAY')) . "' AND [booked] = ''";
+                        strtotime($date . ' + 1 DAY')) . "'";
                 $param = array(
                     'filterLogic' => $filter,
                     'return_format' => 'array',
@@ -214,6 +214,30 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
     }
 
+
+    public function getMonthSummary($event_id)
+    {
+        try {
+            if ($event_id) {
+
+                /*
+                 * TODO Check if date within allowed window
+                 */
+                $filter = "[start] > '" . date('Y-m-d') . "' AND " . "[start] < '" . date('Y-m-d',
+                        strtotime('first day of next month')) . "'";
+                $param = array(
+                    'filterLogic' => $filter,
+                    'return_format' => 'array',
+                    'events' => REDCap::getEventNames(true, false, $event_id)
+                );
+                return REDCap::getData($param);
+            } else {
+                throw new \LogicException('Not event id passed, Aborting!');
+            }
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
+        }
+    }
 
     /**
      * @param array $user
@@ -247,8 +271,9 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * @param array $user
-     * @param array $message
+     * @param $user
+     * @param $message
+     * @throws \Twilio\Exceptions\TwilioException
      */
     private function sendTextMessage($user, $message)
     {
@@ -266,11 +291,15 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 $sql = sprintf("insert into redcap_user_received_text_messages (user_id, sender, receiver, message, created_at) values (" . UI_ID . ", '$result->from', '$result->to', '$result->body', " . time() . ")"
                 );
 
-                db_query($sql);
-            } else {
-                throw new \LogicException('Cant send message');
+                if (!db_query($sql)) {
+                    throw new \LogicException('cant save sent text message ');
+                }
+            } elseif ($result->errorCode) {
+                throw new \Twilio\Exceptions\TwilioException('Cant send message');
             }
         } catch (\LogicException $e) {
+            echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        } catch (\Twilio\Exceptions\TwilioException $e) {
             echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
         }
     }
@@ -281,7 +310,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     private function sendEmail($user)
     {
-
         $this->emailClient->setTo($user['email']);
         $this->emailClient->setFrom('ihabz@stanford.edu');
         $this->emailClient->setFromName('Ihab Zeedia');

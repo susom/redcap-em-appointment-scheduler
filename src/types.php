@@ -42,6 +42,10 @@ foreach ($types as $key => $type){
             'type' : 'GET',
             'success' : function(data) {
                 jQuery("#" + key + "-calendar").html(data);
+
+                setTimeout(function () {
+                    populateMonthSummary();
+                }, 100);
             },
             'error' : function(request,error)
             {
@@ -49,4 +53,37 @@ foreach ($types as $key => $type){
             }
         });
     });
+
+
+    function populateMonthSummary() {
+        setTimeout(function () {
+            var url = jQuery("#summary-url").val();
+            jQuery.ajax({
+                'url': url + '&event_id=' + jQuery("#event-id").val(),
+                'type': 'GET',
+                'success': function (response) {
+                    response = JSON.parse(response);
+
+                    jQuery(".ui-datepicker-calendar td").each(function (index, item) {
+                        var day = jQuery(this).text();
+                        if (response[day] != undefined) {
+                            /**
+                             * if date has open time slots
+                             */
+                            if (response[day].available != undefined) {
+                                jQuery(this).find("a").attr('data-content', response[day].availableText);
+                            } else {
+                                jQuery(this).find("a").attr('data-content', "All slots are booked for this date");
+                            }
+                            jQuery(this).find("a").toggleClass('changed');
+                        }
+                    });
+                },
+                'error': function (request, error) {
+                    alert("Request: " + JSON.stringify(request));
+                }
+            });
+
+        }, 0)
+    }
 </script>
