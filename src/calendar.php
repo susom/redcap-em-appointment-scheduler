@@ -15,7 +15,7 @@ $url = $module->getUrl('src/list.php', true, true);
 
     </div>
 
-    <div class="row p-3 mb-2">
+    <div class="row">
         <div class="date-picker-2" data-toggle="popover" data-html="true" data-content=""
              placeholder="Recipient's username" id="ttry" aria-describedby="basic-addon2"></div>
         <span class="" id="example-popover-2"></span>
