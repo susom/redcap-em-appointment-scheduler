@@ -17,7 +17,7 @@ $data = $module->getCurrentMonthSlots($eventId);
                 View</a>
         </div>
     </div>
-    <div class="row p-3 mb-2">
+    <div class="row ">
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Date (mm/dd/yyyy)</div>
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Location</div>
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Time (PDT)</div>
@@ -65,14 +65,14 @@ if (empty($data)) {
 
     foreach ($days as $key => $day) {
         ?>
-        <div class="row">
+        <div class="border row ">
             <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
                         strtotime($day['date'])) . '.)' ?></div>
-            <div class="  col-lg-9">
+            <div class=" col-lg-9">
                 <?php
                 foreach ($days[$key] as $record) {
                     ?>
-                    <div class="row">
+                    <div class="row border">
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location'] ?></div>
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo date('H:i',
                                 strtotime($record['start'])) ?> – <?php echo date('H:i',
