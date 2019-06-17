@@ -53,12 +53,9 @@ if (empty($data)) {
          */
         if ($slot['booked'] == '') {
             $days[$day][$slot['record_id']]['booked'] = false;
-
         } else {
-
             $days[$day][$slot['record_id']]['booked'] = true;
             $days[$day][$slot['record_id']]['notes'] = $slot['name'] . ' ' . $slot['notes'];
-
         }
     }
 
@@ -91,8 +88,8 @@ if (empty($data)) {
                                         data-start="<?php echo date('Hi', strtotime($record['start'])) ?>"
                                         data-end="<?php echo date('Hi', strtotime($record['end'])) ?>"
                                         data-modal-title="<?php echo date('H:i',
-                                            strtotime($slot['start'])) ?> – <?php echo date('H:i',
-                                            strtotime($slot['end'])) ?>"
+                                            strtotime($record['start'])) ?> – <?php echo date('H:i',
+                                            strtotime($record['end'])) ?>"
                                         class="time-slot btn btn-block btn-success">Book
                                 </button>
                                 <?php
