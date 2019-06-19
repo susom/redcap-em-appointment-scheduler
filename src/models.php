@@ -1,5 +1,5 @@
-<!-- Time Slots Modal -->
-<div class="modal" id="time-slots">
+<!-- Generic Modal -->
+<div class="modal" id="generic-modal">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -56,6 +56,29 @@
                         <label for="mobile">Mobile</label>
                         <input type="text" name="mobile" class="form-control" id="mobile"
                                placeholder="Mobile/Phone Number" required>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" name="private" type="checkbox" value="1" id="private">
+                        <label class="form-check-label" for="private">
+                            Private (wont show up in calendar for other users)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="private">How do you plan to attend the appointment?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="type" id="type-campus"
+                                   value="<?php echo CAMPUS_ONLY ?>" checked>
+                            <label class="form-check-label" for="type-campus">
+                                <?php echo CAMPUS_ONLY_TEXT ?>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="type" id="type-online"
+                                   value="<?php echo VIRTUAL_ONLY ?>">
+                            <label class="form-check-label" for="type-online">
+                                <?php echo VIRTUAL_ONLY_TEXT ?>
+                            </label>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="notes">Notes</label>

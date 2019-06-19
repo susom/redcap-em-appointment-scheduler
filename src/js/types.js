@@ -18,9 +18,6 @@ jQuery(document).on('click', '.type', function () {
         'success': function (data) {
             jQuery("#" + key + "-calendar").html(data);
 
-            setTimeout(function () {
-                populateMonthSummary();
-            }, 100);
         },
         'error': function (request, error) {
             alert("Request: " + JSON.stringify(request));
@@ -31,7 +28,7 @@ jQuery(document).on('click', '.type', function () {
 /**
  * Show list view
  */
-jQuery(document).on('click', '.list-view', function () {
+jQuery(document).on('click', '.calendar-view', function () {
     var url = jQuery(this).data('url');
     var key = jQuery(this).data('key');
     $(".date-picker-2").datepicker("destroy");
@@ -40,6 +37,9 @@ jQuery(document).on('click', '.list-view', function () {
         'type': 'GET',
         'success': function (data) {
             jQuery("#" + key + "-calendar").html(data);
+            setTimeout(function () {
+                populateMonthSummary();
+            }, 100);
         },
         'error': function (request, error) {
             alert("Request: " + JSON.stringify(request));
@@ -85,7 +85,8 @@ function populateMonthSummary() {
  * Show Form to complete for selected time
  */
 jQuery(document).on('click', '.time-slot', function () {
-    var record_id = jQuery(this).data('record-id');
+    record.record_id = jQuery(this).data('record-id');
+    record.event_id = jQuery(this).data('event-id');
     var dateText = jQuery(this).data('modal-title');
 
     /**
@@ -98,10 +99,10 @@ jQuery(document).on('click', '.time-slot', function () {
      */
     record.calendarDate = jQuery(this).data('date');
     jQuery("#selected-time").val(dateText);
-    jQuery("#record-id").val(record_id);
     jQuery('#booking').find('.modal-title').html('Book Time Slot for ' + dateText);
     $('#booking').modal('show');
-    $('#time-slots').modal('hide');
+    $('#generic-modal').modal('hide');
+    console.log(record);
 });
 
 
@@ -114,8 +115,9 @@ jQuery(document).on('click', '#submit-booking-form', function () {
     record.name = jQuery("#name").val();
     record.mobile = jQuery("#mobile").val();
     record.notes = jQuery("#notes").val();
-    record.record_id = jQuery("#record-id").val();
-    record.event_id = jQuery("#event-id").val();
+    record.private = jQuery("#private").val();
+    record.type = $("input[name='type']:checked").val();
+    record.date = record.calendarDate;
 
     var url = jQuery("#book-submit-url").val();
     jQuery.ajax({
@@ -141,7 +143,38 @@ jQuery(document).on('click', '#submit-booking-form', function () {
 /**
  * load calendar view by clicking on the main button and pass the appropriate key
  */
-jQuery(document).on('click', '.calendar-view', function () {
+jQuery(document).on('click', '.list-view', function () {
     var key = jQuery(this).data('key');
     jQuery('.type[data-key="' + key + '"]').get(0).click();
+
+});
+
+
+/**
+ * Get Manage modal to let user manage their saved appointments
+ */
+jQuery(document).on('click', '.manage', function () {
+    var url = jQuery("#manage-url").val();
+    if (email != '') {
+        jQuery.ajax({
+            url: url,
+            type: 'GET',
+            datatype: 'json',
+            success: function (data) {
+                jQuery('#generic-modal').find('.modal-title').html('Manage your appointments');
+                jQuery('#generic-modal').find('.modal-body').html(data);
+                $('#generic-modal').modal('show');
+
+                $('#myTabs a[href="#profile"]').tab('show')
+            },
+            error: function (request, error) {
+                alert("Request: " + JSON.stringify(request));
+            }
+        });
+    } else {
+        /**
+         * user not logged in refresh to force sign in
+         */
+        location.reload();
+    }
 });

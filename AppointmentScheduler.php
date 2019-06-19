@@ -6,6 +6,7 @@ use REDcap;
 
 
 include_once 'emLoggerTrait.php';
+include_once 'Participant.php';
 include_once 'CalendarEmail.php';
 
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
@@ -37,11 +38,13 @@ define('CAMPUS_ONLY_TEXT', 'Redwood City Campus');
  * @property int $eventId
  * @property array $eventInstance
  * @property array $calendarParams
+ * @property \Participant $participant
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
 
     use emLoggerTrait;
+    use Participant;
 
     /**
      * @var \CalendarEmail|null
@@ -340,9 +343,11 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $data['mobile'] = filter_var($_POST['mobile'], FILTER_SANITIZE_STRING);
         $data['notes'] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
         $data['record_id'] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
-        $event_id = filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT);
-        $data['redcap_event_name'] = REDCap::getEventNames(true, false, $event_id);
-        $data['booked'] = "1";
+        $data['private'] = filter_var($_POST['private'], FILTER_SANITIZE_NUMBER_INT);
+        $data['type'] = filter_var($_POST['type'], FILTER_SANITIZE_NUMBER_INT);
+        $data['project_id'] = filter_var($_GET['pid'], FILTER_SANITIZE_NUMBER_INT);
+        $data['event_id'] = filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT);
+        $data['date'] = date('Y-m-d', strtotime(filter_var($_POST['date'], FILTER_SANITIZE_NUMBER_INT)));
 
         return $data;
     }

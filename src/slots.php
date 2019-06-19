@@ -26,6 +26,7 @@ if(isset($_GET['date'])){
             <button type="button"
                     data-record-id="<?php echo $slot['record_id'] ?>" <?php echo $slot['booked'] ? 'disabled' : '' ?>
                     data-date="<?php echo date('Ymd', strtotime($slot['start'])) ?>"
+                    data-event-id="<?php echo $event_id ?>"
                     data-start="<?php echo date('Hi', strtotime($slot['start'])) ?>"
                     data-end="<?php echo date('Hi', strtotime($slot['end'])) ?>"
                     data-modal-title="<?php echo date('H:i',

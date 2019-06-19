@@ -7,13 +7,15 @@ namespace Stanford\AppointmentScheduler;
 
 $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $data = $module->getCurrentMonthSlots($eventId);
+$url = $module->getUrl('src/calendar.php', true, true);
 
 ?>
 
 
     <div class="row p-3 mb-2">
         <div class="col text-right">
-            <a class="btn btn-danger calendar-view" data-key="<?php echo $eventId ?>" href="javascript:;" role="button">Calendar
+            <a class="btn btn-danger calendar-view" data-key="<?php echo $eventId ?>" href="javascript:;"
+               data-url="<?php echo $url . '&event_id=' . $eventId ?>" role="button">Calendar
                 View</a>
         </div>
     </div>
@@ -47,15 +49,18 @@ if (empty($data)) {
         $days[$day][$slot['record_id']]['date'] = date('Y-m-d', strtotime($slot['start']));
         $days[$day][$slot['record_id']]['start'] = date('H:i', strtotime($slot['start']));
         $days[$day][$slot['record_id']]['end'] = date('H:i', strtotime($slot['end']));
-        $days[$day][$slot['record_id']]['location'] = $module->getTypeText($slot['type']);;
+        $days[$day][$slot['record_id']]['location'] = $slot['location'];
+        $days[$day][$slot['record_id']]['number_of_participants'] = $slot['number_of_participants'];
+        $days[$day][$slot['record_id']]['booked_slots'] = $module->getSlotActualCountReservedSpots($slot['record_id']);
         /**
-         * if we have available slots on that day
+         * check if we have slots available
          */
-        if ($slot['booked'] == '') {
+        if ($days[$day][$slot['record_id']]['number_of_participants'] > $days[$day][$slot['record_id']]['booked_slots']) {
             $days[$day][$slot['record_id']]['booked'] = false;
+            $days[$day][$slot['record_id']]['available'] = $days[$day][$slot['record_id']]['number_of_participants'] - $days[$day][$slot['record_id']]['booked_slots'];
         } else {
             $days[$day][$slot['record_id']]['booked'] = true;
-            $days[$day][$slot['record_id']]['notes'] = $slot['name'] . ' ' . $slot['notes'];
+            $days[$day][$slot['record_id']]['notes'] = 'No available spots <br>\\TODO WHAT DO DISPLAY HERE!';
         }
     }
 
@@ -70,7 +75,7 @@ if (empty($data)) {
                         strtotime($day['date'])) . '.)' ?></div>
             <div class=" col-lg-9">
                 <?php
-                foreach ($days[$key] as $record) {
+                foreach ($days[$key] as $record_id => $record) {
                     ?>
                     <div class="row border">
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location'] ?></div>
@@ -83,7 +88,8 @@ if (empty($data)) {
                             } else {
                                 ?>
                                 <button type="button"
-                                        data-record-id="<?php echo $record['record_id'] ?>"
+                                        data-record-id="<?php echo $record_id ?>"
+                                        data-event-id="<?php echo $eventId ?>"
                                         data-date="<?php echo date('Ymd', strtotime($record['start'])) ?>"
                                         data-start="<?php echo date('Hi', strtotime($record['start'])) ?>"
                                         data-end="<?php echo date('Hi', strtotime($record['end'])) ?>"
@@ -92,6 +98,7 @@ if (empty($data)) {
                                             strtotime($record['end'])) ?>"
                                         class="time-slot btn btn-block btn-success">Book
                                 </button>
+                                <small>* (<?php echo $record['available'] ?>) seats is still available</small>
                                 <?php
                             }
                             ?></div>

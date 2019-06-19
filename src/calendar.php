@@ -25,15 +25,5 @@ $url = $module->getUrl('src/list.php', true, true);
 <input type="hidden" name="selected-date" id="selected-date"/>
 <input type="hidden" name="selected-time" id="selected-time"/>
 
-<input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', TRUE, TRUE) ?>" class="hidden"/>
-<input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', TRUE, TRUE) ?>" class="hidden"/>
-<input type="hidden" id="book-submit-url" value="<?php echo $module->getUrl('src/book.php', FALSE, TRUE) ?>" class="hidden"/>
-<input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', true, true) ?>"
-       class="hidden"/>
-<input type="hidden" id="list-view-url" value="<?php echo $module->getUrl('src/list.php', true, true) ?>"
-       class="hidden"/>
-<input type="hidden" id="event-id" value="<?php echo $eventId ?>" class="hidden"/>
-
-
 <!-- LOAD JS -->
 <script src="<?php echo $module->getUrl('src/js/calendar.js') ?>"></script>

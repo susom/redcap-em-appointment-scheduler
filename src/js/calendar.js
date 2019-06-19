@@ -17,11 +17,10 @@ jQuery(".date-picker-2").datepicker({
             'url': url + "&date=" + dateText + "&event_id=" + event_id,
             'type': 'GET',
             'success': function (data) {
-                var html = data;
                 jQuery("#selected-date").val(dateText);
-                jQuery('#time-slots').find('.modal-title').html('Available Time Slots for ' + dateText);
-                jQuery('#time-slots').find('.modal-body').html(html);
-                $('#time-slots').modal('show');
+                jQuery('#generic-modal').find('.modal-title').html('Available Time Slots for ' + dateText);
+                jQuery('#generic-modal').find('.modal-body').html(data);
+                $('#generic-modal').modal('show');
             },
             'error': function (request, error) {
                 alert("Request: " + JSON.stringify(request));

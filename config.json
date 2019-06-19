@@ -24,6 +24,8 @@
     "src/slots",
     "src/summary",
     "src/book",
+    "src/manage",
+    "src/cancel",
     "src/list"
   ],
   "links": {
@@ -62,6 +64,18 @@
         "name": "List View",
         "icon": "brick",
         "url": "src/list.php",
+        "show-header-and-footer": false
+      },
+      {
+        "name": "Manage View",
+        "icon": "brick",
+        "url": "src/manage.php",
+        "show-header-and-footer": false
+      },
+      {
+        "name": "Cancel Appointment View",
+        "icon": "brick",
+        "url": "src/cancel.php",
         "show-header-and-footer": false
       }
     ]
