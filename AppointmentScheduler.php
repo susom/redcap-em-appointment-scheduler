@@ -25,20 +25,25 @@ define('CAMPUS_AND_VIRTUAL', 0);
 define('VIRTUAL_ONLY', 1);
 define('CAMPUS_ONLY', 2);
 
-
+/**
+ * Constants for appointment location text
+ */
 define('CAMPUS_AND_VIRTUAL_TEXT', 'Redwood City Campus , or Virtual via Zoom Meeting.');
 define('VIRTUAL_ONLY_TEXT', 'Virtual via Zoom Meeting.');
 define('CAMPUS_ONLY_TEXT', 'Redwood City Campus');
 
 
 /**
- * definition for participation statuses
+ * Constants for participation statuses
  */
 define('AVAILABLE', 0);
 define('RESERVED', 1);
 define('CANCELED', 2);
 define('NO_SHOW', 3);
 
+/**
+ * Constants for statuses  text
+ */
 define('AVAILABLE_TEXT', 'Available');
 define('RESERVED_TEXT', 'Reserved');
 define('CANCELED_TEXT', 'Canceled');
@@ -57,6 +62,7 @@ define('NO_SHOW_TEXT', 'No_Show');
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
+
 
     use emLoggerTrait;
     use Participant;
@@ -97,6 +103,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     public function __construct()
     {
         try {
+
             parent::__construct();
 
             /**
@@ -195,6 +202,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $this->instances = $this->getSubSettings('instance');;
     }
 
+    /**
+     * @param int $configId
+     * @return mixed
+     */
     public function getSlots($configId)
     {
         $types = $this->getInstances();

@@ -35,10 +35,10 @@ jQuery(document).on('click', '.reschedule-slot', function () {
     slot.start = jQuery(this).data('start');
     slot.end = jQuery(this).data('end');
     slot.instructor = jQuery(this).data('instructor');
+    slot.location = jQuery(this).data('location');
     slot.event_id = jQuery(this).data('event-id');
     slot.record_id = jQuery(this).data('record-id');
 
-    console.log(slot);
     fillSlotForm(slot, function () {
         $("#start").datetimepicker();
         $("#end").datetimepicker();
@@ -57,6 +57,7 @@ function fillSlotForm(data, callback) {
     jQuery('#start').val(data.date + ' ' + data.start);
     jQuery('#end').val(data.date + ' ' + data.end);
     jQuery('#instructor').val(data.instructor);
+    jQuery('#location').val(data.location);
     callback();
 }
 

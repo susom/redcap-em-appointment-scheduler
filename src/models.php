@@ -130,6 +130,11 @@
                                placeholder="Instructor SUNet ID" required>
                     </div>
                     <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" name="location" class="form-control" id="location"
+                               placeholder="Appointment Location" required>
+                    </div>
+                    <div class="form-group">
                         <label for="notes">Notes</label>
                         <textarea class="form-control" name="reschedule-notes" id="reschedule-notes"
                                   rows="3"></textarea>

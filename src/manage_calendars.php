@@ -70,6 +70,7 @@ try {
                                         <button type="button"
                                                 data-record-id="<?php echo $slot['record_id'] ?>"
                                                 data-event-id="<?php echo $slot['event_id'] ?>"
+                                                data-location="<?php echo $slot['location'] ?>"
                                                 data-date="<?php echo date('m/d/Y', strtotime($slot['start'])) ?>"
                                                 data-start="<?php echo date('H:i', strtotime($slot['start'])) ?>"
                                                 data-end="<?php echo date('H:i', strtotime($slot['end'])) ?>"

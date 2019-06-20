@@ -38,9 +38,6 @@ trait Participant
         return false;
     }
 
-
-
-
     /**
      * @param int $event_id
      * @param int $record_id
