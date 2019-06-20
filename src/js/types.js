@@ -178,3 +178,33 @@ jQuery(document).on('click', '.manage', function () {
         location.reload();
     }
 });
+
+
+/**
+ * Get Manage Calendar modal to let instructors manage all calendars
+ */
+jQuery(document).on('click', '.manage-calendars', function () {
+    var url = jQuery("#manage-calendar-url").val();
+    if (email != '') {
+        jQuery.ajax({
+            url: url,
+            type: 'GET',
+            datatype: 'json',
+            success: function (data) {
+                jQuery('#generic-modal').find('.modal-title').html('Manage Instructors Calendar');
+                jQuery('#generic-modal').find('.modal-body').html(data);
+                $('#generic-modal').modal('show');
+
+                $('#myTabs a[href="#profile"]').tab('show')
+            },
+            error: function (request, error) {
+                alert("Request: " + JSON.stringify(request));
+            }
+        });
+    } else {
+        /**
+         * user not logged in refresh to force sign in
+         */
+        location.reload();
+    }
+});

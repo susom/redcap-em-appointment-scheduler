@@ -13,6 +13,8 @@ try {
 
         $data['status'] = CANCELED;
         $module->updateParticipation($data, $id);
+
+        //TODO notify instructor about the cancellation
         echo json_encode(array('status' => 'ok', 'message' => 'Appointment canceled successfully!'));
 
     }

@@ -29,6 +29,21 @@ define('CAMPUS_ONLY', 2);
 define('CAMPUS_AND_VIRTUAL_TEXT', 'Redwood City Campus , or Virtual via Zoom Meeting.');
 define('VIRTUAL_ONLY_TEXT', 'Virtual via Zoom Meeting.');
 define('CAMPUS_ONLY_TEXT', 'Redwood City Campus');
+
+
+/**
+ * definition for participation statuses
+ */
+define('AVAILABLE', 0);
+define('RESERVED', 1);
+define('CANCELED', 2);
+define('NO_SHOW', 3);
+
+define('AVAILABLE_TEXT', 'Available');
+define('RESERVED_TEXT', 'Reserved');
+define('CANCELED_TEXT', 'Canceled');
+define('NO_SHOW_TEXT', 'No_Show');
+
 /**
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
@@ -227,7 +242,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
     }
 
-
+    /**
+     * @param int $event_id
+     * @return array
+     */
     public function getCurrentMonthSlots($event_id)
     {
         try {
@@ -246,6 +264,59 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 return REDCap::getData($param);
             } else {
                 throw new \LogicException('Not event id passed, Aborting!');
+            }
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllOpenSlots()
+    {
+        try {
+            /*
+                 * TODO Check if date within allowed window
+                 */
+            $filter = "[start] > '" . date('Y-m-d') . "' AND " . "[slot_status] != '" . CANCELED . "'";
+            $param = array(
+                'filterLogic' => $filter,
+                'return_format' => 'array'
+            );
+            return REDCap::getData($param);
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function prepareInstructorsSlots($records)
+    {
+        $result = array();
+        /**
+         * just to reduce load on DB
+         */
+        $events = array();
+        try {
+            if (!empty($records)) {
+                foreach ($records as $slots) {
+                    foreach ($slots as $event_id => $slot) {
+                        if (!isset($events[$event_id])) {
+                            $events[$event_id] = REDCap::getEventNames(false, false, $event_id);
+                        }
+
+                        $slot['event_name'] = $events[$event_id];
+                        $slot['event_id'] = $event_id;
+                        $result[$slot['instructor']][] = $slot;
+                    }
+                }
+
+                return $result;
+            } else {
+                throw new \LogicException('No slots found');
             }
         } catch (\LogicException $e) {
             echo $e->getMessage();
@@ -369,5 +440,24 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 $typeText = CAMPUS_AND_VIRTUAL_TEXT;
         }
         return $typeText;
+    }
+
+    /**
+     * @param array $data
+     * @param int $id
+     */
+    public function updateTimeSLot($data, $id)
+    {
+        $filters = '';
+        foreach ($data as $key => $value) {
+            $filters = " $key = '$value' ,";
+        }
+
+        $filters = rtrim($filters, ",");
+        $sql = sprintf("UPDATE  redcap_appointment_participant SET $filters WHERE id = $id");
+
+        if (!db_query($sql)) {
+            throw new \LogicException('cant update participant');
+        }
     }
 }

@@ -97,3 +97,53 @@
     </div>
 </div>
 <!-- END Booking Modal -->
+
+<!-- Reschedule Modal -->
+<div class="modal" id="reschedule">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Reschedule Time Slot</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="reschedule-form">
+                    <input type="hidden" name="reschedule-record-id" id="reschedule-record-id"/>
+                    <input type="hidden" name="reschedule-event-id" id="reschedule-event-id"/>
+                    <div class="form-group">
+                        <label for="start">Start time</label>
+                        <input type="text" name="start" class="form-control" id="start"
+                               placeholder="Office Hours Start Time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end">End time</label>
+                        <input type="text" name="end" class="form-control" id="end" placeholder="Office Hours End Time"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructor">Instructor (Please type SUNet ID)</label>
+                        <input type="text" name="instructor" class="form-control" id="instructor"
+                               placeholder="Instructor SUNet ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea class="form-control" name="reschedule-notes" id="reschedule-notes"
+                                  rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" id="submit-reschedule-form" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END Booking Modal -->

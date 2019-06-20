@@ -25,7 +25,9 @@
     "src/summary",
     "src/book",
     "src/manage",
+    "src/manage_calendars",
     "src/cancel",
+    "src/reschedule",
     "src/list"
   ],
   "links": {
@@ -76,6 +78,18 @@
         "name": "Cancel Appointment View",
         "icon": "brick",
         "url": "src/cancel.php",
+        "show-header-and-footer": false
+      },
+      {
+        "name": "Manage Calendars View",
+        "icon": "brick",
+        "url": "src/manage_calendars.php",
+        "show-header-and-footer": false
+      },
+      {
+        "name": "Reschedule View",
+        "icon": "brick",
+        "url": "src/reschedule.php",
         "show-header-and-footer": false
       }
     ]

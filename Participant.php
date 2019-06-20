@@ -6,18 +6,6 @@ namespace Stanford\AppointmentScheduler;
 
 use REDCap;
 
-/**
- * definition for participation statuses
- */
-define('AVAILABLE', 0);
-define('RESERVED', 1);
-define('CANCELED', 2);
-define('NO_SHOW', 3);
-
-define('AVAILABLE_TEXT', 'Available');
-define('RESERVED_TEXT', 'Reserved');
-define('CANCELED_TEXT', 'Canceled');
-define('NO_SHOW_TEXT', 'No_Show');
 
 trait Participant
 {
@@ -187,7 +175,10 @@ trait Participant
         }
     }
 
-
+    /**
+     * @param array $data
+     * @param int $id
+     */
     public function updateParticipation($data, $id)
     {
         $filters = '';
