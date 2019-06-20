@@ -38,60 +38,7 @@ trait Participant
         return false;
     }
 
-    /**
-     * @param $participant
-     * @return bool
-     */
-    public function saveParticipant($participant)
-    {
 
-        if ($this->isThereAvailableSpotsInAppointment($participant['event_id'], $participant['record_id'])) {
-            if (!$this->isUserBookedSlotForThatDay($participant['email'], $participant['date'],
-                $participant['project_id'], $participant['event_id'])) {
-                $sql = sprintf("INSERT INTO redcap_appointment_participant (email, `name`, mobile, record_id, notes, private, `type`, `status`, created_at) VALUES ('$participant[email]', '$participant[name]', '$participant[mobile]', '$participant[record_id]', '$participant[notes]', '$participant[private]','$participant[type]','$participant[status]', " . time() . ")"
-                );
-
-                if (!db_query($sql)) {
-                    throw new \LogicException('cant save participant');
-                }
-                return true;
-            } else {
-                throw new \LogicException('User already has an appointment for same date.');
-            }
-        } else {
-            throw new \LogicException('No available spots for select time slot.');
-        }
-    }
-
-    /**
-     * @param int $event_id
-     * @param int $record_id
-     * @return array
-     */
-    private function getSlotNumberOfParticipants($event_id, $record_id)
-    {
-        try {
-            if ($event_id) {
-
-                /*
-                 * TODO Check if date within allowed window
-                 */
-                $filter = "[record_id] = '" . $record_id . "'";
-                $param = array(
-                    'filterLogic' => $filter,
-                    'return_format' => 'array',
-                    'fields' => array('number_of_participants'),
-                    'events' => REDCap::getEventNames(true, false, $event_id)
-                );
-                $record = REDCap::getData($param);
-                return $record[$record_id][$event_id]['number_of_participants'];
-            } else {
-                throw new \LogicException('Not event id passed, Aborting!');
-            }
-        } catch (\LogicException $e) {
-            echo $e->getMessage();
-        }
-    }
 
 
     /**
@@ -126,7 +73,7 @@ trait Participant
         /**
          * Get how many reserved spots
          */
-        $sql = sprintf("SELECT id from redcap_appointment_participant ra WHERE ra.record_id = $record_id AND rs.status = " . RESERVED . " ");
+        $sql = sprintf("SELECT id from redcap_appointment_participant ra WHERE ra.record_id = $record_id AND ra.status = " . RESERVED . " ");
 
         $r = db_query($sql);
         $count = db_num_rows($r);
@@ -139,14 +86,34 @@ trait Participant
     }
 
     /**
+     * @param int $record_id
+     * @return bool|\mysqli_result
+     */
+    public function getSlotActualReservedSpots($record_id)
+    {
+        /**
+         * Get how many reserved spots
+         */
+        $sql = sprintf("SELECT email, name from redcap_appointment_participant ra WHERE ra.record_id = $record_id AND ra.status = " . RESERVED . " ");
+
+        $result = db_query($sql);
+
+        if ($result) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @param int $event_id
      * @param int $record_id
      * @return bool
      */
     private function isThereAvailableSpotsInAppointment($event_id, $record_id)
     {
-        if ($this->getSlotNumberOfParticipants($event_id,
-                $record_id) > $this->getSlotActualCountReservedSpots($record_id)) {
+        $slot = $this->getSlot($record_id, $event_id);
+        if ($slot['number_of_participants'] > $this->getSlotActualCountReservedSpots($record_id)) {
             return true;
         } else {
             return false;

@@ -246,6 +246,31 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @param int $event_id
      * @return array
      */
+    public function getTimeSlot($record_id, $event_id)
+    {
+        try {
+            if ($event_id) {
+
+                $filter = "[record_id] = '" . $record_id . "'";
+                $param = array(
+                    'filterLogic' => $filter,
+                    'return_format' => 'array',
+                    'events' => REDCap::getEventNames(true, false, $event_id)
+                );
+                $record = REDCap::getData($param);
+                return $record[$record_id][$event_id];
+            } else {
+                throw new \LogicException('Not event id passed, Aborting!');
+            }
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * @param int $event_id
+     * @return array
+     */
     public function getCurrentMonthSlots($event_id)
     {
         try {
@@ -458,6 +483,73 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
         if (!db_query($sql)) {
             throw new \LogicException('cant update participant');
+        }
+    }
+
+    public function notifyParticipants($record_id, $message)
+    {
+        $participants = $this->getSlotActualReservedSpots($record_id);
+        while ($result = $participants->fetch_assoc()) {
+            $this->emailClient->setTo($result['email']);
+            $this->emailClient->setFrom('ihabz@stanford.edu');
+            $this->emailClient->setFromName($result['email']);
+            $this->emailClient->setSubject($message['subject']);
+            $this->emailClient->setBody($message['body']);
+            $this->emailClient->send();
+        }
+    }
+
+    /**
+     * @param $participant
+     * @return bool
+     */
+    public function saveParticipant($participant)
+    {
+
+        if ($this->isThereAvailableSpotsInAppointment($participant['event_id'], $participant['record_id'])) {
+            if (!$this->isUserBookedSlotForThatDay($participant['email'], $participant['date'],
+                $participant['project_id'], $participant['event_id'])) {
+                $sql = sprintf("INSERT INTO redcap_appointment_participant (email, `name`, mobile, record_id, notes, private, `type`, `status`, created_at) VALUES ('$participant[email]', '$participant[name]', '$participant[mobile]', '$participant[record_id]', '$participant[notes]', '$participant[private]','$participant[type]','$participant[status]', " . time() . ")"
+                );
+
+                if (!db_query($sql)) {
+                    throw new \LogicException('cant save participant');
+                }
+                return true;
+            } else {
+                throw new \LogicException('User already has an appointment for same date.');
+            }
+        } else {
+            throw new \LogicException('No available spots for select time slot.');
+        }
+    }
+
+    /**
+     * @param int $event_id
+     * @param int $record_id
+     * @return array
+     */
+    public function getSlot($record_id, $event_id)
+    {
+        try {
+            if ($event_id) {
+
+                /*
+                 * TODO Check if date within allowed window
+                 */
+                $filter = "[record_id] = '" . $record_id . "'";
+                $param = array(
+                    'filterLogic' => $filter,
+                    'return_format' => 'array',
+                    'events' => REDCap::getEventNames(true, false, $event_id)
+                );
+                $record = REDCap::getData($param);
+                return $record[$record_id][$event_id];
+            } else {
+                throw new \LogicException('Not event id passed, Aborting!');
+            }
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
         }
     }
 }

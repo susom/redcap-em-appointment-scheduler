@@ -2,6 +2,8 @@
 
 namespace Stanford\AppointmentScheduler;
 
+use REDCap;
+
 /** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
 
 
@@ -22,7 +24,12 @@ try {
         if (!empty($response['errors'])) {
             throw new \LogicException(implode("\n", $response['errors']));
         } else {
-            //TODO notify participants about the cancellation
+
+            $slot = $module->getSlot($data['record_id'], $data['event_id']);
+            $message['subject'] = $message['body'] = 'Your ' . REDCap::getEventNames(false, false,
+                    $data['event_id']) . ' at' . date('m/d/Y', strtotime($slot['start'])) . ' at ' . date('H:i',
+                    strtotime($slot['start'])) . ' to ' . date('H:i', strtotime($slot['end'])) . ' has been canceled';
+            $module->notifyParticipants($data['record_id'], $message);
             echo json_encode(array('status' => 'ok', 'message' => 'Slot canceled successfully!'));
         }
     }
