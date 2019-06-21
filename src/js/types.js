@@ -103,7 +103,6 @@ jQuery(document).on('click', '.time-slot', function () {
     jQuery('#booking').find('.modal-title').html('Book Time Slot for ' + dateText);
     $('#booking').modal('show');
     $('#generic-modal').modal('hide');
-    console.log(record);
 });
 
 
