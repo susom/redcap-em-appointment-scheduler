@@ -16,7 +16,8 @@ jQuery(document).on('click', '.type', function () {
             jQuery('.slots-container').html('');
         },
         'success': function (data) {
-            jQuery("#" + key + "-calendar").html(data);
+            jQuery("#" + key + "-calendar").hide().html(data).slideDown("slow");
+            ;
 
         },
         'error': function (request, error) {
