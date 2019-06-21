@@ -130,6 +130,7 @@ jQuery(document).on('click', '#submit-booking-form', function () {
             if (response.status == 'ok') {
                 alert(response.message);
                 $('#booking').modal('hide');
+                record = {};
             } else {
                 alert(response.message);
             }
