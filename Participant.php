@@ -102,6 +102,26 @@ trait Participant
         }
     }
 
+
+    /**
+     * @param int $record_id
+     * @return bool|\mysqli_result
+     */
+    public function getSlotParticipants($record_id)
+    {
+        /**
+         * Get all reserved spots
+         */
+        $sql = sprintf("SELECT * from redcap_appointment_participant ra WHERE ra.record_id = $record_id ");
+
+        $result = db_query($sql);
+
+        if ($result) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
     /**
      * @param int $event_id
      * @param int $record_id

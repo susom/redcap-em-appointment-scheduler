@@ -28,6 +28,7 @@
     "src/manage_calendars",
     "src/cancel",
     "src/reschedule",
+    "src/participants_list",
     "src/list"
   ],
   "links": {
@@ -90,6 +91,12 @@
         "name": "Reschedule View",
         "icon": "brick",
         "url": "src/reschedule.php",
+        "show-header-and-footer": false
+      },
+      {
+        "name": "Participants List View",
+        "icon": "brick",
+        "url": "src/participants_list.php",
         "show-header-and-footer": false
       }
     ]

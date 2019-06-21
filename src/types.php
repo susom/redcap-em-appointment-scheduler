@@ -75,16 +75,17 @@ $types = $module->getInstances();
         <input type="hidden" id="manage-url" value="<?php echo $module->getUrl('src/manage.php', false, true) ?>"
                class="hidden"/>
         <input type="hidden" id="manage-calendar-url"
-               value="<?php echo $module->getUrl('src/manage_calendars.php', false, true) ?>"
-               class="hidden"/>
+               value="<?php echo $module->getUrl('src/manage_calendars.php', false, true) ?>" class="hidden"/>
         <input type="hidden" id="cancel-appointment-url"
-               value="<?php echo $module->getUrl('src/cancel.php', false, true) ?>"
-               class="hidden"/>
+               value="<?php echo $module->getUrl('src/cancel.php', false, true) ?>" class="hidden"/>
         <input type="hidden" id="cancel-slot-url"
-               value="<?php echo $module->getUrl('src/cancel_slot.php', false, true) ?>"
-               class="hidden"/><input type="hidden" id="reschedule-submit-url"
-                                      value="<?php echo $module->getUrl('src/reschedule.php', false, true) ?>"
-                                      class="hidden"/>
+               value="<?php echo $module->getUrl('src/cancel_slot.php', false, true) ?>" class="hidden"/>
+        <input type="hidden" id="reschedule-submit-url"
+               value="<?php echo $module->getUrl('src/reschedule.php', false, true) ?>" class="hidden"/>
+        <input type="hidden" id="participants-list-url"
+               value="<?php echo $module->getUrl('src/participants_list.php', false, true) ?>" class="hidden"/>
+        <input type="hidden" id="participants-no-show-url"
+               value="<?php echo $module->getUrl('src/no_show.php', false, true) ?>" class="hidden"/>
         <input type="hidden" id="event-id" value="" class="hidden"/>
         <input type="hidden" id="user-email" value="<?php echo $user_email ?>" class="hidden"/>
 

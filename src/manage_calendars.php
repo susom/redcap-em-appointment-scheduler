@@ -77,6 +77,14 @@ try {
                                                 data-instructor="<?php echo $instructor ?>"
                                                 class="reschedule-slot btn btn-block btn-info">Reschedule
                                         </button>
+                                        <button type="button"
+                                                data-record-id="<?php echo $slot['record_id'] ?>"
+                                                data-modal-title="<?php echo date('m/d/Y',
+                                                    strtotime($slot['start'])) ?> <?php echo date('H:i',
+                                                    strtotime($slot['start'])) ?> – <?php echo date('H:i',
+                                                    strtotime($slot['end'])) ?>"
+                                                class="participants-list btn btn-block btn-success">Participants List
+                                        </button>
                                     </div>
                                 </div>
                                 <?php
