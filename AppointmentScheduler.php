@@ -60,6 +60,7 @@ define('MODULE_NAME', 'Appointment_scheduler');
  * @property array $eventInstance
  * @property array $calendarParams
  * @property \Participant $participant
+ * @property \Monolog\Logger $logger
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
@@ -98,7 +99,9 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     private $calendarParams;
 
-
+    /**
+     * @var \Monolog\Logger
+     */
     private $logger;
     /**
      * AppointmentScheduler constructor.
@@ -123,7 +126,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
              * Initiate PSR logger
              */
             $this->setLogger();
-            $this->logger->warning('Initiate logger completed');
+            $this->logger->info('Initiate logger completed');
 
 
 
@@ -155,6 +158,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     $this->eventInstance['twilio_token']);
             }
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -177,6 +181,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/' . MODULE_NAME . '.log',
                 Logger::WARNING));
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -251,7 +256,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \Exception('No Type exists');
             }
         } catch (\Exception $e) {
-
+            $this->logger->error($e->getMessage());
         }
     }
 
@@ -281,6 +286,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not a valid date, Aborting!');
             }
         } catch (\LogicException $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -306,6 +312,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not event id passed, Aborting!');
             }
         } catch (\LogicException $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -334,6 +341,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not event id passed, Aborting!');
             }
         } catch (\LogicException $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -354,6 +362,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             );
             return REDCap::getData($param);
         } catch (\LogicException $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -387,6 +396,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('No slots found');
             }
         } catch (\LogicException $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -450,8 +460,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \Twilio\Exceptions\TwilioException('Cant send message');
             }
         } catch (\LogicException $e) {
+            $this->logger->error($e->getMessage());
             echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
         } catch (\Twilio\Exceptions\TwilioException $e) {
+            $this->logger->error($e->getMessage());
             echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
         }
     }
@@ -592,6 +604,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not event id passed, Aborting!');
             }
         } catch (\LogicException $e) {
+            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
