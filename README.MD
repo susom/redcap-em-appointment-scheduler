@@ -34,4 +34,3 @@ You need to create type of office hours you need as events. **Make sure to desig
 Few table got create. Please make sure to run the SQL statements in **/database/Appointment_Scheduler.sql**. 
 
 
-
