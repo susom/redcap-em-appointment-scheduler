@@ -179,7 +179,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         try {
             $this->logger = new Logger(MODULE_NAME);
             $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/' . MODULE_NAME . '.log',
-                Logger::WARNING));
+                Logger::INFO));
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             echo $e->getMessage();
