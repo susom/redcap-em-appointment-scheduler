@@ -12,12 +12,11 @@ include_once 'CalendarEmail.php';
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     // Required if your environment does not handle autoloading
     require __DIR__ . '/vendor/autoload.php';
-
-
 }
 
 use Twilio\Rest\Client;
-
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 /**
  * Constants where appointment  is located
  */
@@ -49,6 +48,8 @@ define('RESERVED_TEXT', 'Reserved');
 define('CANCELED_TEXT', 'Canceled');
 define('NO_SHOW_TEXT', 'No_Show');
 
+
+define('MODULE_NAME', 'Appointment_scheduler');
 /**
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
@@ -97,6 +98,8 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     private $calendarParams;
 
+
+    private $logger;
     /**
      * AppointmentScheduler constructor.
      */
@@ -115,6 +118,13 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  */
                 $this->setInstances();
             }
+
+            /*
+             * Initiate PSR logger
+             */
+            $this->setLogger();
+            $this->logger->warning('Initiate logger completed');
+
 
 
             /**
@@ -144,6 +154,28 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 $this->twilioClient = new Client($this->eventInstance['twilio_sid'],
                     $this->eventInstance['twilio_token']);
             }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * Initiate logger object
+     */
+    public function setLogger()
+    {
+        try {
+            $this->logger = new Logger(MODULE_NAME);
+            $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/' . MODULE_NAME . '.log',
+                Logger::WARNING));
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
@@ -528,7 +560,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 }
                 return true;
             } else {
-                throw new \LogicException('User already has an appointment for same date.');
+                throw new \LogicException('User already has an appointment on same day.');
             }
         } else {
             throw new \LogicException('No available spots for select time slot.');

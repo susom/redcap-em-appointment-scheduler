@@ -231,17 +231,6 @@ class ClassLoader
     }
 
     /**
-     * Can be used to check if the autoloader uses the include path to check
-     * for classes.
-     *
-     * @return bool
-     */
-    public function getUseIncludePath()
-    {
-        return $this->useIncludePath;
-    }
-
-    /**
      * Turns on searching the include path for class files.
      *
      * @param bool $useIncludePath
@@ -252,13 +241,14 @@ class ClassLoader
     }
 
     /**
-     * Should class lookup fail if not found in the current class map?
+     * Can be used to check if the autoloader uses the include path to check
+     * for classes.
      *
      * @return bool
      */
-    public function isClassMapAuthoritative()
+    public function getUseIncludePath()
     {
-        return $this->classMapAuthoritative;
+        return $this->useIncludePath;
     }
 
     /**
@@ -273,13 +263,13 @@ class ClassLoader
     }
 
     /**
-     * The APCu prefix in use, or null if APCu caching is not enabled.
+     * Should class lookup fail if not found in the current class map?
      *
-     * @return string|null
+     * @return bool
      */
-    public function getApcuPrefix()
+    public function isClassMapAuthoritative()
     {
-        return $this->apcuPrefix;
+        return $this->classMapAuthoritative;
     }
 
     /**
@@ -291,6 +281,16 @@ class ClassLoader
     {
         $this->apcuPrefix = function_exists('apcu_fetch') && filter_var(ini_get('apc.enabled'),
             FILTER_VALIDATE_BOOLEAN) ? $apcuPrefix : null;
+    }
+
+    /**
+     * The APCu prefix in use, or null if APCu caching is not enabled.
+     *
+     * @return string|null
+     */
+    public function getApcuPrefix()
+    {
+        return $this->apcuPrefix;
     }
 
     /**

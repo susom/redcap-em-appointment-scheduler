@@ -1,5 +1,7 @@
 {
   "require": {
-    "twilio/sdk": "^5.33"
+    "twilio/sdk": "^5.33",
+    "psr/log": "^1.1",
+    "monolog/monolog": "^1.24"
   }
 }
