@@ -35,6 +35,7 @@ if (empty($data)) {
     </div>
     <?php
 } else {
+    $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
     /**
      * prepare data
      */
@@ -51,7 +52,8 @@ if (empty($data)) {
         $days[$day][$slot['record_id']]['end'] = date('H:i', strtotime($slot['end']));
         $days[$day][$slot['record_id']]['location'] = $slot['location'];
         $days[$day][$slot['record_id']]['number_of_participants'] = $slot['number_of_participants'];
-        $days[$day][$slot['record_id']]['booked_slots'] = $module->getSlotActualCountReservedSpots($slot['record_id']);
+        $days[$day][$slot['record_id']]['booked_slots'] = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
+            $reservationEventId);
         /**
          * check if we have slots available
          */
@@ -69,10 +71,11 @@ if (empty($data)) {
      */
 
     foreach ($days as $key => $day) {
+        $dayName = array_pop($day);
         ?>
         <div class="border row ">
             <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
-                        strtotime($day['date'])) . '.)' ?></div>
+                        strtotime($dayName['date'])) . '.)' ?></div>
             <div class=" col-lg-9">
                 <?php
                 foreach ($days[$key] as $record_id => $record) {

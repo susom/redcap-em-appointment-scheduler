@@ -2,12 +2,8 @@
 
 namespace Stanford\AppointmentScheduler;
 
-/** @var \Stanford\LanguageEditor\LanguageEditor $this */
 
-use REDCap;
-
-
-trait Participant
+class Participant
 {
 
     /**
@@ -17,7 +13,7 @@ trait Participant
      * @param int $event_id
      * @return bool
      */
-    private function isUserBookedSlotForThatDay($email, $date, $project_id, $event_id)
+    public function isUserBookedSlotForThatDay($email, $date, $project_id, $event_id)
     {
         /**
          * Let see if user booked something else for same date, we will validate via email
@@ -54,7 +50,7 @@ trait Participant
                 'filterLogic' => $filter,
                 'return_format' => 'array',
             );
-            $record = REDCap::getData($param);
+            $record = \REDCap::getData($param);
             return $record[$record_id];
         } catch (\LogicException $e) {
             echo $e->getMessage();
@@ -65,20 +61,20 @@ trait Participant
      * @param int $record_id
      * @return int
      */
-    public function getSlotActualCountReservedSpots($record_id)
+    public function getSlotActualCountReservedSpots($slotId, $eventId)
     {
-        /**
-         * Get how many reserved spots
-         */
-        $sql = sprintf("SELECT id from redcap_appointment_participant ra WHERE ra.record_id = $record_id AND ra.status = " . RESERVED . " ");
+        try {
 
-        $r = db_query($sql);
-        $count = db_num_rows($r);
-
-        if ($count == 0 || is_null($count)) {
-            return 0;
-        } else {
-            return $count;
+            $filter = "[slot_id] = '" . $slotId . "'";
+            $param = array(
+                'filterLogic' => $filter,
+                'return_format' => 'array',
+                'events' => \REDCap::getEventNames(true, true, $eventId)
+            );
+            $record = \REDCap::getData($param);
+            return count($record);
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -86,19 +82,20 @@ trait Participant
      * @param int $record_id
      * @return bool|\mysqli_result
      */
-    public function getSlotActualReservedSpots($record_id)
+    public function getSlotActualReservedSpots($slotId, $eventId)
     {
-        /**
-         * Get how many reserved spots
-         */
-        $sql = sprintf("SELECT email, name from redcap_appointment_participant ra WHERE ra.record_id = $record_id AND ra.status = " . RESERVED . " ");
+        try {
 
-        $result = db_query($sql);
-
-        if ($result) {
-            return $result;
-        } else {
-            return false;
+            $filter = "[slot_id] = '" . $slotId . "' AND [participant_status] ='" . RESERVED . "'";
+            $param = array(
+                'filterLogic' => $filter,
+                'return_format' => 'array',
+                'events' => \REDCap::getEventNames(true, true, $eventId)
+            );
+            $record = \REDCap::getData($param);
+            return $record;
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -107,19 +104,20 @@ trait Participant
      * @param int $record_id
      * @return bool|\mysqli_result
      */
-    public function getSlotParticipants($record_id)
+    public function getSlotParticipants($recordId, $eventId)
     {
-        /**
-         * Get all reserved spots
-         */
-        $sql = sprintf("SELECT * from redcap_appointment_participant ra WHERE ra.record_id = $record_id ");
+        try {
 
-        $result = db_query($sql);
-
-        if ($result) {
-            return $result;
-        } else {
-            return false;
+            $filter = "[slot_id] = '" . $recordId . "'";
+            $param = array(
+                'filterLogic' => $filter,
+                'return_format' => 'array',
+                'events' => \REDCap::getEventNames(true, true, $eventId)
+            );
+            $record = \REDCap::getData($param);
+            return $record;
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
         }
     }
     /**
@@ -127,9 +125,9 @@ trait Participant
      * @param int $record_id
      * @return bool
      */
-    private function isThereAvailableSpotsInAppointment($event_id, $record_id)
+    public function isThereAvailableSpotsInAppointment($event_id, $record_id)
     {
-        $slot = $this->getSlot($record_id, $event_id);
+        $slot = AppointmentScheduler::getSlot($record_id, $event_id);
         if ($slot['number_of_participants'] > $this->getSlotActualCountReservedSpots($record_id)) {
             return true;
         } else {
@@ -139,24 +137,29 @@ trait Participant
 
 
     /**
-     * @param $email
-     * @return bool|mysqli_result
+     * @param string $email
+     * @param null $status
+     * @return mixed
      */
     public function getUserParticipation($email, $status = null)
     {
-
-        if (is_null($status)) {
-            $sql = sprintf("SELECT * from redcap_appointment_participant ra WHERE ra.email = '$email'");
-        } else {
-            $sql = sprintf("SELECT * from redcap_appointment_participant ra WHERE ra.email = '$email' AND ra.status = $status");
-
+        try {
+            if (is_null($status)) {
+                $filter = "[email] = '" . $email . "'";
+            } else {
+                $filter = "[email] = '" . $email . "' AND participant_status = $status";
+            }
+            $param = array(
+                'filterLogic' => $filter,
+                'return_format' => 'array',
+                'events' => \REDCap::getEventNames(true, true)
+            );
+            $records = \REDCap::getData($param);
+            return $records;
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
         }
 
-        if ($result = db_query($sql)) {
-            return $result;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -176,5 +179,19 @@ trait Participant
         if (!db_query($sql)) {
             throw new \LogicException('cant update participant');
         }
+    }
+
+    public function getUserParticipationViaStatus($records, $status)
+    {
+        $result = array();
+        foreach ($records as $record) {
+            $participation = end($record);
+            $eventId = key($record);
+            $participation['event_id'] = $eventId;
+            if ($participation['participant_status'] == $status) {
+                $result[] = $participation;
+            }
+        }
+        return $result;
     }
 }

@@ -160,7 +160,7 @@ class SessionInstance extends InstanceResource
      */
     protected function getParticipants()
     {
-        return $this->proxy()->participants;
+        return $this->proxy()->getParticipant()s;
     }
 
     /**

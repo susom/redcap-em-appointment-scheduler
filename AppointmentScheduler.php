@@ -4,10 +4,10 @@ namespace Stanford\AppointmentScheduler;
 
 use REDcap;
 
-
 include_once 'emLoggerTrait.php';
 include_once 'Participant.php';
 include_once 'CalendarEmail.php';
+include_once 'Survey.php';
 
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     // Required if your environment does not handle autoloading
@@ -50,6 +50,14 @@ define('NO_SHOW_TEXT', 'No_Show');
 
 
 define('MODULE_NAME', 'Appointment_scheduler');
+
+
+/**
+ * REDCap constants
+ */
+define('REDCAP_INCOMPLETE', 0);
+define('REDCAP_UNVERIFIED', 1);
+define('REDCAP_COMPLETE', 2);
 /**
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
@@ -59,15 +67,15 @@ define('MODULE_NAME', 'Appointment_scheduler');
  * @property int $eventId
  * @property array $eventInstance
  * @property array $calendarParams
- * @property \Participant $participant
+ * @property \Stanford\AppointmentScheduler\Participant $participant
  * @property \Monolog\Logger $logger
+ * @property \Stanford\AppointmentScheduler\Survey $survey
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
 
 
     use emLoggerTrait;
-    use Participant;
 
     /**
      * @var \CalendarEmail|null
@@ -103,6 +111,16 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @var \Monolog\Logger
      */
     private $logger;
+
+    /**
+     * @var \Participant;
+     */
+    private $participant;
+
+    /**
+     * @var \Survey
+     */
+    private $survey;
     /**
      * AppointmentScheduler constructor.
      */
@@ -126,9 +144,23 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
              * Initiate PSR logger
              */
             $this->setLogger();
-            $this->logger->info('Initiate logger completed');
 
 
+            /**
+             * Initiate surveys
+             */
+            $this->setSurvey();
+
+            /**
+             * Initiate Email Client
+             */
+            $this->setEmailClient();
+
+
+            /**
+             * Initiate Email Participant
+             */
+            $this->setParticipant();
 
             /**
              * Only call this class when event is provided.
@@ -146,22 +178,62 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  */
                 $this->setEventInstance($this->getEventId());
 
-                /**
-                 * initiate Calendar email client
-                 */
-                $this->emailClient = new \CalendarEmail;
-
-                /**
-                 * Define Twilio client using event instance
-                 */
-                $this->twilioClient = new Client($this->eventInstance['twilio_sid'],
-                    $this->eventInstance['twilio_token']);
             }
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
+
+    /**
+     * @return \CalendarEmail
+     */
+    public function getEmailClient()
+    {
+        return $this->emailClient;
+    }
+
+    /**
+     * @param \CalendarEmail $emailClient
+     */
+    public function setEmailClient()
+    {
+        $this->emailClient = new \CalendarEmail;
+    }
+
+
+    /**
+     * @return \Stanford\AppointmentScheduler\Participant
+     */
+    public function getParticipant()
+    {
+        return $this->participant;
+    }
+
+    /**
+     * @param \Stanford\AppointmentScheduler\Participant $participant
+     */
+    public function setParticipant()
+    {
+        $this->participant = new  \Stanford\AppointmentScheduler\Participant();
+    }
+
+
+    /**
+     * @return \Survey
+     */
+    public function getSurvey()
+    {
+        return $this->survey;
+    }
+
+    /**
+     * @param \Survey $survey
+     */
+    public function setSurvey()
+    {
+        $this->survey = new  \Stanford\AppointmentScheduler\Survey();
+    }
+
 
     /**
      * @return mixed
@@ -179,7 +251,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         try {
             $this->logger = new Logger(MODULE_NAME);
             $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/' . MODULE_NAME . '.log',
-                Logger::INFO));
+                Logger::DEBUG));
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             echo $e->getMessage();
@@ -492,13 +564,14 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $data['email'] = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $data['name'] = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
         $data['mobile'] = filter_var($_POST['mobile'], FILTER_SANITIZE_STRING);
-        $data['notes'] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
-        $data['record_id'] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
+        $data['participant_notes'] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
+        $data['slot_id'] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
         $data['private'] = filter_var($_POST['private'], FILTER_SANITIZE_NUMBER_INT);
-        $data['type'] = filter_var($_POST['type'], FILTER_SANITIZE_NUMBER_INT);
-        $data['project_id'] = filter_var($_GET['pid'], FILTER_SANITIZE_NUMBER_INT);
+        $data['participant_location'] = filter_var($_POST['type'], FILTER_SANITIZE_NUMBER_INT);
         $data['event_id'] = filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT);
-        $data['date'] = date('Y-m-d', strtotime(filter_var($_POST['date'], FILTER_SANITIZE_NUMBER_INT)));
+        $data['redcap_event_name'] = \REDCap::getEventNames(true, true,
+            filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT));
+        // $data['date'] = date('Y-m-d', strtotime(filter_var($_POST['date'], FILTER_SANITIZE_NUMBER_INT)));
 
         return $data;
     }
@@ -541,42 +614,27 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
     }
 
-    public function notifyParticipants($record_id, $message)
+    public function notifyParticipants($slotId, $eventId, $message)
     {
-        $participants = $this->getSlotActualReservedSpots($record_id);
-        while ($result = $participants->fetch_assoc()) {
+        $participants = $this->participant->getSlotActualReservedSpots($slotId, $eventId);
+        foreach ($participants as $participant) {
+            $result = end($participant);
             $this->emailClient->setTo($result['email']);
             $this->emailClient->setFrom('ihabz@stanford.edu');
             $this->emailClient->setFromName($result['email']);
             $this->emailClient->setSubject($message['subject']);
             $this->emailClient->setBody($message['body']);
             $this->emailClient->send();
+            $this->forceCancellation($result['record_id'], $eventId);
         }
     }
 
-    /**
-     * @param $participant
-     * @return bool
-     */
-    public function saveParticipant($participant)
+    public function forceCancellation($recordId, $eventId)
     {
-
-        if ($this->isThereAvailableSpotsInAppointment($participant['event_id'], $participant['record_id'])) {
-            if (!$this->isUserBookedSlotForThatDay($participant['email'], $participant['date'],
-                $participant['project_id'], $participant['event_id'])) {
-                $sql = sprintf("INSERT INTO redcap_appointment_participant (email, `name`, mobile, record_id, notes, private, `type`, `status`, created_at) VALUES ('$participant[email]', '$participant[name]', '$participant[mobile]', '$participant[record_id]', '$participant[notes]', '$participant[private]','$participant[type]','$participant[status]', " . time() . ")"
-                );
-
-                if (!db_query($sql)) {
-                    throw new \LogicException('cant save participant');
-                }
-                return true;
-            } else {
-                throw new \LogicException('User already has an appointment on same day.');
-            }
-        } else {
-            throw new \LogicException('No available spots for select time slot.');
-        }
+        $data['participant_status'] = CANCELED;
+        $data['record_id'] = $recordId;
+        $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
+        $response = \REDCap::saveData('json', json_encode(array($data)));
     }
 
     /**
@@ -584,7 +642,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @param int $record_id
      * @return array
      */
-    public function getSlot($record_id, $event_id)
+    public static function getSlot($record_id, $event_id)
     {
         try {
             if ($event_id) {
@@ -604,8 +662,46 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not event id passed, Aborting!');
             }
         } catch (\LogicException $e) {
-            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
+
+
+    public function testCron()
+    {
+
+        $this->logger->debug('Logging from cron. this is so easy');
+    }
+
+
+    public function getNextRecordsId($eventId, $projectId)
+    {
+        $sql = sprintf("SELECT max(record) as record_id from redcap_data WHERE project_id = $projectId AND event_id = $eventId");
+
+        $result = db_query($sql);
+        if (!$result) {
+            throw new \LogicException('cant save sent text message ');
+        }
+
+        $data = db_fetch_assoc($result);
+        return (int)$data['record_id'] + 1;
+    }
+
+    /**
+     * @param array $instances
+     * @param int $slotEventId
+     * @return bool
+     */
+    public function getReservationEventIdViaSlotEventId($slotEventId)
+    {
+        $instances = $this->getInstances();
+        foreach ($instances as $instance) {
+            if ($instance['slot_event_id'] == $slotEventId) {
+                return $instance['reservation_event_id'];
+            }
+        }
+        return false;
+    }
+
+
 }

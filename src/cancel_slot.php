@@ -25,11 +25,13 @@ try {
             throw new \LogicException(implode("\n", $response['errors']));
         } else {
 
-            $slot = $module->getSlot($data['record_id'], $data['event_id']);
+            $slot = AppointmentScheduler::getSlot($data['record_id'], $data['event_id']);
             $message['subject'] = $message['body'] = 'Your ' . REDCap::getEventNames(false, false,
                     $data['event_id']) . ' at' . date('m/d/Y', strtotime($slot['start'])) . ' at ' . date('H:i',
                     strtotime($slot['start'])) . ' to ' . date('H:i', strtotime($slot['end'])) . ' has been canceled';
-            $module->notifyParticipants($data['record_id'], $message);
+            $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
+
+            $module->notifyParticipants($data['record_id'], $reservationEventId, $message);
             echo json_encode(array('status' => 'ok', 'message' => 'Slot canceled successfully!'));
         }
     }

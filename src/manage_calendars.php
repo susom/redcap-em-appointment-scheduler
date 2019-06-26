@@ -79,6 +79,7 @@ try {
                                         </button>
                                         <button type="button"
                                                 data-record-id="<?php echo $slot['record_id'] ?>"
+                                                data-event-id="<?php echo $slot['event_id'] ?>"
                                                 data-modal-title="<?php echo date('m/d/Y',
                                                     strtotime($slot['start'])) ?> <?php echo date('H:i',
                                                     strtotime($slot['start'])) ?> – <?php echo date('H:i',

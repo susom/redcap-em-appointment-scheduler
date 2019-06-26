@@ -7,7 +7,7 @@ namespace Stanford\AppointmentScheduler;
 use REDCap;
 
 $url = $module->getUrl('src/list.php', true, true);
-$types = $module->getInstances();
+$instances = $module->getInstances();
 ?>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -47,20 +47,26 @@ $types = $module->getInstances();
 
     <div class="container">
         <?php
-        foreach ($types as $key => $type) {
+        foreach ($instances as $instance) {
+            $slotEvent = REDCap::getEventNames(false, false, $instance['slot_event_id']);
             ?>
             <div class="row  p-3 mb-2">
-                <a class="type" data-key="<?php echo $type['event_id'] ?>" href="javascript:;"
-                   data-url="<?php echo $url . '&config=' . $key . '&event_id=' . $type['event_id'] ?>">
-                    <div class="btn btn-block btn-info"><?php echo $type['title'] ?></div>
+                <a class="type" data-key="<?php echo $instance['slot_event_id'] ?>" href="javascript:;"
+                   data-url="<?php echo $url . '&event_id=' . $instance['slot_event_id'] ?>">
+                    <div class="btn btn-block btn-info"><?php echo $slotEvent ?></div>
                 </a>
             </div>
+            <input type="hidden" id="<?php echo $instance['slot_event_id'] ?>-reservation-event-id"
+                   value="<?php echo $instance['reservation_event_id'] ?>"
+                   class="hidden"/>
             <div class="row">
-                <div class="slots-container" id="<?php echo $type['event_id'] ?>-calendar" style="width: 100%;"></div>
+                <div class="slots-container" id="<?php echo $instance['slot_event_id'] ?>-calendar"
+                     style="width: 100%;"></div>
             </div>
             <?php
         }
         ?>
+
 
         <input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', true, true) ?>"
                class="hidden"/>

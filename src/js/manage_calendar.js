@@ -99,10 +99,11 @@ jQuery(document).on('click', '#submit-reschedule-form', function () {
 jQuery(document).on('click', '.participants-list', function () {
 
     var record_id = jQuery(this).data('record-id');
+    var event_id = jQuery(this).data('event-id');
     var title = jQuery(this).data('modal-title');
     var url = jQuery("#participants-list-url").val();
     jQuery.ajax({
-        url: url + "&record_id=" + record_id,
+        url: url + "&record_id=" + record_id + "&event_id=" + event_id,
         type: 'GET',
         data: slot,
         datatype: 'json',
@@ -122,6 +123,7 @@ jQuery(document).on('click', '.participants-list', function () {
  */
 jQuery(document).on('click', '.participants-no-show', function () {
     var participation_id = jQuery(this).data('participant-id');
+    var event_id = jQuery(this).data('event-id');
     var url = jQuery('#participants-no-show-url').val();
 
     if (confirm("Are you sure you want to mark this Participant as No Show?")) {
@@ -130,7 +132,7 @@ jQuery(document).on('click', '.participants-no-show', function () {
          * Get Manage modal to let user manage their saved appointments
          */
         jQuery.ajax({
-            url: url + '&participation_id=' + participation_id,
+            url: url + '&participation_id=' + participation_id + "&event_id=" + event_id,
             type: 'GET',
             datatype: 'json',
             success: function (data) {

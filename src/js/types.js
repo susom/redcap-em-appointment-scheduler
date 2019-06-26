@@ -5,7 +5,11 @@ var record = {};
 jQuery(document).on('click', '.type', function () {
     var url = jQuery(this).data('url');
     var key = jQuery(this).data('key');
-
+    /**
+     * init the reservation event id for selected slot.
+     * @type {jQuery}
+     */
+    record.event_id = jQuery('#' + key + "-reservation-event-id").val();
     jQuery.ajax({
         'url': url,
         'type': 'GET',

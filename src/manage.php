@@ -13,8 +13,9 @@ try {
         throw new \LogicException('Please login.');
     }
 
-    $records = $module->getUserParticipation($user_email);
-    if ($records) {
+    $records = $module->getParticipant()->getUserParticipation($user_email);
+    if (count($records) > 0) {
+
         ?>
         <div class="container">
 
@@ -40,10 +41,10 @@ try {
             <div class="tab-content">
                 <div class="tab-pane fade active in show" id="<?php echo RESERVED_TEXT ?>">
                     <?php
-                    $reservedRecords = $module->getUserParticipation($user_email, RESERVED);
-                    if ($reservedRecords->num_rows > 0) {
+                    $reservedRecords = $module->getParticipant()->getUserParticipationViaStatus($records, RESERVED);
+                    if ($reservedRecords) {
                         foreach ($reservedRecords as $reserved) {
-                            $slot = $module->getParticipationSlotData($reserved['record_id']);
+                            $slot = $module->getParticipant()->getParticipationSlotData($reserved['slot_id']);
 
                             $record = array_pop($slot);
                             ?>
@@ -57,7 +58,8 @@ try {
                                         strtotime($record['end'])) ?></div>
                                 <div class="p-3 mb-2 col-lg-4 text-dark">
                                     <button type="button"
-                                            data-participation-id="<?php echo $reserved['id'] ?>"
+                                            data-participation-id="<?php echo $reserved['record_id'] ?>"
+                                            data-event-id="<?php echo $reserved['event_id'] ?>"
                                             class="cancel-appointment btn btn-block btn-danger">Cancel
                                     </button>
                                 </div>
@@ -71,10 +73,10 @@ try {
                 </div>
                 <div class="tab-pane fade" id="<?php echo CANCELED_TEXT ?>">
                     <?php
-                    $canceledRecords = $module->getUserParticipation($user_email, CANCELED);
-                    if ($canceledRecords->num_rows > 0) {
+                    $canceledRecords = $module->getParticipant()->getUserParticipationViaStatus($records, CANCELED);
+                    if ($canceledRecords) {
                         foreach ($canceledRecords as $canceled) {
-                            $slot = $module->getParticipationSlotData($canceled['record_id']);
+                            $slot = $module->getParticipant()->getParticipationSlotData($canceled['slot_id']);
 
                             $record = array_pop($slot);
                             ?>
@@ -100,10 +102,10 @@ try {
                 </div>
                 <div class="tab-pane fade" id="<?php echo NO_SHOW_TEXT ?>">
                     <?php
-                    $noShowRecords = $module->getUserParticipation($user_email, NO_SHOW);
-                    if ($noShowRecords->num_rows > 0) {
+                    $noShowRecords = $module->getParticipant()->getUserParticipationViaStatus($records, NO_SHOW);
+                    if ($noShowRecords) {
                         foreach ($noShowRecords as $noShow) {
-                            $slot = $module->getParticipationSlotData($noShow['record_id']);
+                            $slot = $module->getParticipant()->getParticipationSlotData($noShow['slot_id']);
 
                             $record = array_pop($slot);
                             ?>

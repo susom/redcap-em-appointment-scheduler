@@ -32,6 +32,14 @@
     "src/list"
   ],
   "links": {
+    "control-center": [
+      {
+        "name": "Appointment Scheduler Config",
+        "icon": "fas fa-receipt",
+        "url": "create_db_project.php"
+      }
+    ],
+
     "project": [
       {
         "name": "Appointment Scheduler",
@@ -101,7 +109,15 @@
       }
     ]
   },
-
+  "crons": [
+    {
+      "cron_name": "test_cron",
+      "cron_description": "This is just for fun to test cron functionality",
+      "method": "testCron",
+      "cron_frequency": "5",
+      "cron_max_run_time": "1200"
+    }
+  ],
   "system-settings": [
     {
       "key": "enable-system-debug-logging",
@@ -124,48 +140,90 @@
       "repeatable": true,
       "sub_settings": [
         {
-          "key": "event_id",
-          "name": "<b>Event id where the data is located</b><br/>Must include both source and destination fields",
+          "key": "slot_event_id",
+          "name": "<b>Appointment Slot Event</b><br>Select the arm/event where each record corresponds to an appointment slot that can be reserved.  This event must have the 'Slots' form enabled",
+          "required": true,
+          "type": "event-list"
+        },
+        {
+          "key": "reservation_event_id",
+          "name": "<b>Appointment Reservation Event</b><br>Select the arm/event where each record corresponds to a reserved appointment slot.  This event must have the 'Reservation' form enabled",
           "required": true,
           "type": "event-list"
         },
         {
           "key": "title",
-          "name": "<b>Title for summarize block</b><br/>Alternately you can add a title before you pipe in the result",
+          "name": "<b>Title for Appointment</b><br/>Alternately you can add a title before you pipe in the result",
           "required": false,
           "type": "textarea"
+        },
+        {
+          "key": "options_config",
+          "name": "<b>Options</b>",
+          "required": false,
+          "type": "descriptive"
+        },
+        {
+          "key": "use_api_url",
+          "name": "<b>Use API Url</b><br>Check to use unauthenticated api urls for scheduling appointments",
+          "required": false,
+          "type": "checkbox"
         },
         {
           "key": "max_future_days",
-          "name": "<b>Number of days required before appoint to book",
-          "required": false,
-          "type": "textarea"
-        },
-        {
-          "key": "phone_number_country_code",
-          "name": "<b>Country Phone code</b>",
+          "name": "<b>Future Availability</b><br>The maximum number of days in advance someone can book an appointment",
           "required": false,
           "type": "text"
         },
         {
-          "key": "twilio_sender_number",
-          "name": "<b>Twilio Phone number to send from(Numbers only)</b>",
+          "key": "include_redcap_pid",
+          "name": "<b>REDCap Project</b><br>Allow user to select a redcap project id to reference in their appointment",
           "required": false,
-          "type": "text"
+          "type": "checkbox"
         },
         {
-          "key": "twilio_sid",
-          "name": "<b>Twilio SID(You can find it in your Twilio dashboard)</b>",
+          "key": "include_notes",
+          "name": "<b>Include Notes</b><br>Allow user to input a paragraph about the appointment",
           "required": false,
-          "type": "text"
+          "type": "checkbox"
         },
         {
-          "key": "twilio_token",
-          "name": "<b>Twilio Token(You can find it in your Twilio dashboard)</b>",
+          "key": "notes_header",
+          "name": "<b>Notes Header</b><br>Enter a header to appear before the notes field",
           "required": false,
           "type": "text"
         }
       ]
+    },
+    {
+      "key": "twilio_config",
+      "name": "<b>Twilio Config</b>",
+      "required": false,
+      "type": "descriptive"
+    },
+    {
+      "key": "phone_number_country_code",
+      "name": "<b>Country Phone code</b>",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "key": "twilio_sender_number",
+      "name": "<b>Twilio Phone number to send from(Numbers only)</b>",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "key": "twilio_sid",
+      "name": "<b>Twilio SID(You can find it in your Twilio dashboard)</b>",
+      "required": false,
+      "type": "text"
+    },
+    {
+      "key": "twilio_token",
+      "name": "<b>Twilio Token(You can find it in your Twilio dashboard)</b>",
+      "required": false,
+      "type": "text"
     },
     {
       "key": "enable-project-debug-logging",
