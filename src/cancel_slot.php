@@ -8,18 +8,20 @@ use REDCap;
 
 
 try {
+    $suffix = $module->getSuffix();
     $data['record_id'] = filter_var($_GET['record_id'], FILTER_SANITIZE_NUMBER_INT);
-    $data['event_id'] = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
+    $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
     if ($data['record_id'] == '') {
         throw new \LogicException('Record ID is missing');
     }
-    if ($data['event_id'] == '') {
+    if ($eventId == '') {
         throw new \LogicException('Event ID is missing');
     }
     if (!SUPER_USER) {
         throw new \LogicException('You should not be here');
     } else {
-        $data['slot_status'] = CANCELED;
+        $data['slot_status' . $suffix] = CANCELED;
+        $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
         $response = \REDCap::saveData('json', json_encode(array($data)));
         if (!empty($response['errors'])) {
             throw new \LogicException(implode("\n", $response['errors']));
@@ -27,8 +29,10 @@ try {
 
             $slot = AppointmentScheduler::getSlot($data['record_id'], $data['event_id']);
             $message['subject'] = $message['body'] = 'Your ' . REDCap::getEventNames(false, false,
-                    $data['event_id']) . ' at' . date('m/d/Y', strtotime($slot['start'])) . ' at ' . date('H:i',
-                    strtotime($slot['start'])) . ' to ' . date('H:i', strtotime($slot['end'])) . ' has been canceled';
+                    $data['event_id']) . ' at' . date('m/d/Y',
+                    strtotime($slot['start' . $suffix])) . ' at ' . date('H:i',
+                    strtotime($slot['start' . $suffix])) . ' to ' . date('H:i',
+                    strtotime($slot['end' . $suffix])) . ' has been canceled';
             $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
 
             $module->notifyParticipants($data['record_id'], $reservationEventId, $message);

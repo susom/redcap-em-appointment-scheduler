@@ -48,19 +48,26 @@ $instances = $module->getInstances();
     <div class="container">
         <?php
         foreach ($instances as $instance) {
-            $slotEvent = REDCap::getEventNames(false, false, $instance['slot_event_id']);
+            if (isset($_GET['complementary']) && $_GET['complementary'] == 'true') {
+                $slotsEventId = $instance['survey_complementary_slot_event_id'];
+                $reservationEventId = $instance['survey_complementary_reservation_event_id'];
+            } else {
+                $slotsEventId = $instance['slot_event_id'];
+                $reservationEventId = $instance['reservation_event_id'];
+            }
+            $slotEvent = REDCap::getEventNames(false, false, $slotsEventId);
             ?>
             <div class="row  p-3 mb-2">
-                <a class="type" data-key="<?php echo $instance['slot_event_id'] ?>" href="javascript:;"
-                   data-url="<?php echo $url . '&event_id=' . $instance['slot_event_id'] ?>">
+                <a class="type" data-key="<?php echo $slotsEventId ?>" href="javascript:;"
+                   data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>">
                     <div class="btn btn-block btn-info"><?php echo $slotEvent ?></div>
                 </a>
             </div>
-            <input type="hidden" id="<?php echo $instance['slot_event_id'] ?>-reservation-event-id"
-                   value="<?php echo $instance['reservation_event_id'] ?>"
+            <input type="hidden" id="<?php echo $slotsEventId ?>-reservation-event-id"
+                   value="<?php echo $reservationEventId ?>"
                    class="hidden"/>
             <div class="row">
-                <div class="slots-container" id="<?php echo $instance['slot_event_id'] ?>-calendar"
+                <div class="slots-container" id="<?php echo $slotsEventId ?>-calendar"
                      style="width: 100%;"></div>
             </div>
             <?php
@@ -68,32 +75,38 @@ $instances = $module->getInstances();
         ?>
 
 
-        <input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', true, true) ?>"
-               class="hidden"/>
-        <input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', true, true) ?>"
-               class="hidden"/>
-        <input type="hidden" id="book-submit-url" value="<?php echo $module->getUrl('src/book.php', false, true) ?>"
-               class="hidden"/>
-        <input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', true, true) ?>"
-               class="hidden"/>
-        <input type="hidden" id="list-view-url" value="<?php echo $module->getUrl('src/list.php', true, true) ?>"
-               class="hidden"/>
-        <input type="hidden" id="manage-url" value="<?php echo $module->getUrl('src/manage.php', false, true) ?>"
-               class="hidden"/>
+        <!--
+        ***********Add COMPLEMENTARY_SUFFIX to the end of each URL so the suffix can be loaded when ever you instantiate $module ***********
+        -->
+        <input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', true,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', true,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="book-submit-url" value="<?php echo $module->getUrl('src/book.php', false,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', true,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="list-view-url" value="<?php echo $module->getUrl('src/list.php', true,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="manage-url" value="<?php echo $module->getUrl('src/manage.php', false,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="manage-calendar-url"
-               value="<?php echo $module->getUrl('src/manage_calendars.php', false, true) ?>" class="hidden"/>
-        <input type="hidden" id="cancel-appointment-url"
-               value="<?php echo $module->getUrl('src/cancel.php', false, true) ?>" class="hidden"/>
-        <input type="hidden" id="cancel-slot-url"
-               value="<?php echo $module->getUrl('src/cancel_slot.php', false, true) ?>" class="hidden"/>
-        <input type="hidden" id="reschedule-submit-url"
-               value="<?php echo $module->getUrl('src/reschedule.php', false, true) ?>" class="hidden"/>
+               value="<?php echo $module->getUrl('src/manage_calendars.php', false,
+                       true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="cancel-appointment-url" value="<?php echo $module->getUrl('src/cancel.php', false,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="cancel-slot-url" value="<?php echo $module->getUrl('src/cancel_slot.php', false,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="reschedule-submit-url" value="<?php echo $module->getUrl('src/reschedule.php', false,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="participants-list-url"
-               value="<?php echo $module->getUrl('src/participants_list.php', false, true) ?>" class="hidden"/>
-        <input type="hidden" id="participants-no-show-url"
-               value="<?php echo $module->getUrl('src/no_show.php', false, true) ?>" class="hidden"/>
+               value="<?php echo $module->getUrl('src/participants_list.php', false,
+                       true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="participants-no-show-url" value="<?php echo $module->getUrl('src/no_show.php', false,
+                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="event-id" value="" class="hidden"/>
         <input type="hidden" id="user-email" value="<?php echo $user_email ?>" class="hidden"/>
+        <input type="hidden" id="complementary-suffix" value="<?php echo $module->getSuffix() ?>" class="hidden"/>
 
 
     </div>

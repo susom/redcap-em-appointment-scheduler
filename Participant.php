@@ -61,11 +61,11 @@ class Participant
      * @param int $record_id
      * @return int
      */
-    public function getSlotActualCountReservedSpots($slotId, $eventId)
+    public function getSlotActualCountReservedSpots($slotId, $eventId, $suffix)
     {
         try {
 
-            $filter = "[slot_id] = '" . $slotId . "'";
+            $filter = "[slot_id$suffix] = '" . $slotId . "' AND [participant_status$suffix] = '" . RESERVED . "'";
             $param = array(
                 'filterLogic' => $filter,
                 'return_format' => 'array',
@@ -104,11 +104,11 @@ class Participant
      * @param int $record_id
      * @return bool|\mysqli_result
      */
-    public function getSlotParticipants($recordId, $eventId)
+    public function getSlotParticipants($recordId, $eventId, $suffix)
     {
         try {
 
-            $filter = "[slot_id] = '" . $recordId . "'";
+            $filter = "[slot_id$suffix] = '" . $recordId . "'";
             $param = array(
                 'filterLogic' => $filter,
                 'return_format' => 'array',
@@ -141,13 +141,13 @@ class Participant
      * @param null $status
      * @return mixed
      */
-    public function getUserParticipation($email, $status = null)
+    public function getUserParticipation($email, $suffix, $status = null)
     {
         try {
             if (is_null($status)) {
-                $filter = "[email] = '" . $email . "'";
+                $filter = "[email$suffix] = '" . $email . "'";
             } else {
-                $filter = "[email] = '" . $email . "' AND participant_status = $status";
+                $filter = "[email$suffix] = '" . $email . "' AND [participant_status$suffix] = $status";
             }
             $param = array(
                 'filterLogic' => $filter,
@@ -181,14 +181,14 @@ class Participant
         }
     }
 
-    public function getUserParticipationViaStatus($records, $status)
+    public function getUserParticipationViaStatus($records, $status, $suffix)
     {
         $result = array();
         foreach ($records as $record) {
             $participation = end($record);
             $eventId = key($record);
             $participation['event_id'] = $eventId;
-            if ($participation['participant_status'] == $status) {
+            if ($participation['participant_status' . $suffix] == $status) {
                 $result[] = $participation;
             }
         }

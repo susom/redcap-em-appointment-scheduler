@@ -4,10 +4,11 @@ namespace Stanford\AppointmentScheduler;
 
 /** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
 
-
+$suffix = $module->getSuffix();
 $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $data = $module->getCurrentMonthSlots($eventId);
 $url = $module->getUrl('src/calendar.php', true, true);
+
 
 ?>
 
@@ -44,25 +45,25 @@ if (empty($data)) {
         /**
          * group by day
          */
-        $day = date('d', strtotime($slot['start']));
+        $day = date('d', strtotime($slot['start' . $suffix]));
 
 
-        $days[$day][$slot['record_id']]['date'] = date('Y-m-d', strtotime($slot['start']));
-        $days[$day][$slot['record_id']]['start'] = date('H:i', strtotime($slot['start']));
-        $days[$day][$slot['record_id']]['end'] = date('H:i', strtotime($slot['end']));
-        $days[$day][$slot['record_id']]['location'] = $slot['location'];
-        $days[$day][$slot['record_id']]['number_of_participants'] = $slot['number_of_participants'];
-        $days[$day][$slot['record_id']]['booked_slots'] = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
-            $reservationEventId);
+        $days[$day][$slot['record_id']]['date' . $suffix] = date('Y-m-d', strtotime($slot['start' . $suffix]));
+        $days[$day][$slot['record_id']]['start' . $suffix] = date('H:i', strtotime($slot['start' . $suffix]));
+        $days[$day][$slot['record_id']]['end' . $suffix] = date('H:i', strtotime($slot['end' . $suffix]));
+        $days[$day][$slot['record_id']]['location' . $suffix] = $slot['location' . $suffix];
+        $days[$day][$slot['record_id']]['number_of_participants' . $suffix] = $slot['number_of_participants' . $suffix];
+        $days[$day][$slot['record_id']]['booked_slots' . $suffix] = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
+            $reservationEventId, $suffix);
         /**
          * check if we have slots available
          */
-        if ($days[$day][$slot['record_id']]['number_of_participants'] > $days[$day][$slot['record_id']]['booked_slots']) {
-            $days[$day][$slot['record_id']]['booked'] = false;
-            $days[$day][$slot['record_id']]['available'] = $days[$day][$slot['record_id']]['number_of_participants'] - $days[$day][$slot['record_id']]['booked_slots'];
+        if ($days[$day][$slot['record_id']]['number_of_participants' . $suffix] > $days[$day][$slot['record_id']]['booked_slots' . $suffix]) {
+            $days[$day][$slot['record_id']]['booked' . $suffix] = false;
+            $days[$day][$slot['record_id']]['available' . $suffix] = $days[$day][$slot['record_id']]['number_of_participants' . $suffix] - $days[$day][$slot['record_id']]['booked_slots' . $suffix];
         } else {
-            $days[$day][$slot['record_id']]['booked'] = true;
-            $days[$day][$slot['record_id']]['notes'] = 'No available spots <br>\\TODO WHAT DO DISPLAY HERE!';
+            $days[$day][$slot['record_id']]['booked' . $suffix] = true;
+            $days[$day][$slot['record_id']]['notes' . $suffix] = 'No available spots <br>\\TODO WHAT DO DISPLAY HERE!';
         }
     }
 
@@ -75,33 +76,33 @@ if (empty($data)) {
         ?>
         <div class="border row ">
             <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
-                        strtotime($dayName['date'])) . '.)' ?></div>
+                        strtotime($dayName['date' . $suffix])) . '.)' ?></div>
             <div class=" col-lg-9">
                 <?php
                 foreach ($days[$key] as $record_id => $record) {
                     ?>
                     <div class="row border">
-                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location'] ?></div>
+                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location' . $suffix] ?></div>
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo date('H:i',
-                                strtotime($record['start'])) ?> – <?php echo date('H:i',
-                                strtotime($record['end'])) ?></div>
+                                strtotime($record['start' . $suffix])) ?> – <?php echo date('H:i',
+                                strtotime($record['end' . $suffix])) ?></div>
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php
-                            if ($record['booked']) {
-                                echo $record['notes'];
+                            if ($record['booked' . $suffix]) {
+                                echo $record['notes' . $suffix];
                             } else {
                                 ?>
                                 <button type="button"
                                         data-record-id="<?php echo $record_id ?>"
                                         data-event-id="<?php echo $eventId ?>"
-                                        data-date="<?php echo date('Ymd', strtotime($record['start'])) ?>"
-                                        data-start="<?php echo date('Hi', strtotime($record['start'])) ?>"
-                                        data-end="<?php echo date('Hi', strtotime($record['end'])) ?>"
+                                        data-date="<?php echo date('Ymd', strtotime($record['start' . $suffix])) ?>"
+                                        data-start="<?php echo date('Hi', strtotime($record['start' . $suffix])) ?>"
+                                        data-end="<?php echo date('Hi', strtotime($record['end' . $suffix])) ?>"
                                         data-modal-title="<?php echo date('H:i',
-                                            strtotime($record['start'])) ?> – <?php echo date('H:i',
-                                            strtotime($record['end'])) ?>"
+                                            strtotime($record['start' . $suffix])) ?> – <?php echo date('H:i',
+                                            strtotime($record['end' . $suffix])) ?>"
                                         class="time-slot btn btn-block btn-success">Book
                                 </button>
-                                <small>* (<?php echo $record['available'] ?>) seats is still available</small>
+                                <small>* (<?php echo $record['available' . $suffix] ?>) seats is still available</small>
                                 <?php
                             }
                             ?></div>

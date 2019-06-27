@@ -7,16 +7,17 @@ namespace Stanford\AppointmentScheduler;
 
 try {
     $data = $module->sanitizeInput();
-    if ($data['email'] == '' || $data['name'] == '' || $data['mobile'] == '') {
+    if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '' || $data['mobile' . $module->getSuffix()] == '') {
         throw new \LogicException('Data cant be missing');
     } else {
 
-        $data['participant_status'] = RESERVED;
+        $data['participant_status' . $module->getSuffix()] = RESERVED;
 
         /**
          * let mark it as complete so we can send the survey if needed.
+         * Complete status has different naming convension based on the instrument name. so you need to get instrument name and append _complete to it.
          */
-        $data['reservation_complete'] = REDCAP_COMPLETE;
+        $data[$Proj->lastFormName . '_complete'] = REDCAP_COMPLETE;
         $data['event_id'] = $module->getReservationEventIdViaSlotEventId($data['event_id']);
         $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $data['event_id']);
         $data['record_id'] = $module->getNextRecordsId($data['event_id'], PROJECT_ID);

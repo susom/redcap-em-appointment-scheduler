@@ -12,9 +12,9 @@ try {
     if (!SUPER_USER) {
         throw new \LogicException('You cant be here');
     }
-
-    $records = $module->getAllOpenSlots();
-    $data = $module->prepareInstructorsSlots($records);
+    $suffix = $module->getSuffix();
+    $records = $module->getAllOpenSlots($suffix);
+    $data = $module->prepareInstructorsSlots($records, $suffix);
     $instructors = array_keys($data);
     $pointer = 0;
     if ($instructors) {
@@ -49,31 +49,42 @@ try {
                         <?php
                         if (!empty($instructorSlots)) {
                             foreach ($instructorSlots as $slot) {
-
                                 ?>
                                 <div class="row">
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
                                         <strong><?php echo $slot['event_name'] ?></strong>
-                                        - <?php echo $slot['location'] ?></div>
+                                        - <?php echo $slot['location' . $suffix] ?></div>
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
                                         <?php echo date('m/d/Y',
-                                            strtotime($slot['start'])) ?>
+                                            strtotime($slot['start' . $suffix])) ?>
                                         <br><?php echo date('H:i',
-                                            strtotime($slot['start'])) ?> – <?php echo date('H:i',
-                                            strtotime($slot['end'])) ?></div>
+                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                            strtotime($slot['end' . $suffix])) ?></div>
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
+                                        <?php
+                                        if ($slot['slot_status' . $suffix] == CANCELED) {
+                                            ?>
+                                            Slot Canceled
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <button type="button"
+                                                    data-record-id="<?php echo $slot['record_id'] ?>"
+                                                    data-event-id="<?php echo $slot['event_id'] ?>"
+                                                    class="cancel-slot btn btn-block btn-danger">Cancel
+                                            </button>
+                                            <?php
+                                        }
+                                        ?>
                                         <button type="button"
                                                 data-record-id="<?php echo $slot['record_id'] ?>"
                                                 data-event-id="<?php echo $slot['event_id'] ?>"
-                                                class="cancel-slot btn btn-block btn-danger">Cancel
-                                        </button>
-                                        <button type="button"
-                                                data-record-id="<?php echo $slot['record_id'] ?>"
-                                                data-event-id="<?php echo $slot['event_id'] ?>"
-                                                data-location="<?php echo $slot['location'] ?>"
-                                                data-date="<?php echo date('m/d/Y', strtotime($slot['start'])) ?>"
-                                                data-start="<?php echo date('H:i', strtotime($slot['start'])) ?>"
-                                                data-end="<?php echo date('H:i', strtotime($slot['end'])) ?>"
+                                                data-location="<?php echo $slot['location' . $suffix] ?>"
+                                                data-date="<?php echo date('m/d/Y',
+                                                    strtotime($slot['start' . $suffix])) ?>"
+                                                data-start="<?php echo date('H:i',
+                                                    strtotime($slot['start' . $suffix])) ?>"
+                                                data-end="<?php echo date('H:i', strtotime($slot['end' . $suffix])) ?>"
                                                 data-instructor="<?php echo $instructor ?>"
                                                 class="reschedule-slot btn btn-block btn-info">Reschedule
                                         </button>
@@ -81,9 +92,9 @@ try {
                                                 data-record-id="<?php echo $slot['record_id'] ?>"
                                                 data-event-id="<?php echo $slot['event_id'] ?>"
                                                 data-modal-title="<?php echo date('m/d/Y',
-                                                    strtotime($slot['start'])) ?> <?php echo date('H:i',
-                                                    strtotime($slot['start'])) ?> – <?php echo date('H:i',
-                                                    strtotime($slot['end'])) ?>"
+                                                    strtotime($slot['start' . $suffix])) ?> <?php echo date('H:i',
+                                                    strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                                    strtotime($slot['end' . $suffix])) ?>"
                                                 class="participants-list btn btn-block btn-success">Participants List
                                         </button>
                                     </div>

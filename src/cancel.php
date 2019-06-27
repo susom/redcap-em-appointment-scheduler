@@ -12,7 +12,7 @@ try {
         throw new \LogicException('Participation ID is missing');
     } else {
 
-        $data['participant_status'] = CANCELED;
+        $data['participant_status' . $module->getSuffix()] = CANCELED;
         $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
         $response = \REDCap::saveData('json', json_encode(array($data)));
 

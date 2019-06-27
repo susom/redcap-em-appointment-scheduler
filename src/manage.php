@@ -13,7 +13,7 @@ try {
         throw new \LogicException('Please login.');
     }
 
-    $records = $module->getParticipant()->getUserParticipation($user_email);
+    $records = $module->getParticipant()->getUserParticipation($user_email, $module->getSuffix());
     if (count($records) > 0) {
 
         ?>
@@ -41,30 +41,33 @@ try {
             <div class="tab-content">
                 <div class="tab-pane fade active in show" id="<?php echo RESERVED_TEXT ?>">
                     <?php
-                    $reservedRecords = $module->getParticipant()->getUserParticipationViaStatus($records, RESERVED);
+                    $reservedRecords = $module->getParticipant()->getUserParticipationViaStatus($records, RESERVED,
+                        $module->getSuffix());
                     if ($reservedRecords) {
                         foreach ($reservedRecords as $reserved) {
-                            $slot = $module->getParticipant()->getParticipationSlotData($reserved['slot_id']);
+                            $slots = $module->getParticipant()->getParticipationSlotData($reserved['slot_id' . $module->getSuffix()]);
 
-                            $record = array_pop($slot);
-                            ?>
-                            <div class="row">
-                                <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location'] ?></div>
-                                <div class="p-3 mb-2 col-lg-4 text-dark">
-                                    <?php echo date('m/d/Y',
-                                        strtotime($record['start'])) ?>
-                                    <br><?php echo date('H:i',
-                                        strtotime($record['start'])) ?> – <?php echo date('H:i',
-                                        strtotime($record['end'])) ?></div>
-                                <div class="p-3 mb-2 col-lg-4 text-dark">
-                                    <button type="button"
-                                            data-participation-id="<?php echo $reserved['record_id'] ?>"
-                                            data-event-id="<?php echo $reserved['event_id'] ?>"
-                                            class="cancel-appointment btn btn-block btn-danger">Cancel
-                                    </button>
+                            foreach ($slots as $eventId => $slot) {
+                                $suffix = $module->getSuffixViaEventId($eventId);
+                                ?>
+                                <div class="row">
+                                    <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $slot['location' . $suffix] ?></div>
+                                    <div class="p-3 mb-2 col-lg-4 text-dark">
+                                        <?php echo date('m/d/Y',
+                                            strtotime($slot['start' . $suffix])) ?>
+                                        <br><?php echo date('H:i',
+                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                            strtotime($slot['end' . $suffix])) ?></div>
+                                    <div class="p-3 mb-2 col-lg-4 text-dark">
+                                        <button type="button"
+                                                data-participation-id="<?php echo $reserved['record_id'] ?>"
+                                                data-event-id="<?php echo $module->getReservationEventIdViaSlotEventId($eventId) ?>"
+                                                class="cancel-appointment btn btn-block btn-danger">Cancel
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <?php
+                                <?php
+                            }
                         }
                     } else {
                         echo 'No Active Reserved Appointment at this time';
@@ -73,25 +76,27 @@ try {
                 </div>
                 <div class="tab-pane fade" id="<?php echo CANCELED_TEXT ?>">
                     <?php
-                    $canceledRecords = $module->getParticipant()->getUserParticipationViaStatus($records, CANCELED);
+                    $canceledRecords = $module->getParticipant()->getUserParticipationViaStatus($records, CANCELED,
+                        $module->getSuffix());
                     if ($canceledRecords) {
                         foreach ($canceledRecords as $canceled) {
-                            $slot = $module->getParticipant()->getParticipationSlotData($canceled['slot_id']);
-
-                            $record = array_pop($slot);
-                            ?>
-                            <div class="row">
-                                <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location'] ?></div>
-                                <div class="p-3 mb-2 col-lg-4 text-dark">
-                                    <?php echo date('m/d/Y',
-                                        strtotime($record['start'])) ?>
-                                    <br><?php echo date('H:i',
-                                        strtotime($record['start'])) ?> – <?php echo date('H:i',
-                                        strtotime($record['end'])) ?></div>
-                                <div class="p-3 mb-2 col-lg-4 text-dark"><?php
-                                    $canceled['notes'] . ($record['notes'] != '' ? '<br>Instructor Notes:' . $record['notes'] : '') ?></div>
-                            </div>
-                            <?php
+                            $slots = $module->getParticipant()->getParticipationSlotData($canceled['slot_id' . $module->getSuffix()]);
+                            foreach ($slots as $eventId => $slot) {
+                                $suffix = $module->getSuffixViaEventId($eventId);
+                                ?>
+                                <div class="row">
+                                    <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $slot['location' . $suffix] ?></div>
+                                    <div class="p-3 mb-2 col-lg-4 text-dark">
+                                        <?php echo date('m/d/Y',
+                                            strtotime($slot['start' . $suffix])) ?>
+                                        <br><?php echo date('H:i',
+                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                            strtotime($slot['end' . $suffix])) ?></div>
+                                    <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo
+                                            $canceled['notes' . $suffix] . ($slot['notes' . $suffix] != '' ? '<br>Instructor Notes:' . $slot['notes' . $suffix] : '') ?></div>
+                                </div>
+                                <?php
+                            }
                         }
                     } else {
                         ?>
@@ -102,25 +107,28 @@ try {
                 </div>
                 <div class="tab-pane fade" id="<?php echo NO_SHOW_TEXT ?>">
                     <?php
-                    $noShowRecords = $module->getParticipant()->getUserParticipationViaStatus($records, NO_SHOW);
+                    $noShowRecords = $module->getParticipant()->getUserParticipationViaStatus($records, NO_SHOW,
+                        $module->getSuffix());
                     if ($noShowRecords) {
                         foreach ($noShowRecords as $noShow) {
-                            $slot = $module->getParticipant()->getParticipationSlotData($noShow['slot_id']);
+                            $slots = $module->getParticipant()->getParticipationSlotData($noShow['slot_id' . $module->getSuffix()]);
 
-                            $record = array_pop($slot);
-                            ?>
-                            <div class="row">
-                                <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location'] ?></div>
-                                <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo date('m/d/Y',
-                                        strtotime($record['start'])) ?>
-                                    <br>
-                                    <?php echo date('H:i',
-                                        strtotime($record['start'])) ?> – <?php echo date('H:i',
-                                        strtotime($record['end'])) ?></div>
-                                <div class="p-3 mb-2 col-lg-4 text-dark"><?php
-                                    $noShow['notes'] . ($record['notes'] != '' ? '<br>Instructor Notes:' . $record['notes'] : '') ?></div>
-                            </div>
-                            <?php
+                            foreach ($slots as $eventId => $slot) {
+                                $suffix = $module->getSuffixViaEventId($eventId);
+                                ?>
+                                <div class="row">
+                                    <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $slot['location' . $suffix] ?></div>
+                                    <div class="p-3 mb-2 col-lg-4 text-dark">
+                                        <?php echo date('m/d/Y',
+                                            strtotime($slot['start' . $suffix])) ?>
+                                        <br><?php echo date('H:i',
+                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                            strtotime($slot['end' . $suffix])) ?></div>
+                                    <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo
+                                            $canceled['notes' . $suffix] . ($slot['notes' . $suffix] != '' ? '<br>Instructor Notes:' . $slot['notes' . $suffix] : '') ?></div>
+                                </div>
+                                <?php
+                            }
                         }
                     } else {
                         ?>

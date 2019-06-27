@@ -58,6 +58,19 @@ define('MODULE_NAME', 'Appointment_scheduler');
 define('REDCAP_INCOMPLETE', 0);
 define('REDCAP_UNVERIFIED', 1);
 define('REDCAP_COMPLETE', 2);
+
+
+/**
+ * Complementary Constants (if you change in config.json you MUST update below constants accordingly)
+ */
+define('COMPLEMENTARY_EMAIL', 'complementary_email');
+define('COMPLEMENTARY_NAME', 'complementary_name');
+define('COMPLEMENTARY_MOBILE', 'complementary_mobile');
+define('COMPLEMENTARY_NOTES', 'complementary_notes');
+
+
+define('COMPLEMENTARY_SUFFIX', 'complementary_suffix');
+
 /**
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
@@ -69,7 +82,7 @@ define('REDCAP_COMPLETE', 2);
  * @property array $calendarParams
  * @property \Stanford\AppointmentScheduler\Participant $participant
  * @property \Monolog\Logger $logger
- * @property \Stanford\AppointmentScheduler\Survey $survey
+ * @property string $suffix
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
@@ -118,9 +131,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     private $participant;
 
     /**
-     * @var \Survey
+     * @var string
      */
-    private $survey;
+    private $suffix;
+
     /**
      * AppointmentScheduler constructor.
      */
@@ -147,9 +161,9 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
 
             /**
-             * Initiate surveys
+             * Initiate suffix if exists
              */
-            $this->setSurvey();
+            $this->setSuffix();
 
             /**
              * Initiate Email Client
@@ -185,6 +199,20 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
+     * @return string
+     */
+    public function getSuffix()
+    {
+        return $this->suffix;
+    }
+
+    public function setSuffix()
+    {
+        $this->suffix = (isset($_GET['complementary_suffix']) ? filter_var($_GET['complementary_suffix'],
+            FILTER_SANITIZE_STRING) : '');
+    }
+
+    /**
      * @return \CalendarEmail
      */
     public function getEmailClient()
@@ -217,22 +245,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $this->participant = new  \Stanford\AppointmentScheduler\Participant();
     }
 
-
-    /**
-     * @return \Survey
-     */
-    public function getSurvey()
-    {
-        return $this->survey;
-    }
-
-    /**
-     * @param \Survey $survey
-     */
-    public function setSurvey()
-    {
-        $this->survey = new  \Stanford\AppointmentScheduler\Survey();
-    }
 
 
     /**
@@ -390,23 +402,21 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * @param int $event_id
+     * @param int $eventId
      * @return array
      */
-    public function getCurrentMonthSlots($event_id)
+    public function getCurrentMonthSlots($eventId)
     {
         try {
-            if ($event_id) {
+            if ($eventId) {
 
-                /*
-                 * TODO Check if date within allowed window
-                 */
-                $filter = "[start] > '" . date('Y-m-d') . "' AND " . "[start] < '" . date('Y-m-d',
+                $variable = 'start' . $this->getSuffix();
+                $filter = "[$variable] > '" . date('Y-m-d') . "' AND " . "[$variable] < '" . date('Y-m-d',
                         strtotime('first day of next month')) . "'";
                 $param = array(
                     'filterLogic' => $filter,
                     'return_format' => 'array',
-                    'events' => REDCap::getEventNames(true, false, $event_id)
+                    'events' => REDCap::getEventNames(true, false, $eventId)
                 );
                 return REDCap::getData($param);
             } else {
@@ -421,13 +431,13 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * @return array
      */
-    public function getAllOpenSlots()
+    public function getAllOpenSlots($suffix)
     {
         try {
             /*
                  * TODO Check if date within allowed window
                  */
-            $filter = "[start] > '" . date('Y-m-d') . "' AND " . "[slot_status] != '" . CANCELED . "'";
+            $filter = "[start$suffix] > '" . date('Y-m-d') . "' AND " . "[slot_status$suffix] != '" . CANCELED . "'";
             $param = array(
                 'filterLogic' => $filter,
                 'return_format' => 'array'
@@ -442,7 +452,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * @return array
      */
-    public function prepareInstructorsSlots($records)
+    public function prepareInstructorsSlots($records, $suffix)
     {
         $result = array();
         /**
@@ -459,7 +469,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
                         $slot['event_name'] = $events[$event_id];
                         $slot['event_id'] = $event_id;
-                        $result[$slot['instructor']][] = $slot;
+                        $result[$slot['instructor' . $suffix]][] = $slot;
                     }
                 }
 
@@ -561,13 +571,17 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     public function sanitizeInput()
     {
         $data = array();
-        $data['email'] = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-        $data['name'] = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
-        $data['mobile'] = filter_var($_POST['mobile'], FILTER_SANITIZE_STRING);
-        $data['participant_notes'] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
-        $data['slot_id'] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
-        $data['private'] = filter_var($_POST['private'], FILTER_SANITIZE_NUMBER_INT);
-        $data['participant_location'] = filter_var($_POST['type'], FILTER_SANITIZE_NUMBER_INT);
+        $data['email' . $this->getSuffix()] = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $data['name' . $this->getSuffix()] = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+        $data['mobile' . $this->getSuffix()] = filter_var($_POST['mobile'], FILTER_SANITIZE_STRING);
+        $data['participant_notes' . $this->getSuffix()] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
+        $data['slot_id' . $this->getSuffix()] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
+        $data['private' . $this->getSuffix()] = filter_var($_POST['private'], FILTER_SANITIZE_NUMBER_INT);
+        $data['participant_location' . $this->getSuffix()] = filter_var($_POST['type'], FILTER_SANITIZE_NUMBER_INT);
+
+        /**
+         * For Event data you do not need to append suffix info because it will not be saved.
+         */
         $data['event_id'] = filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT);
         $data['redcap_event_name'] = \REDCap::getEventNames(true, true,
             filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT));
@@ -696,12 +710,77 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     {
         $instances = $this->getInstances();
         foreach ($instances as $instance) {
-            if ($instance['slot_event_id'] == $slotEventId) {
-                return $instance['reservation_event_id'];
+
+            /**
+             * If its regular appointment
+             */
+            if ($this->getSuffix() == '') {
+                if ($instance['slot_event_id'] == $slotEventId) {
+                    return $instance['reservation_event_id'];
+                }
+            } else {
+                if ($instance['survey_complementary_slot_event_id'] == $slotEventId) {
+                    return $instance['survey_complementary_reservation_event_id'];
+                }
             }
+
         }
         return false;
     }
 
+    /**
+     * call REDCap hook
+     */
+    public function redcap_survey_complete()
+    {
+        $instances = $this->getInstances();
+        $survey = filter_var($_GET['page'], FILTER_SANITIZE_STRING);
+        $uri = '';
+        foreach ($instances as $instance) {
+            if ($instance['instrument_id_for_complementary_appointment'] == $survey) {
+                $uri = $this->buildSurveyComplementaryInputsURI($instance);
+                break;
+            }
+        }
+        $url = $this->getUrl('src/types.php', false, true) . $uri;
+        echo "<a href='$url'>Click Here</a> If you want to scheule a followup regarding your survey input. ";
+    }
 
+    /**
+     * @param array $instance
+     * @return string
+     */
+    private function buildSurveyComplementaryInputsURI($instance)
+    {
+        $email = filter_var($_POST[$instance[COMPLEMENTARY_EMAIL]], FILTER_SANITIZE_STRING);
+        $result = '&' . COMPLEMENTARY_EMAIL . '=' . $email;
+        $name = filter_var($_POST[$instance[COMPLEMENTARY_NAME]], FILTER_SANITIZE_STRING);
+        $result .= '&' . COMPLEMENTARY_NAME . '=' . $name;
+        $mobile = filter_var($_POST[$instance[COMPLEMENTARY_MOBILE]], FILTER_SANITIZE_NUMBER_INT);
+        $result .= '&' . COMPLEMENTARY_MOBILE . '=' . $mobile;
+        $notes = filter_var($_POST[$instance[COMPLEMENTARY_NOTES]], FILTER_SANITIZE_STRING);
+        $result .= '&' . COMPLEMENTARY_NOTES . '=' . $notes;
+        $result .= '&complementary=true';
+        $result .= '&complementary_suffix=' . $instance[COMPLEMENTARY_SUFFIX];
+
+        return $result;
+    }
+
+    /**
+     * @param int $eventId
+     * @return string
+     */
+    public function getSuffixViaEventId($eventId)
+    {
+        $instances = $this->getInstances();
+        foreach ($instances as $instance) {
+            /**
+             * if the event id passed is survey_complementary_slot_event_id or survey_complementary_reservation_event_id
+             */
+            if ($instance['survey_complementary_slot_event_id'] == $eventId || $instance['survey_complementary_reservation_event_id'] == $eventId) {
+                return $instance['complementary_suffix'];
+            }
+        }
+        return '';
+    }
 }

@@ -1,4 +1,8 @@
+<?php
+/** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
+?>
 <!-- Generic Modal -->
+
 <div class="modal" id="generic-modal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -42,11 +46,15 @@
                     <input type="hidden" name="record-id" id="record-id"/>
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
+                               value="<?php echo(isset($_GET[COMPLEMENTARY_NAME]) ? filter_var($_GET[COMPLEMENTARY_NAME],
+                                   FILTER_SANITIZE_STRING) : '') ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email address</label>
-                        <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp"
+                        <input type="email" name="email" class="form-control" id="email"
+                               value="<?php echo(isset($_GET[COMPLEMENTARY_EMAIL]) ? filter_var($_GET[COMPLEMENTARY_EMAIL],
+                                   FILTER_SANITIZE_STRING) : '') ?>" aria-describedby="emailHelp"
                                placeholder="Enter email" required>
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                             else.
@@ -55,6 +63,8 @@
                     <div class="form-group">
                         <label for="mobile">Mobile</label>
                         <input type="text" name="mobile" class="form-control" id="mobile"
+                               value="<?php echo(isset($_GET[COMPLEMENTARY_MOBILE]) ? filter_var($_GET[COMPLEMENTARY_MOBILE],
+                                   FILTER_SANITIZE_NUMBER_INT) : '') ?>"
                                placeholder="Mobile/Phone Number" required>
                     </div>
                     <div class="form-check">
@@ -82,7 +92,9 @@
                     </div>
                     <div class="form-group">
                         <label for="notes">Notes</label>
-                        <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
+                        <textarea class="form-control" name="notes" id="notes"
+                                  rows="3"><?php echo(isset($_GET[COMPLEMENTARY_NOTES]) ? filter_var($_GET[COMPLEMENTARY_NOTES],
+                                FILTER_SANITIZE_STRING) : '') ?></textarea>
                     </div>
                 </form>
             </div>
