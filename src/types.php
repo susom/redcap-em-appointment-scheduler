@@ -6,7 +6,7 @@ namespace Stanford\AppointmentScheduler;
 
 use REDCap;
 
-$url = $module->getUrl('src/list.php', true, true);
+$url = $module->getUrl('src/list.php', false, true, true);
 $instances = $module->getInstances();
 ?>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -78,23 +78,23 @@ $instances = $module->getInstances();
         <!--
         ***********Add COMPLEMENTARY_SUFFIX to the end of each URL so the suffix can be loaded when ever you instantiate $module ***********
         -->
-        <input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', true,
-                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-        <input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', true,
-                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', false,
+                true, true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', false,
+                true, true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="book-submit-url" value="<?php echo $module->getUrl('src/book.php', false,
-                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-        <input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', true,
-                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-        <input type="hidden" id="list-view-url" value="<?php echo $module->getUrl('src/list.php', true,
-                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+                true, true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', false,
+                true, true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        <input type="hidden" id="list-view-url" value="<?php echo $module->getUrl('src/list.php', false,
+                true, true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="manage-url" value="<?php echo $module->getUrl('src/manage.php', false,
-                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+                true, true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="manage-calendar-url"
                value="<?php echo $module->getUrl('src/manage_calendars.php', false,
                        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="cancel-appointment-url" value="<?php echo $module->getUrl('src/cancel.php', false,
-                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+                true, true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="cancel-slot-url" value="<?php echo $module->getUrl('src/cancel_slot.php', false,
                 true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
         <input type="hidden" id="reschedule-submit-url" value="<?php echo $module->getUrl('src/reschedule.php', false,
