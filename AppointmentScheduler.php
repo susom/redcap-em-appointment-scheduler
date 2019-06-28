@@ -469,7 +469,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
                         $slot['event_name'] = $events[$event_id];
                         $slot['event_id'] = $event_id;
-                        $result[$slot['instructor' . $suffix]][] = $slot;
+                        $result[] = $slot;
                     }
                 }
 

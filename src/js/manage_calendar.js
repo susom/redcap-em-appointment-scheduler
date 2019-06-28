@@ -110,7 +110,9 @@ jQuery(document).on('click', '.participants-list', function () {
         success: function (response) {
             jQuery('#generic-modal').find('.modal-title').html('Participants list for ' + title);
             jQuery('#generic-modal').find('.modal-body').html(response);
-            $('#generic-modal').modal('show');
+            jQuery('#generic-modal').modal('show');
+
+            jQuery('#participants-datatable').DataTable();
         },
         error: function (request, error) {
             alert("Request: " + JSON.stringify(request));

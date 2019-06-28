@@ -18,23 +18,39 @@ try {
     $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
     $participants = $module->getParticipant()->getSlotParticipants($recordId, $reservationEventId, $suffix);
     if (!empty($participants)) {
-        foreach ($participants as $record) {
+        ?>
+        <table id="participants-datatable" class="display">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Notes</th>
+                <th>No Show</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $pointer = 1;
+            foreach ($participants as $record) {
             $participant = $record[$reservationEventId];
             ?>
-            <div class="row">
-                <div class="p-3 mb-2 col-lg-4 text-dark">
-                    <strong><?php echo $participant['name' . $suffix] ?></strong></div>
-                <div class="p-3 mb-2 col-lg-4 text-dark">
-                    <a href="mailto:<?php echo $participant['email' . $suffix] ?>"><?php echo $participant['email' . $suffix] ?></a>
-                </div>
-                <div class="p-3 mb-2 col-lg-4 text-dark">
-                    <?php
+                <tr>
+                    <td><?php echo $pointer ?></td>
+                    <td><?php echo $participant['name' . $suffix] ?></td>
+                    <td>
+                        <a href="mailto:<?php echo $participant['email' . $suffix] ?>"><?php echo $participant['email' . $suffix] ?></a>
+                    </td>
+                    <td><?php echo $participant['mobile' . $suffix] ?></td>
+                    <td><?php echo $participant['notes' . $suffix] ?></td>
+                    <td><?php
                     if ($participant['participant_status' . $suffix] == RESERVED) {
                         ?>
                         <button type="button"
                                 data-participant-id="<?php echo $participant['record_id'] ?>"
                                 data-event-id="<?php echo $reservationEventId ?>"
-                                class="participants-no-show btn btn-block btn-danger">No Show
+                                class="participants-no-show">No Show
                         </button>
                         <?php
                     } elseif ($participant['participant_status' . $suffix] == CANCELED) {
@@ -47,11 +63,15 @@ try {
                         <?php
                     }
                     ?>
-
-                </div>
-            </div>
-            <?php
-        }
+                    </td>
+                </tr>
+                <?php
+                $pointer++;
+            }
+            ?>
+            </tbody>
+        </table>
+        <?php
     } else {
         ?>
         <div class="row">

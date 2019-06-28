@@ -198,9 +198,10 @@ jQuery(document).on('click', '.manage-calendars', function () {
             success: function (data) {
                 jQuery('#generic-modal').find('.modal-title').html('Manage Instructors Calendar');
                 jQuery('#generic-modal').find('.modal-body').html(data);
-                $('#generic-modal').modal('show');
+                jQuery('#generic-modal').modal('show');
+                jQuery('#generic-modal').modal('show');
 
-                $('#myTabs a[href="#profile"]').tab('show')
+                jQuery('#calendar-datatable').DataTable();
             },
             error: function (request, error) {
                 alert("Request: " + JSON.stringify(request));

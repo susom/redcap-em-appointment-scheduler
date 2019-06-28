@@ -18,7 +18,12 @@ $instances = $module->getInstances();
           href="//cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css">
     <script src="//code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
 
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <div class="container">
         <nav class="navbar navbar-expand-sm bg-light navbar-light">
             <ul class="navbar-nav">
