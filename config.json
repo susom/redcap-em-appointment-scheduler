@@ -152,32 +152,6 @@
       "repeatable": true,
       "sub_settings": [
         {
-          "key": "test_project_id",
-          "name": "<b>Project ids</b><br>",
-          "required": true,
-          "type": "project-id",
-          "branchingLogic": {
-            "children": [
-              {
-                "key": "test_event",
-                "name": "<b>Load Events list</b>",
-                "required": false,
-                "type": "event-list",
-                "branchingLogic": {
-                  "children": [
-                    {
-                      "key": "test_field",
-                      "name": "<b>Load Fields list</b>",
-                      "required": false,
-                      "type": "field-list"
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
           "key": "slot_event_id",
           "name": "<b>Appointment Slot Event</b><br>Select the arm/event where each record corresponds to an appointment slot that can be reserved.  This event must have the 'Slots' form enabled",
           "required": true,
