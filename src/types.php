@@ -6,6 +6,8 @@ namespace Stanford\AppointmentScheduler;
 
 use REDCap;
 
+
+$x = $module->getConfig();
 $url = $module->getUrl('src/list.php', false, true, true);
 $instances = $module->getInstances();
 ?>
