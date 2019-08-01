@@ -58,66 +58,6 @@
         "icon": "brick",
         "url": "src/types.php",
         "show-header-and-footer": false
-      },
-      {
-        "name": "Appointment Slots",
-        "icon": "brick",
-        "url": "src/slots.php",
-        "show-header-and-footer" : false
-      },
-      {
-        "name": "User Calendar",
-        "icon": "brick",
-        "url": "src/calendar.php",
-        "show-header-and-footer" : false
-      },
-      {
-        "name": "Book Appointment",
-        "icon": "brick",
-        "url": "src/book.php",
-        "show-header-and-footer" : false
-      },
-      {
-        "name": "Date Summary",
-        "icon": "brick",
-        "url": "src/summary.php",
-        "show-header-and-footer": false
-      },
-      {
-        "name": "List View",
-        "icon": "brick",
-        "url": "src/list.php",
-        "show-header-and-footer": false
-      },
-      {
-        "name": "Manage View",
-        "icon": "brick",
-        "url": "src/manage.php",
-        "show-header-and-footer": false
-      },
-      {
-        "name": "Cancel Appointment View",
-        "icon": "brick",
-        "url": "src/cancel.php",
-        "show-header-and-footer": false
-      },
-      {
-        "name": "Manage Calendars View",
-        "icon": "brick",
-        "url": "src/manage_calendars.php",
-        "show-header-and-footer": false
-      },
-      {
-        "name": "Reschedule View",
-        "icon": "brick",
-        "url": "src/reschedule.php",
-        "show-header-and-footer": false
-      },
-      {
-        "name": "Participants List View",
-        "icon": "brick",
-        "url": "src/participants_list.php",
-        "show-header-and-footer": false
       }
     ]
   },

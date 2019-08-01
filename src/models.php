@@ -91,10 +91,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="notes">Notes</label>
+                        <label for="notes">What is your question?</label>
                         <textarea class="form-control" name="notes" id="notes"
                                   rows="3"><?php echo(isset($_GET[COMPLEMENTARY_NOTES]) ? filter_var($_GET[COMPLEMENTARY_NOTES],
                                 FILTER_SANITIZE_STRING) : '') ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="project_id">Project ID</label>
+                        <input type="text" name="project_id" class="form-control" id="project_id"
+                               placeholder="Your Project Id"
+                               value="<?php echo(isset($_GET[COMPLEMENTARY_PROJECT_ID]) ? filter_var($_GET[COMPLEMENTARY_PROJECT_ID],
+                                   FILTER_SANITIZE_STRING) : '') ?>" required>
                     </div>
                 </form>
             </div>

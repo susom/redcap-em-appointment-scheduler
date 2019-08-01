@@ -28,7 +28,7 @@ try {
         $data['record_id'] = $module->getNextRecordsId($eventId, PROJECT_ID);
         $response = \REDCap::saveData('json', json_encode(array($data)));
         if (empty($response['errors'])) {
-            //$module->notifyUser($data);
+            $module->notifyUser($data);
             echo json_encode(array('status' => 'ok', 'message' => 'Appointment saved successfully!'));
         }
     }

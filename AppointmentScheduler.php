@@ -67,6 +67,7 @@ define('COMPLEMENTARY_EMAIL', 'complementary_email');
 define('COMPLEMENTARY_NAME', 'complementary_name');
 define('COMPLEMENTARY_MOBILE', 'complementary_mobile');
 define('COMPLEMENTARY_NOTES', 'complementary_notes');
+define('COMPLEMENTARY_PROJECT_ID', 'complementary_project_id');
 
 
 define('COMPLEMENTARY_SUFFIX', 'complementary_suffix');
@@ -575,6 +576,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $data['name' . $this->getSuffix()] = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
         $data['mobile' . $this->getSuffix()] = filter_var($_POST['mobile'], FILTER_SANITIZE_STRING);
         $data['participant_notes' . $this->getSuffix()] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
+        $data['project_id' . $this->getSuffix()] = filter_var($_POST['project_id'], FILTER_SANITIZE_NUMBER_INT);
         $data['slot_id' . $this->getSuffix()] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
         $data['private' . $this->getSuffix()] = filter_var($_POST['private'], FILTER_SANITIZE_NUMBER_INT);
         $data['participant_location' . $this->getSuffix()] = filter_var($_POST['type'], FILTER_SANITIZE_NUMBER_INT);
