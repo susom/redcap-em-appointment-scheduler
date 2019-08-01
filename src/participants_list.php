@@ -43,7 +43,7 @@ try {
                         <a href="mailto:<?php echo $participant['email' . $suffix] ?>"><?php echo $participant['email' . $suffix] ?></a>
                     </td>
                     <td><?php echo $participant['mobile' . $suffix] ?></td>
-                    <td><?php echo $participant['notes' . $suffix] ?></td>
+                    <td><?php echo $participant['participant_notes' . $suffix] ?></td>
                     <td><?php
                     if ($participant['participant_status' . $suffix] == RESERVED) {
                         ?>
