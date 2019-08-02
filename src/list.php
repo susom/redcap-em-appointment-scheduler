@@ -6,7 +6,7 @@ namespace Stanford\AppointmentScheduler;
 
 $suffix = $module->getSuffix();
 $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
-$data = $module->getCurrentMonthSlots($eventId);
+$data = $module->getMonthSlots($eventId);
 $url = $module->getUrl('src/calendar.php', true, true);
 
 

@@ -4,10 +4,8 @@ var dateToday = new Date();
  */
 jQuery(".date-picker-2").datepicker({
     //numberOfMonths: [4,3],
-    changeMonth: false,
     changeYear: false,
     duration: 'fast',
-    stepMonths: 0,
     beforeShowDay: $.datepicker.noWeekends,
     onSelect: function (dateText) {
         var url = jQuery("#slots-url").val();
@@ -29,6 +27,10 @@ jQuery(".date-picker-2").datepicker({
                 populateMonthSummary(event_id);
             }
         });
+    },
+    onChangeMonthYear: function (year, month) {
+        var event_id = jQuery("#event-id").val();
+        populateMonthSummary(event_id, year, month);
     },
     minDate: dateToday,
 });

@@ -403,17 +403,26 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * @param int $eventId
-     * @return array
+     * @param $eventId
+     * @param null $month
+     * @param null $year
+     * @return mixed
      */
-    public function getCurrentMonthSlots($eventId)
+    public function getMonthSlots($eventId, $year = null, $month = null)
     {
         try {
             if ($eventId) {
 
                 $variable = 'start' . $this->getSuffix();
-                $filter = "[$variable] > '" . date('Y-m-d') . "' AND " . "[$variable] < '" . date('Y-m-d',
-                        strtotime('first day of next month')) . "'";
+                if ($month != '' && $year != '') {
+                    $date = "$year-$month-01";
+                    $filter = "[$variable] > '" . date('Y-m-01',
+                            strtotime($date)) . "' AND " . "[$variable] < '" . date('Y-m-t', strtotime($date)) . "'";
+                } else {
+                    $filter = "[$variable] > '" . date('Y-m-d') . "' AND " . "[$variable] < '" . date('Y-m-d',
+                            strtotime('first day of next month')) . "'";
+                }
+
                 $param = array(
                     'filterLogic' => $filter,
                     'return_format' => 'array',

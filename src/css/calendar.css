@@ -7,10 +7,6 @@
 }
 
 
-.ui-datepicker-next, .ui-datepicker-prev {
-    display: none;
-}
-
 .ui-state-default, .ui-datepicker td {
     min-height: 150px;
     max-width: 150px;

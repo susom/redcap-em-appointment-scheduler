@@ -54,11 +54,17 @@ jQuery(document).on('click', '.calendar-view', function () {
 });
 
 
-function populateMonthSummary(key) {
+function populateMonthSummary(key, year, month) {
     setTimeout(function () {
         var url = jQuery("#summary-url").val();
+        if (month == undefined) {
+            month = ''
+        }
+        if (year == undefined) {
+            year = ''
+        }
         jQuery.ajax({
-            'url': url + '&event_id=' + key,
+            'url': url + '&event_id=' + key + '&month=' + month + '&year=' + year,
             'type': 'GET',
             'success': function (response) {
                 response = JSON.parse(response);

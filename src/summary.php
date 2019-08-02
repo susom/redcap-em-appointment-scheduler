@@ -6,7 +6,13 @@ namespace Stanford\AppointmentScheduler;
 
 
 $event_id = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
-$data = $module->getCurrentMonthSlots($event_id);
+if (isset($_GET['month']) && isset($_GET['year'])) {
+    $month = filter_var($_GET['month'], FILTER_SANITIZE_NUMBER_INT);
+    $year = filter_var($_GET['year'], FILTER_SANITIZE_NUMBER_INT);
+    $data = $module->getMonthSlots($event_id, $year, $month);
+} else {
+    $data = $module->getMonthSlots($event_id);
+}
 $days = array();
 foreach ($data as $slot) {
     $slot = array_pop($slot);
