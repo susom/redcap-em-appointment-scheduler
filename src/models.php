@@ -97,11 +97,18 @@
                                 FILTER_SANITIZE_STRING) : '') ?></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="project_id">Project ID</label>
-                        <input type="text" name="project_id" class="form-control" id="project_id"
-                               placeholder="Your Project Id"
-                               value="<?php echo(isset($_GET[COMPLEMENTARY_PROJECT_ID]) ? filter_var($_GET[COMPLEMENTARY_PROJECT_ID],
-                                   FILTER_SANITIZE_STRING) : '') ?>" required>
+                        <label for="project_id">Project ID(Optional)</label>
+                        <select name="project_id" class="form-control">
+                            <option value="" selected>No Project Available</option>
+                            <?php
+                            $projects = $module->getUserProjects(USERID);
+                            while ($row = db_fetch_array($projects)) {
+                                ?>
+                                <option value="<?php echo $row['project_id'] ?>"><?php echo $row['app_title'] ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
                     </div>
                 </form>
             </div>

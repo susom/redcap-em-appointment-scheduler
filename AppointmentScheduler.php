@@ -785,4 +785,18 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
         return '';
     }
+
+    /**
+     * @param string $user
+     * @return bool|\mysqli_result
+     */
+    public function getUserProjects($user)
+    {
+        // Retrieve the projects that the user has access to
+        $query = "select pr.project_id, pr.app_title " .
+            " from redcap_user_rights ur, redcap_projects pr " .
+            " where ur.username = '" . $user . "'" .
+            " and ur.project_id = pr.project_id order by pr.project_id";
+        return db_query($query);
+    }
 }

@@ -55,6 +55,7 @@ $instances = $module->getInstances();
     <div class="container">
         <?php
         foreach ($instances as $instance) {
+            $title = $instance['title'];
             if (isset($_GET['complementary']) && $_GET['complementary'] == 'true') {
                 $slotsEventId = $instance['survey_complementary_slot_event_id'];
                 $reservationEventId = $instance['survey_complementary_reservation_event_id'];
@@ -67,7 +68,7 @@ $instances = $module->getInstances();
             <div class="row  p-3 mb-2">
                 <a class="type" data-key="<?php echo $slotsEventId ?>" href="javascript:;"
                    data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>">
-                    <div class="btn btn-block btn-info"><?php echo $slotEvent ?></div>
+                    <div class="btn btn-block btn-info"><?php echo $title ?></div>
                 </a>
             </div>
             <input type="hidden" id="<?php echo $slotsEventId ?>-reservation-event-id"
