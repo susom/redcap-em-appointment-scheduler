@@ -26,7 +26,7 @@ jQuery(".date-picker-2").datepicker({
                 alert("Request: " + JSON.stringify(request));
             },
             'complete': function () {
-                populateMonthSummary();
+                populateMonthSummary(event_id);
             }
         });
     },

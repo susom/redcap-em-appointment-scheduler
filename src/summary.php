@@ -13,7 +13,7 @@ foreach ($data as $slot) {
     /**
      * group by day
      */
-    $day = date('d', strtotime($slot['start']));
+    $day = (int)date('d', strtotime($slot['start']));
 
     /**
      * if we have available slots on that day

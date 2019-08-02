@@ -43,7 +43,8 @@ jQuery(document).on('click', '.calendar-view', function () {
         'success': function (data) {
             jQuery("#" + key + "-calendar").html(data);
             setTimeout(function () {
-                populateMonthSummary();
+                $("#event-id").val(key)
+                populateMonthSummary(key);
             }, 100);
         },
         'error': function (request, error) {
@@ -53,17 +54,18 @@ jQuery(document).on('click', '.calendar-view', function () {
 });
 
 
-function populateMonthSummary() {
+function populateMonthSummary(key) {
     setTimeout(function () {
         var url = jQuery("#summary-url").val();
         jQuery.ajax({
-            'url': url + '&event_id=' + jQuery("#event-id").val(),
+            'url': url + '&event_id=' + key,
             'type': 'GET',
             'success': function (response) {
                 response = JSON.parse(response);
-
                 jQuery(".ui-datepicker-calendar td").each(function (index, item) {
+
                     var day = jQuery(this).text();
+
                     if (response[day] != undefined) {
                         /**
                          * if date has open time slots
