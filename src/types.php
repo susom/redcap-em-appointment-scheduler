@@ -7,7 +7,6 @@ namespace Stanford\AppointmentScheduler;
 use REDCap;
 
 
-$x = $module->getConfig();
 $url = $module->getUrl('src/list.php', false, true, true);
 $instances = $module->getInstances();
 ?>
@@ -66,7 +65,8 @@ $instances = $module->getInstances();
             $slotEvent = REDCap::getEventNames(false, false, $slotsEventId);
             ?>
             <div class="row  p-3 mb-2">
-                <a class="type" data-key="<?php echo $slotsEventId ?>" href="javascript:;"
+                <a class="type" data-key="<?php echo $slotsEventId ?>" data-name="<?php echo $slotEvent ?>"
+                   href="javascript:;"
                    data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>">
                     <div class="btn btn-block btn-info"><?php echo $title ?></div>
                 </a>
@@ -118,8 +118,10 @@ $instances = $module->getInstances();
         <input type="hidden" id="event-id" value="" class="hidden"/>
         <input type="hidden" id="user-email" value="<?php echo $user_email ?>" class="hidden"/>
         <input type="hidden" id="complementary-suffix" value="<?php echo $module->getSuffix() ?>" class="hidden"/>
-
-
+        <!-- trigger below instance after loading the page. -->
+        <input type="hidden" name="triggered-instance" id="triggered-instance"
+               value="<?php echo(isset($_GET['trigger']) ? filter_var($_GET['trigger'],
+                   FILTER_SANITIZE_STRING) : '') ?>"
     </div>
 
     <!-- LOAD JS -->

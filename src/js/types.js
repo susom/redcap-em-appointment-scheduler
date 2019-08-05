@@ -222,3 +222,18 @@ jQuery(document).on('click', '.manage-calendars', function () {
         location.reload();
     }
 });
+
+/**
+ * trigger function to load instance
+ */
+$(document).ready(function () {
+    var instance = jQuery("#triggered-instance").val();
+    var instances = jQuery("a.type");
+    if (instance == '') {
+        var $elem = jQuery(instances[0]);
+        $elem.trigger('click');
+    } else {
+        var $elem = jQuery('a.type[data-name="' + instance + '"]');
+        $elem.trigger('click');
+    }
+});
