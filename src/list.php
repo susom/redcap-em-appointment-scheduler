@@ -40,13 +40,20 @@ if (empty($data)) {
     /**
      * prepare data
      */
-    foreach ($data as $slot) {
+    foreach ($data as $record_id => $slot) {
         $slot = array_pop($slot);
+
         /**
          * group by day
          */
         $day = date('d', strtotime($slot['start' . $suffix]));
 
+        /**
+         * if the record id has different name just use whatever is provided.
+         */
+        if (!isset($slot['record_id'])) {
+            $slot['record_id'] = $record_id;
+        }
 
         $days[$day][$slot['record_id']]['date' . $suffix] = date('Y-m-d', strtotime($slot['start' . $suffix]));
         $days[$day][$slot['record_id']]['start' . $suffix] = date('H:i', strtotime($slot['start' . $suffix]));

@@ -45,7 +45,8 @@ class Participant
             /*
              * TODO Check if date within allowed window
              */
-            $filter = "[record_id] = '" . $record_id . "'";
+            $primary = \REDCap::getRecordIdField();
+            $filter = "[$primary] = '" . $record_id . "'";
             $param = array(
                 'filterLogic' => $filter,
                 'return_format' => 'array',
