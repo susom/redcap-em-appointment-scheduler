@@ -2,7 +2,7 @@
 
 namespace Stanford\AppointmentScheduler;
 
-use REDcap;
+use REDCap;
 
 include_once 'emLoggerTrait.php';
 include_once 'Participant.php';
