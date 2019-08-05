@@ -70,7 +70,7 @@ if (empty($data)) {
     /**
      * now display the list
      */
-
+    var_dump($days);
     foreach ($days as $key => $day) {
         $dayName = array_pop($day);
         ?>
