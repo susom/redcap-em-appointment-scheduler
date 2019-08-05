@@ -40,6 +40,7 @@ if (empty($data)) {
     /**
      * prepare data
      */
+    var_dump($data);
     foreach ($data as $slot) {
         $slot = array_pop($slot);
         /**
