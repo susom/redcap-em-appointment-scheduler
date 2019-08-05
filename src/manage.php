@@ -14,7 +14,6 @@ try {
     }
 
     $records = $module->getParticipant()->getUserParticipation($user_email, $module->getSuffix());
-    var_dump($records);
     if (count($records) > 0) {
 
         ?>
@@ -44,10 +43,11 @@ try {
                     <?php
                     $reservedRecords = $module->getParticipant()->getUserParticipationViaStatus($records, RESERVED,
                         $module->getSuffix());
+                    var_dump("count " . count($reservedRecords));
                     if ($reservedRecords) {
                         foreach ($reservedRecords as $reserved) {
                             $slots = $module->getParticipant()->getParticipationSlotData($reserved['slot_id' . $module->getSuffix()]);
-
+                            var_dump($slots);
                             foreach ($slots as $eventId => $slot) {
                                 $suffix = $module->getSuffixViaEventId($eventId);
                                 ?>

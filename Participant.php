@@ -43,8 +43,8 @@ class Participant
     {
         try {
             /*
-                 * TODO Check if date within allowed window
-                 */
+             * TODO Check if date within allowed window
+             */
             $filter = "[record_id] = '" . $record_id . "'";
             $param = array(
                 'filterLogic' => $filter,
