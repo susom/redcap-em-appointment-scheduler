@@ -40,7 +40,6 @@ if (empty($data)) {
     /**
      * prepare data
      */
-    var_dump($data);
     foreach ($data as $slot) {
         $slot = array_pop($slot);
         /**
@@ -71,7 +70,6 @@ if (empty($data)) {
     /**
      * now display the list
      */
-    var_dump($days);
     foreach ($days as $key => $day) {
         $dayName = array_pop($day);
         ?>

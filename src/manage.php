@@ -14,6 +14,7 @@ try {
     }
 
     $records = $module->getParticipant()->getUserParticipation($user_email, $module->getSuffix());
+    var_dump($records);
     if (count($records) > 0) {
 
         ?>
