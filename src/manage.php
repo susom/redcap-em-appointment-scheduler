@@ -49,6 +49,13 @@ try {
 
                             foreach ($slots as $eventId => $slot) {
                                 $suffix = $module->getSuffixViaEventId($eventId);
+                                $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
+                                /**
+                                 * if no suffix then its no slots event ignore
+                                 */
+                                if (!$reservationEventId) {
+                                    continue;
+                                }
                                 ?>
                                 <div class="row">
                                     <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $slot['location' . $suffix] ?></div>
