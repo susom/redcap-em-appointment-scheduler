@@ -90,13 +90,13 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="notes">What is your question?</label>
+                    <div class="form-group" id="show-notes">
+                        <label for="notes" id="notes-label">What is your question?</label>
                         <textarea class="form-control" name="notes" id="notes"
                                   rows="3"><?php echo(isset($_GET[COMPLEMENTARY_NOTES]) ? filter_var($_GET[COMPLEMENTARY_NOTES],
                                 FILTER_SANITIZE_STRING) : '') ?></textarea>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="show-projects">
                         <label for="project_id">Project ID(Optional)</label>
                         <select name="project_id" class="form-control">
                             <option value="" selected>No Project Available</option>

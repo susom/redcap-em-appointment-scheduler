@@ -103,6 +103,23 @@ jQuery(document).on('click', '.time-slot', function () {
     var dateText = jQuery(this).data('modal-title');
 
     /**
+     * do we need to show notes and projects section based on config.json
+     */
+    if (jQuery(this).data('show-projects') == "1") {
+        jQuery("#show-projects").show();
+    } else {
+        jQuery("#show-projects").hide();
+    }
+
+    if (jQuery(this).data('show-notes') == "1") {
+        jQuery("#show-notes").show();
+        var label = jQuery(this).data('notes-label');
+        jQuery("#notes-label").text(label);
+    } else {
+        jQuery("#show-notes").hide();
+    }
+
+    /**
      * Capture start and end time for Email calendar
      */
     record.calendarStartTime = jQuery(this).data('start');

@@ -104,6 +104,11 @@
           "type": "event-list"
         },
         {
+          "key": "survey_section",
+          "name": "<h6 style='text-align:center;color:red'><b>Config for Scheduling Appointment after completing a survey</b></h6>",
+          "type": "descriptive"
+        },
+        {
           "key": "survey_complementary_slot_event_id",
           "name": "<b>Survey Complementary Appointment Slot Event</b><br>Select the arm/event where each record corresponds to an appointment slot that can be reserved after user complates .  This event must have the 'Slots' form enabled",
           "required": false,

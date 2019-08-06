@@ -27,6 +27,9 @@ if(isset($_GET['date'])){
                     data-record-id="<?php echo $slot['record_id'] ?>" <?php echo $slot['booked'] ? 'disabled' : '' ?>
                     data-date="<?php echo date('Ymd', strtotime($slot['start'])) ?>"
                     data-event-id="<?php echo $event_id ?>"
+                    data-notes-label="<?php echo $module->getNoteLabel(); ?>"
+                    data-show-projects="<?php echo $module->showProjectIds(); ?>"
+                    data-show-notes="<?php echo $module->showNotes(); ?>"
                     data-start="<?php echo date('Hi', strtotime($slot['start'])) ?>"
                     data-end="<?php echo date('Hi', strtotime($slot['end'])) ?>"
                     data-modal-title="<?php echo date('H:i',

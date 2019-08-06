@@ -808,4 +808,36 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             " and ur.project_id = pr.project_id order by pr.project_id";
         return db_query($query);
     }
+
+    public function getNoteLabel()
+    {
+        $instance = $this->identifyCurrentInstance($this->getEventId());
+        return $instance['note_textarea_label'];
+    }
+
+    public function showProjectIds()
+    {
+        $instance = $this->identifyCurrentInstance($this->getEventId());
+        return $instance['show_projects'];
+    }
+
+    public function showNotes()
+    {
+        $instance = $this->identifyCurrentInstance($this->getEventId());
+        return $instance['show_notes'];
+    }
+
+    /**
+     * @param int $eventId
+     * @return bool|array
+     */
+    private function identifyCurrentInstance($eventId)
+    {
+        foreach ($this->getInstances() as $instance) {
+            if ($instance['slot_event_id'] == $eventId) {
+                return $instance;
+            }
+        }
+        return false;
+    }
 }
