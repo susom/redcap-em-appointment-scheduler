@@ -175,7 +175,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             /**
              * Initiate Email Participant
              */
-            $this->setParticipant();
+            $this->setParticipant(new  \Stanford\AppointmentScheduler\Participant());
 
             /**
              * Only call this class when event is provided.
@@ -241,9 +241,9 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * @param \Stanford\AppointmentScheduler\Participant $participant
      */
-    public function setParticipant()
+    public function setParticipant($participant)
     {
-        $this->participant = new  \Stanford\AppointmentScheduler\Participant();
+        $this->participant = $participant;
     }
 
 
