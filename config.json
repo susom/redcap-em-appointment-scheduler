@@ -164,34 +164,42 @@
           "type": "descriptive"
         },
         {
-          "key": "use_api_url",
-          "name": "<b>Use API Url</b><br>Check to use unauthenticated api urls for scheduling appointments",
-          "required": false,
-          "type": "checkbox"
-        },
-        {
-          "key": "max_future_days",
-          "name": "<b>Future Availability</b><br>The maximum number of days in advance someone can book an appointment",
+          "key": "note_textarea_label",
+          "name": "<b>Textarea Label</b><br>Label will be displayed above note textarea",
           "required": false,
           "type": "text"
         },
         {
-          "key": "include_redcap_pid",
-          "name": "<b>REDCap Project</b><br>Allow user to select a redcap project id to reference in their appointment",
+          "key": "show_projects",
+          "name": "<b>Display Projects ID field on reservation form</b>",
           "required": false,
-          "type": "checkbox"
+          "type": "dropdown",
+          "choices": [
+            {
+              "name": "Yes",
+              "value": "1"
+            },
+            {
+              "name": "No",
+              "value": "0"
+            }
+          ]
         },
         {
-          "key": "include_notes",
-          "name": "<b>Include Notes</b><br>Allow user to input a paragraph about the appointment",
+          "key": "show_notes",
+          "name": "<b>Display Notes field on reservation form</b>",
           "required": false,
-          "type": "checkbox"
-        },
-        {
-          "key": "notes_header",
-          "name": "<b>Notes Header</b><br>Enter a header to appear before the notes field",
-          "required": false,
-          "type": "text"
+          "type": "dropdown",
+          "choices": [
+            {
+              "name": "Yes",
+              "value": "1"
+            },
+            {
+              "name": "No",
+              "value": "0"
+            }
+          ]
         }
       ]
     },
