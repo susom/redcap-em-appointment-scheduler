@@ -66,14 +66,17 @@ class Participant
     {
         try {
 
-            $filter = "[slot_id$suffix] = '" . $slotId . "' AND [participant_status$suffix] = '" . RESERVED . "'";
             $param = array(
-                'filterLogic' => $filter,
                 'return_format' => 'array',
                 'events' => \REDCap::getEventNames(true, true, $eventId)
             );
-            $record = \REDCap::getData($param);
-            return count($record);
+            $records = \REDCap::getData($param);
+            foreach ($records as $record) {
+                if ($record[$eventId]["slot_id$suffix"] == $slotId && $record[$eventId]["participant_status$suffix"] == RESERVED) {
+                    return count($record);
+                }
+            }
+
         } catch (\LogicException $e) {
             echo $e->getMessage();
         }

@@ -16,7 +16,8 @@ jQuery(document).on('click', '.cancel-appointment', function () {
             datatype: 'json',
             success: function (data) {
                 data = JSON.parse(data);
-                alert(data.message)
+                alert(data.message);
+                jQuery('.manage').trigger('click');
             },
             error: function (request, error) {
                 alert("Request: " + JSON.stringify(request));

@@ -1,10 +1,13 @@
 var record = {};
+
+var currentView = '';
 /**
  * Show Form to complete for selected time
  */
 jQuery(document).on('click', '.type', function () {
     var url = jQuery(this).data('url');
     var key = jQuery(this).data('key');
+    var $elem = jQuery(this)
     /**
      * init the reservation event id for selected slot.
      * @type {jQuery}
@@ -21,8 +24,7 @@ jQuery(document).on('click', '.type', function () {
         },
         'success': function (data) {
             jQuery("#" + key + "-calendar").hide().html(data).slideDown("slow");
-            ;
-
+            currentView = $elem;
         },
         'error': function (request, error) {
             alert("Request: " + JSON.stringify(request));
@@ -42,6 +44,7 @@ jQuery(document).on('click', '.calendar-view', function () {
         'type': 'GET',
         'success': function (data) {
             jQuery("#" + key + "-calendar").html(data);
+            currentView = $(this);
             setTimeout(function () {
                 $("#event-id").val(key)
                 populateMonthSummary(key);
@@ -167,7 +170,7 @@ jQuery(document).on('click', '#submit-booking-form', function () {
                 alert(response.message);
                 $('#booking').modal('hide');
                 record = {};
-
+                currentView.trigger('click');
                 /**
                  * when this book came from survey page lets return the reservation id back to the survey.
                  */
@@ -261,6 +264,7 @@ jQuery(document).on('click', '.manage-calendars', function () {
 $(document).ready(function () {
     var instance = jQuery("#triggered-instance").val();
     var instances = jQuery("a.type");
+    console.log(instance);
     if (instance == '') {
         var $elem = jQuery(instances[0]);
         $elem.trigger('click');

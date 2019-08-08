@@ -441,6 +441,24 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
     }
 
+    private function sortRecordsByDate($records, $eventId)
+    {
+        $temp = array();
+        $result = array();
+        foreach ($records as $record) {
+            $date = date('Y-m-d', strtotime($record[$eventId]['start']));
+            $temp[$date][] = $record;
+        }
+        ksort($temp);
+        foreach ($temp as $timestamp) {
+            if (empty($result)) {
+                $result = $timestamp;
+            } else {
+                $result = array_merge($result, $timestamp);
+            }
+        }
+        return $result;
+    }
     /**
      * @param $eventId
      * @param null $month
@@ -454,20 +472,26 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
                 $variable = 'start' . $this->getSuffix();
                 if ($month != '' && $year != '') {
-                    $date = "$year-$month-01";
-                    $filter = "[$variable] > '" . date('Y-m-01',
-                            strtotime($date)) . "' AND " . "[$variable] < '" . date('Y-m-t', strtotime($date)) . "'";
+                    $start = "$year-$month-01";
+                    $end = date('Y-m-t', strtotime($start));
                 } else {
-                    $filter = "[$variable] > '" . date('Y-m-d') . "' AND " . "[$variable] < '" . date('Y-m-d',
-                            strtotime('first day of next month')) . "'";
+                    $start = date('Y-m-d');
+                    $end = date('Y-m-d', strtotime('first day of next month'));
                 }
 
                 $param = array(
-                    'filterLogic' => $filter,
                     'return_format' => 'array',
                     'events' => REDCap::getEventNames(true, false, $eventId)
                 );
-                return REDCap::getData($param);
+                $data = array();
+                $records = REDCap::getData($param);
+                foreach ($records as $record) {
+                    if (date('Y-m-d', strtotime($record[$eventId][$variable])) > $start && date('Y-m-d',
+                            strtotime($record[$eventId][$variable])) < $end) {
+                        $data[] = $record;
+                    }
+                }
+                return $this->sortRecordsByDate($data, $eventId);
             } else {
                 throw new \LogicException('Not event id passed, Aborting!');
             }
@@ -1047,7 +1071,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             'return_format' => 'array',
             'events' => \REDCap::getEventNames(true, true, $reservationEventId)
         );
-        $reservations = $this->participant->getUserParticipation($email, $suffix);
+        $reservations = $this->participant->getUserParticipation($email, $suffix, RESERVED);
 
         foreach ($reservations as $reservation) {
             $record = $reservation[$reservationEventId];
