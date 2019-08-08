@@ -6,9 +6,10 @@ namespace Stanford\AppointmentScheduler;
 
 
 try {
-    $data['record_id'] = filter_var($_GET['participation_id'], FILTER_SANITIZE_NUMBER_INT);
+    $primary = \REDCap::getRecordIdField();
+    $data[$primary] = $_GET[$primary];
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
-    if ($data['record_id'] == '') {
+    if ($data[$primary] == '') {
         throw new \LogicException('Participation ID is missing');
     } else {
 

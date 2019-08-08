@@ -12,7 +12,7 @@ try {
     if (!SUPER_USER) {
         throw new \LogicException('You cant be here');
     }
-    $data['record_id'] = filter_var($_GET['participation_id'], FILTER_SANITIZE_NUMBER_INT);
+    $data['record_id'] = filter_var($_GET[\REDCap::getRecordIdField()], FILTER_SANITIZE_NUMBER_INT);
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
     if ($data['record_id'] == '') {
         throw new \LogicException('Participation ID is missing');

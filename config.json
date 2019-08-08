@@ -17,7 +17,8 @@
 
   "permissions": [
     "redcap_every_page_before_render",
-    "redcap_survey_complete"
+    "redcap_survey_complete",
+    "redcap_survey_page_top"
   ],
   "no-auth-pages": [
     "src/calendar",
@@ -44,20 +45,12 @@
     "src/list"
   ],
   "links": {
-    "control-center": [
-      {
-        "name": "Appointment Scheduler Config",
-        "icon": "fas fa-receipt",
-        "url": "create_db_project.php"
-      }
-    ],
-
     "project": [
       {
         "name": "Appointment Scheduler",
         "icon": "brick",
         "url": "src/types.php",
-        "show-header-and-footer": false
+        "show-header-and-footer": true
       }
     ]
   },
@@ -109,52 +102,10 @@
           "type": "descriptive"
         },
         {
-          "key": "survey_complementary_slot_event_id",
-          "name": "<b>Survey Complementary Appointment Slot Event</b><br>Select the arm/event where each record corresponds to an appointment slot that can be reserved after user complates .  This event must have the 'Slots' form enabled",
-          "required": false,
-          "type": "event-list"
-        },
-        {
-          "key": "survey_complementary_reservation_event_id",
-          "name": "<b>Appointment Reservation Event</b><br>Select the arm/event where each record corresponds to a reserved appointment slot.  This event must have the 'Reservation' form enabled",
-          "required": false,
-          "type": "event-list"
-        },
-        {
           "key": "instrument_id_for_complementary_appointment",
           "name": "<b>Instrument Id for Complementary Appointment</b></br>Please select survey instrument that will be followed by an option to schedule an appointment.",
           "required": false,
           "type": "form-list"
-        },
-        {
-          "key": "complementary_name",
-          "name": "<b>Complementary Name</b></br>Field will populate name field in the appointment reservation.",
-          "required": false,
-          "type": "field-list"
-        },
-        {
-          "key": "complementary_email",
-          "name": "<b>Complementary Email</b></br>Field will populate Email field in the appointment reservation.",
-          "required": false,
-          "type": "field-list"
-        },
-        {
-          "key": "complementary_mobile",
-          "name": "<b>Complementary Mobile</b></br>Field will populate Mobile field in the appointment reservation.",
-          "required": false,
-          "type": "field-list"
-        },
-        {
-          "key": "complementary_notes",
-          "name": "<b>Complementary Notes</b></br>Field will populate Notes field in the appointment reservation.",
-          "required": false,
-          "type": "field-list"
-        },
-        {
-          "key": "complementary_suffix",
-          "name": "<b>Complementary suffix</b></br>Fill this if your project contains both regular and complementary appointment. <b>Make sure the suffix same as the one used to copy the instruments.</b>.",
-          "required": false,
-          "type": "text"
         },
         {
           "key": "title",
@@ -167,6 +118,12 @@
           "name": "<b>Options</b>",
           "required": false,
           "type": "descriptive"
+        },
+        {
+          "key": "enable-redcap-calendar",
+          "name": "<b>Integrate REDCap calendar</b> Show REDCap calendar records in Appointment scheduler. ",
+          "required": false,
+          "type": "checkbox"
         },
         {
           "key": "note_textarea_label",

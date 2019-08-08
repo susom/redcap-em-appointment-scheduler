@@ -17,6 +17,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 use Twilio\Rest\Client;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+
 /**
  * Constants where appointment  is located
  */
@@ -72,6 +73,9 @@ define('COMPLEMENTARY_PROJECT_ID', 'complementary_project_id');
 
 define('COMPLEMENTARY_SUFFIX', 'complementary_suffix');
 
+define("SURVEY_RESERVATION_FIELD", "survey_reservation_id");
+define("RESERVATION_SLOT_FIELD", "slot_id");
+
 /**
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
@@ -84,6 +88,7 @@ define('COMPLEMENTARY_SUFFIX', 'complementary_suffix');
  * @property \Stanford\AppointmentScheduler\Participant $participant
  * @property \Monolog\Logger $logger
  * @property string $suffix
+ * @property int $mainSurveyId
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
@@ -111,6 +116,8 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     private $eventInstance;
 
+
+    private $mainSurveyId;
     /**
      * @var int
      */
@@ -200,6 +207,39 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
+     * @return array
+     */
+    public function getCalendarParams()
+    {
+        return $this->calendarParams;
+    }
+
+    /**
+     * @param array $calendarParams
+     */
+    public function setCalendarParams($calendarParams)
+    {
+        $this->calendarParams = $calendarParams;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getMainSurveyId()
+    {
+        return $this->mainSurveyId;
+    }
+
+    /**
+     * @param mixed $mainSurveyId
+     */
+    public function setMainSurveyId($mainSurveyId)
+    {
+        $this->mainSurveyId = $mainSurveyId;
+    }
+
+    /**
      * @return string
      */
     public function getSuffix()
@@ -247,7 +287,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
 
-
     /**
      * @return mixed
      */
@@ -285,7 +324,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public function setEventInstance($eventId)
     {
-        foreach ($this->instances as $instance) {
+        foreach ($this->getInstances() as $instance) {
             if ($instance['event_id'] == $eventId) {
                 $this->eventInstance = $instance;
             }
@@ -671,11 +710,11 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     {
         try {
             if ($event_id) {
-
+                $primary = \REDCap::getRecordIdField();
                 /*
                  * TODO Check if date within allowed window
                  */
-                $filter = "[record_id] = '" . $record_id . "'";
+                $filter = "[$primary] = '" . $record_id . "'";
                 $param = array(
                     'filterLogic' => $filter,
                     'return_format' => 'array',
@@ -742,9 +781,17 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * call REDCap hook
      */
-    public function redcap_survey_complete()
-    {
-        $instances = $this->getInstances();
+    public function redcap_survey_complete(
+        $project_id,
+        $record = null,
+        $instrument,
+        $event_id,
+        $group_id = null,
+        $survey_hash,
+        $response_id = null,
+        $repeat_instance = 1
+    ) {
+        /*$instances = $this->getInstances();
         $survey = filter_var($_GET['page'], FILTER_SANITIZE_STRING);
         $uri = '';
         foreach ($instances as $instance) {
@@ -753,8 +800,71 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 break;
             }
         }
-        $url = $this->getUrl('src/types.php', false, true) . $uri;
-        echo "<a href='$url'>Click Here</a> If you want to scheule a followup regarding your survey input. ";
+        $url = $this->getUrl('src/types.php', false, true) . $uri;*/
+        /**
+         * get survey record
+         */
+        $this->setMainSurveyId($instrument);
+        $primary = \REDCap::getRecordIdField();
+        $filter = "[$primary] = '" . $record . "'";
+        $param = array(
+            'filterLogic' => $filter,
+            'return_format' => 'array',
+            'events' => \REDCap::getEventNames(true, true, $event_id)
+        );
+        $survey = REDCap::getData($param);
+        if (!empty($survey)) {
+            /**
+             * get reservation record for the survey
+             */
+            $reservationId = $survey[$record][$event_id][SURVEY_RESERVATION_FIELD];
+            $reservationEventId = $this->getReservationEventId();
+            $filter = "[$primary] = '" . $reservationId . "'";
+            $param = array(
+                'filterLogic' => $filter,
+                'return_format' => 'array',
+                'events' => \REDCap::getEventNames(true, true, $reservationEventId)
+            );
+            $reservation = REDCap::getData($param);
+
+            if (!empty($reservation)) {
+                /**
+                 * get slot record for the reservation.
+                 */
+                $slotId = $reservation[$reservationId][$reservationEventId][RESERVATION_SLOT_FIELD];
+                $slotEventId = $this->getSlotsEventId();
+
+                $filter = "[$primary] = '" . $slotId . "'";
+                $param = array(
+                    'filterLogic' => $filter,
+                    'return_format' => 'array',
+                    'events' => \REDCap::getEventNames(true, true, $slotEventId)
+                );
+                $slot = REDCap::getData($param);
+                if (!empty($slot)) {
+                    require __DIR__ . '/src/survey.php';
+                    $record = $slot[$slotId][$slotEventId];
+                    $status = $reservation[$reservationId][$reservationEventId]['participant_status'];
+                    switch ($status) {
+                        case CANCELED:
+                            echo "Your reservation at " . date('M/d/Y', strtotime($record['start'])) . ' was canceled';
+                            break;
+                        case NO_SHOW:
+                            echo "You missed your reservation at " . date('M/d/Y',
+                                    strtotime($record['start'])) . ' and Marked as No Show';
+                            break;
+                        default:
+                            require __DIR__ . '/src/survey.php';
+                            echo "You have a reservation on " . date('M/d/Y',
+                                    strtotime($record['start'])) . " between " . date('H:i',
+                                    strtotime($record['start'])) . " and " . date('H:i',
+                                    strtotime($record['end'])) . " <a class='manage' href='javascript:;'>Click Here</a> edit your reservation.";
+                            break;
+                    }
+
+                }
+            }
+        }
     }
 
     /**
@@ -809,18 +919,27 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         return db_query($query);
     }
 
+    /**
+     * @return boolean
+     */
     public function getNoteLabel()
     {
         $instance = $this->identifyCurrentInstance($this->getEventId());
         return $instance['note_textarea_label'];
     }
 
+    /**
+     * @return boolean
+     */
     public function showProjectIds()
     {
         $instance = $this->identifyCurrentInstance($this->getEventId());
         return $instance['show_projects'];
     }
 
+    /**
+     * @return boolean
+     */
     public function showNotes()
     {
         $instance = $this->identifyCurrentInstance($this->getEventId());
@@ -839,5 +958,104 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             }
         }
         return false;
+    }
+
+    /**
+     * @param $project_id
+     * @param null $record
+     * @param $instrument
+     * @param $event_id
+     * @param null $group_id
+     * @param $survey_hash
+     * @param null $response_id
+     * @param int $repeat_instance
+     */
+    public function redcap_survey_page_top(
+        $project_id,
+        $record = null,
+        $instrument,
+        $event_id,
+        $group_id = null,
+        $survey_hash,
+        $response_id = null,
+        $repeat_instance = 1
+    ) {
+        $this->setMainSurveyId($instrument);
+        require __DIR__ . '/src/survey.php';
+    }
+
+    /**
+     * @return int
+     */
+    public function getSlotsEventId()
+    {
+        foreach ($this->getInstances() as $instance) {
+            if ($instance['instrument_id_for_complementary_appointment'] == $this->getMainSurveyId()) {
+                return $instance['slot_event_id'];
+            }
+        }
+        throw new \LogicException("No Event is assigned");
+    }
+
+    /**
+     * @return int
+     */
+    public function getReservationEventId()
+    {
+        foreach ($this->getInstances() as $instance) {
+            if ($instance['instrument_id_for_complementary_appointment'] == $this->getMainSurveyId()) {
+                return $instance['reservation_event_id'];
+            }
+        }
+        throw new \LogicException("No Event is assigned");
+    }
+
+    /**
+     * @param $pid
+     * @param int|null $month
+     * @param int|null $year
+     * @return bool|\mysqli_result
+     */
+    public function getProjectREDCapCalendar($pid, $year = null, $month = null)
+    {
+        if ($month != '' && $year != '') {
+            $date = "$year-$month-01";
+            $filter = "event_date BETWEEN '" . date('Y-m-01', strtotime($date)) . "' AND " . " '" . date('Y-m-t',
+                    strtotime($date)) . "'";
+        } else {
+            $filter = "event_date BETWEEN '" . date('Y-m-d') . "' AND " . " '" . date('Y-m-d',
+                    strtotime('first day of next month')) . "'";
+        }
+        $sql = sprintf("SELECT * from redcap_events_calendar WHERE project_id = $pid AND $filter");
+
+        return db_query($sql);
+    }
+
+    /**
+     * @param string $slotDate
+     * @param string $email
+     * @param string $suffix
+     * @param int $slotEventId
+     * @param int $reservationEventId
+     */
+    public function doesUserHaveSameDateReservation($slotDate, $email, $suffix, $slotEventId, $reservationEventId)
+    {
+
+        $filter = "[email] = $email ";
+        $param = array(
+            'filterLogic' => $filter,
+            'return_format' => 'array',
+            'events' => \REDCap::getEventNames(true, true, $reservationEventId)
+        );
+        $reservations = $this->participant->getUserParticipation($email, $suffix);
+
+        foreach ($reservations as $reservation) {
+            $record = $reservation[$reservationEventId];
+            $reservationSlot = self::getSlot($record['slot_id'], $slotEventId);
+            $reservationSlotDate = date('Y-m-d', strtotime($reservationSlot['start']));
+            if ($reservationSlotDate == $slotDate) {
+                throw new \LogicException("you cant book more than one reservation on same date. please select another date");
+            }
+        }
     }
 }

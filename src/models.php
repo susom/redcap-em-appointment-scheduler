@@ -1,5 +1,9 @@
 <?php
 /** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
+//this when called for redcap hook
+if (!isset($module)) {
+    $module = $this;
+}
 ?>
 <!-- Generic Modal -->
 
@@ -96,20 +100,28 @@
                                   rows="3"><?php echo(isset($_GET[COMPLEMENTARY_NOTES]) ? filter_var($_GET[COMPLEMENTARY_NOTES],
                                 FILTER_SANITIZE_STRING) : '') ?></textarea>
                     </div>
-                    <div class="form-group" id="show-projects">
-                        <label for="project_id">Project ID(Optional)</label>
-                        <select name="project_id" class="form-control">
-                            <option value="" selected>No Project Available</option>
-                            <?php
-                            $projects = $module->getUserProjects(USERID);
-                            while ($row = db_fetch_array($projects)) {
-                                ?>
-                                <option value="<?php echo $row['project_id'] ?>"><?php echo $row['app_title'] ?></option>
+                    <?php
+                    //for surveys no need for projects to be displayed
+                    if (is_numeric(USERID)) {
+                        ?>
+                        <div class="form-group" id="show-projects">
+                            <label for="project_id">Project ID(Optional)</label>
+                            <select name="project_id" class="form-control">
+                                <option value="" selected>No Project Available</option>
                                 <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
+                                $projects = $module->getUserProjects(USERID);
+                                while ($row = db_fetch_array($projects)) {
+                                    ?>
+                                    <option value="<?php echo $row['project_id'] ?>"><?php echo $row['app_title'] ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <?php
+                    }
+                    ?>
+
                 </form>
             </div>
 

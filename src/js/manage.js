@@ -11,7 +11,7 @@ jQuery(document).on('click', '.cancel-appointment', function () {
          * Get Manage modal to let user manage their saved appointments
          */
         jQuery.ajax({
-            url: url + '&participation_id=' + participation_id + '&event_id=' + event_id,
+            url: url + '&participations_id=' + participation_id + '&event_id=' + event_id,
             type: 'GET',
             datatype: 'json',
             success: function (data) {

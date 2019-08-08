@@ -67,7 +67,7 @@ try {
                                             strtotime($slot['end' . $suffix])) ?></div>
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
                                         <button type="button"
-                                                data-participation-id="<?php echo $reserved['record_id'] ?>"
+                                                data-participation-id="<?php echo $reserved[\REDCap::getRecordIdField()] ?>"
                                                 data-event-id="<?php echo $module->getReservationEventIdViaSlotEventId($eventId) ?>"
                                                 class="cancel-appointment btn btn-block btn-danger">Cancel
                                         </button>

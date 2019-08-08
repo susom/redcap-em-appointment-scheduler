@@ -103,7 +103,7 @@ if (empty($data)) {
                                         data-notes-label="<?php echo $module->getNoteLabel(); ?>"
                                         data-show-projects="<?php echo $module->showProjectIds(); ?>"
                                         data-show-notes="<?php echo $module->showNotes(); ?>"
-                                        data-date="<?php echo date('Ymd', strtotime($record['start' . $suffix])) ?>"
+                                        data-date="<?php echo date('Ymd', strtotime($record['date' . $suffix])) ?>"
                                         data-start="<?php echo date('Hi', strtotime($record['start' . $suffix])) ?>"
                                         data-end="<?php echo date('Hi', strtotime($record['end' . $suffix])) ?>"
                                         data-modal-title="<?php echo date('H:i',

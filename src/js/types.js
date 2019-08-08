@@ -77,7 +77,14 @@ function populateMonthSummary(key, year, month) {
                          * if date has open time slots
                          */
                         if (response[day].available != undefined) {
-                            jQuery(this).find("a").attr('data-content', response[day].availableText);
+                            if (response[day].availableText != undefined) {
+                                jQuery(this).find("a").attr('data-content', response[day].availableText);
+                            }
+                            if (response[day].REDCapAvailableText != undefined) {
+                                var $a = jQuery(this).find("a");
+                                jQuery(this).append(response[day].REDCapAvailableText)
+                                //jQuery(this).find("a").insertAfter(response[day].REDCapAvailableText);
+                            }
                         } else {
                             jQuery(this).find("a").attr('data-content', "All slots are booked for this date");
                         }
@@ -160,6 +167,14 @@ jQuery(document).on('click', '#submit-booking-form', function () {
                 alert(response.message);
                 $('#booking').modal('hide');
                 record = {};
+
+                /**
+                 * when this book came from survey page lets return the reservation id back to the survey.
+                 */
+                if (jQuery("input[name=survey_reservation_id]").length) {
+                    completeSurveyReservation(response);
+                }
+
             } else {
                 alert(response.message);
             }
@@ -254,3 +269,8 @@ $(document).ready(function () {
         $elem.trigger('click');
     }
 });
+
+//Calendar functions
+function popupCal(cal_id, width) {
+    window.open(app_path_webroot + 'Calendar/calendar_popup.php?pid=' + pid + '&width=' + width + '&cal_id=' + cal_id, 'myWin', 'width=' + width + ', height=250, toolbar=0, menubar=0, location=0, status=0, scrollbars=1, resizable=1');
+}
