@@ -20,3 +20,7 @@
     font-size: small;
     font-weight: bold;
 }
+
+a.ui-state-default, span.ui-state-default {
+    width: 100%;
+}
