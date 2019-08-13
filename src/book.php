@@ -7,6 +7,10 @@ namespace Stanford\AppointmentScheduler;
 
 try {
 
+    if (!defined(USERID)) {
+        throw new \LogicException('Please login.');
+    }
+
     $data = $module->sanitizeInput();
     if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '' || $data['mobile' . $module->getSuffix()] == '') {
         throw new \LogicException('Data cant be missing');
@@ -14,6 +18,7 @@ try {
 
 
         $data['participant_status' . $module->getSuffix()] = RESERVED;
+        $data['sunet_id' . $module->getSuffix()] = USERID;
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
         $date = date('Y-m-d', strtotime(preg_replace("([^0-9/])", "", $_POST['calendarDate'])));
         $module->doesUserHaveSameDateReservation($date, $data['email' . $module->getSuffix()], $module->getSuffix(),

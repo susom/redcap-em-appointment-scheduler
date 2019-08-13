@@ -93,8 +93,8 @@ if (empty($data)) {
                     ?>
                     <div class="row border">
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location' . $suffix] ?></div>
-                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo date('H:i',
-                                strtotime($record['start' . $suffix])) ?> – <?php echo date('H:i',
+                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo date('h:i A',
+                                strtotime($record['start' . $suffix])) ?> – <?php echo date('h:i A',
                                 strtotime($record['end' . $suffix])) ?></div>
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php
                             if ($record['booked' . $suffix]) {
@@ -110,8 +110,8 @@ if (empty($data)) {
                                         data-date="<?php echo date('Ymd', strtotime($record['date' . $suffix])) ?>"
                                         data-start="<?php echo date('Hi', strtotime($record['start' . $suffix])) ?>"
                                         data-end="<?php echo date('Hi', strtotime($record['end' . $suffix])) ?>"
-                                        data-modal-title="<?php echo date('H:i',
-                                            strtotime($record['start' . $suffix])) ?> – <?php echo date('H:i',
+                                        data-modal-title="<?php echo date('h:i A',
+                                            strtotime($record['start' . $suffix])) ?> – <?php echo date('h:i A',
                                             strtotime($record['end' . $suffix])) ?>"
                                         class="time-slot btn btn-block btn-success">Book
                                 </button>

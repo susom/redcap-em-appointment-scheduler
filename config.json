@@ -50,7 +50,7 @@
         "name": "Appointment Scheduler",
         "icon": "brick",
         "url": "src/types.php",
-        "show-header-and-footer": true
+        "show-header-and-footer": false
       }
     ]
   },

@@ -65,7 +65,7 @@ class Participant
     public function getSlotActualCountReservedSpots($slotId, $eventId, $suffix)
     {
         try {
-
+            $counter = 0;
             $param = array(
                 'return_format' => 'array',
                 'events' => \REDCap::getEventNames(true, true, $eventId)
@@ -73,10 +73,10 @@ class Participant
             $records = \REDCap::getData($param);
             foreach ($records as $record) {
                 if ($record[$eventId]["slot_id$suffix"] == $slotId && $record[$eventId]["participant_status$suffix"] == RESERVED) {
-                    return count($record);
+                    $counter++;
                 }
             }
-
+            return $counter;
         } catch (\LogicException $e) {
             echo $e->getMessage();
         }
@@ -141,17 +141,17 @@ class Participant
 
 
     /**
-     * @param string $email
+     * @param string $sunetID
      * @param null $status
      * @return mixed
      */
-    public function getUserParticipation($email, $suffix, $status = null)
+    public function getUserParticipation($sunetID, $suffix, $status = null)
     {
         try {
             if (is_null($status)) {
-                $filter = "[email$suffix] = '" . $email . "'";
+                $filter = "[sunet_id$suffix] = '" . $sunetID . "'";
             } else {
-                $filter = "[email$suffix] = '" . $email . "' AND [participant_status$suffix] = $status";
+                $filter = "[sunet_id$suffix] = '" . $sunetID . "' AND [participant_status$suffix] = $status";
             }
             $param = array(
                 'filterLogic' => $filter,

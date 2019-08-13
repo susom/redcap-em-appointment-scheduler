@@ -33,10 +33,10 @@ if(isset($_GET['date'])){
                     data-show-notes="<?php echo $module->showNotes(); ?>"
                     data-start="<?php echo date('Hi', strtotime($slot['start'])) ?>"
                     data-end="<?php echo date('Hi', strtotime($slot['end'])) ?>"
-                    data-modal-title="<?php echo date('H:i',
-                        strtotime($slot['start'])) ?> – <?php echo date('H:i', strtotime($slot['end'])) ?>"
-                    class="time-slot btn btn-block <?php echo $slot['booked'] ? 'disabled btn-secondary' : 'btn-success' ?>"><?php echo $typeText . '<br>' . date('H:i',
-                    strtotime($slot['start'])) ?> – <?php echo date('H:i', strtotime($slot['end'])) ?></button>
+                    data-modal-title="<?php echo date('h:i A',
+                        strtotime($slot['start'])) ?> – <?php echo date('h:i A', strtotime($slot['end'])) ?>"
+                    class="time-slot btn btn-block <?php echo $slot['booked'] ? 'disabled btn-secondary' : 'btn-success' ?>"><?php echo $typeText . '<br>' . date('h:i A',
+                        strtotime($slot['start'])) ?> – <?php echo date('h:i A', strtotime($slot['end'])) ?></button>
             <?php
         }
     }else{

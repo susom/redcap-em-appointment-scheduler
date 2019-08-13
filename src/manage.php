@@ -13,7 +13,7 @@ try {
         throw new \LogicException('Please login.');
     }
 
-    $records = $module->getParticipant()->getUserParticipation($user_email, $module->getSuffix());
+    $records = $module->getParticipant()->getUserParticipation(USERID, $module->getSuffix());
     if (count($records) > 0) {
 
         ?>
