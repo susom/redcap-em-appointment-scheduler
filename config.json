@@ -168,6 +168,36 @@
               "value": "0"
             }
           ]
+        },
+        {
+          "key": "emails_config",
+          "name": "<b>Email`s Configuration</b>",
+          "required": false,
+          "type": "descriptive"
+        },
+        {
+          "key": "sender_email",
+          "name": "<b>Sender Email(By default admin@stanford.edu)</b>",
+          "required": false,
+          "type": "text"
+        },
+        {
+          "key": "sender_name",
+          "name": "<b>Sender Name(By default REDCap Admin)</b>",
+          "required": false,
+          "type": "text"
+        },
+        {
+          "key": "calendar_subject",
+          "name": "<b>Calendar Email Subject</b>",
+          "required": false,
+          "type": "text"
+        },
+        {
+          "key": "calendar_body",
+          "name": "<b>Calendar Email Body</b>",
+          "required": false,
+          "type": "textarea"
         }
       ]
     },

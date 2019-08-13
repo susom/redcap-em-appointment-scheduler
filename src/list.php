@@ -9,13 +9,13 @@ $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $data = $module->getMonthSlots($eventId);
 $url = $module->getUrl('src/calendar.php', true, true);
 
-
+$instance = $module->getEventInstance();
 ?>
 
 
     <div class="row p-3 mb-2">
         <div class="col-8">
-            <?php echo $module->getInstanceDescription($eventId) ?>
+            <?php echo $instance['instance_description'] ?>
         </div>
         <div class="col-4 text-right">
             <a class="btn btn-danger calendar-view" data-key="<?php echo $eventId ?>" href="javascript:;"
@@ -40,6 +40,7 @@ if (empty($data)) {
     <?php
 } else {
     $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
+    $primary = \REDCap::getRecordIdField();
     /**
      * prepare data
      */
@@ -55,7 +56,7 @@ if (empty($data)) {
          * if the record id has different name just use whatever is provided.
          */
         if (!isset($slot['record_id'])) {
-            $slot['record_id'] = $record_id;
+            $slot['record_id'] = $slot[$primary];
         }
 
         $days[$day][$slot['record_id']]['date' . $suffix] = date('Y-m-d', strtotime($slot['start' . $suffix]));

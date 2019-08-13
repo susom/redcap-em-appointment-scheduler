@@ -75,6 +75,8 @@ define('COMPLEMENTARY_SUFFIX', 'complementary_suffix');
 
 define("SURVEY_RESERVATION_FIELD", "survey_reservation_id");
 define("RESERVATION_SLOT_FIELD", "slot_id");
+define("DEFAULT_EMAIL", "admin@stanford.edu");
+define("DEFAULT_NAME", "REDCap Admin");
 
 /**
  * Class AppointmentScheduler
@@ -179,6 +181,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             $this->setEmailClient();
 
 
+
             /**
              * Initiate Email Participant
              */
@@ -199,11 +202,34 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  * when event id exist lets find its instance
                  */
                 $this->setEventInstance($this->getEventId());
-
             }
+
+            // Initiate Twilio Client
+            $sid = $this->getProjectSetting('twilio_sid');
+            $token = $this->getProjectSetting('twilio_token');
+            if ($sid != '' && $token != '') {
+                $this->setTwilioClient(new Client($sid, $token));
+            }
+
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    /**
+     * @return Client
+     */
+    public function getTwilioClient()
+    {
+        return $this->twilioClient;
+    }
+
+    /**
+     * @param Client $twilioClient
+     */
+    public function setTwilioClient($twilioClient)
+    {
+        $this->twilioClient = $twilioClient;
     }
 
     /**
@@ -325,7 +351,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     public function setEventInstance($eventId)
     {
         foreach ($this->getInstances() as $instance) {
-            if ($instance['event_id'] == $eventId) {
+            if ($instance['slot_event_id'] == $eventId) {
                 $this->eventInstance = $instance;
             }
         }
@@ -561,10 +587,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public function notifyUser($user)
     {
-
-        $this->calendarParams['calendarOrganizerEmail'] = 'ihabz@stanford.edu';
-        $this->calendarParams['calendarOrganizer'] = 'Ihab Zeedia';
-        $this->calendarParams['calendarDescription'] = 'Appointment for Office visit';
+        $instance = $this->getEventInstance();
+        $this->calendarParams['calendarOrganizerEmail'] = ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL);
+        $this->calendarParams['calendarOrganizer'] = ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME);
+        $this->calendarParams['calendarDescription'] = $instance['calendar_body'];
         $this->calendarParams['calendarDate'] = preg_replace("([^0-9/])", "", $_POST['calendarDate']);
         $this->calendarParams['calendarStartTime'] = preg_replace("([^0-9/])", "", $_POST['calendarStartTime']);
         $this->calendarParams['calendarEndTime'] = preg_replace("([^0-9/])", "", $_POST['calendarEndTime']);
@@ -573,11 +599,20 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
                 strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
                 strtotime($this->calendarParams['calendarEndTime']));
-        $this->sendEmail($user);
+        $this->sendEmail($user,
+            ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL),
+            ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME),
+            '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
+                strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
+                strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
+                strtotime($this->calendarParams['calendarEndTime'])),
+            $instance['calendar_body'],
+            true
+        );
 
-        if ($user['mobile'] && $this->twilioClient) {
+        if ($user['mobile'] && $this->getTwilioClient()) {
             $message = array(
-                'from' => '+' . $this->eventInstance['phone_number_country_code'] . $this->eventInstance['twilio_sender_number'],
+                'from' => '+' . $instance['phone_number_country_code'] . $instance['twilio_sender_number'],
                 'body' => '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
                         strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
                         strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
@@ -624,17 +659,24 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * send both regular and calendar email
+     * send calendar or regular emails
      * @param array $user
+     * @param string $senderEmail
+     * @param string $senderName
+     * @param string $subject
+     * @param string $body
+     * @param bool $calendar
      */
-    private function sendEmail($user)
+    private function sendEmail($user, $senderEmail, $senderName, $subject, $body, $calendar = false)
     {
         $this->emailClient->setTo($user['email']);
-        $this->emailClient->setFrom('ihabz@stanford.edu');
-        $this->emailClient->setFromName('Ihab Zeedia');
-        $this->emailClient->setSubject('Appointment for Office visit');
-        $this->emailClient->setBody('Appointment for Office visit');
-        $this->emailClient->sendCalendarEmail($this->calendarParams);
+        $this->emailClient->setFrom($senderEmail);
+        $this->emailClient->setFromName($senderName);
+        $this->emailClient->setSubject($subject);
+        $this->emailClient->setBody($body);
+        if ($calendar) {
+            $this->emailClient->sendCalendarEmail($this->calendarParams);
+        }
         $this->emailClient->send();
     }
 
@@ -909,24 +951,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $result .= '&complementary_suffix=' . $instance[COMPLEMENTARY_SUFFIX];
 
         return $result;
-    }
-
-    /**
-     * @param int $eventId
-     * @return string
-     */
-    public function getInstanceDescription($eventId)
-    {
-        $instances = $this->getInstances();
-        foreach ($instances as $instance) {
-            /**
-             * if the event id passed is survey_complementary_slot_event_id or survey_complementary_reservation_event_id
-             */
-            if ($instance['slot_event_id'] == $eventId || $instance['reservation_event_id'] == $eventId) {
-                return $instance['instance_description'];
-            }
-        }
-        return '';
     }
 
     /**

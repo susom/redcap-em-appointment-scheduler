@@ -2,14 +2,14 @@
 
 $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $url = $module->getUrl('src/list.php', true, true);
-
+$instance = $module->getEventInstance();
 ?>
 <link rel="stylesheet" href="<?php echo $module->getUrl('src/css/calendar.css') ?>">
 
 <div class="container">
     <div class="row p-3 mb-2">
         <div class="col-8">
-            <?php echo $module->getInstanceDescription($eventId) ?>
+            <?php echo $instance['instance_description'] ?>
         </div>
         <div class="col-4 text-right">
             <a class="btn btn-danger list-view" data-key="<?php echo $eventId ?>" href="javascript:;"

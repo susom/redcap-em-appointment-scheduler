@@ -235,7 +235,11 @@ class CalendarEmail extends Message
             $participants.= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN".$name.";X-NUM-GUESTS=0:MAILTO:".$email."\r\n";
         }
 
-        $message = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Deathstar-mailer//theforce/NONSGML v1.0//EN\r\nMETHOD:REQUEST\r\nBEGIN:VEVENT\r\nUID:" . md5(uniqid(mt_rand(), true)) . "example.com\r\nDTSTAMP:" . gmdate('Ymd').'T'. gmdate('His') . "Z\r\nDTSTART:".$this->getCalendarDate()."T".$this->getCalendarStartTime()."00\r\nDTEND:".$this->getCalendarDate()."T".$this->getCalendarEndTime()."00\r\nSUMMARY:".$this->getCalendarSubject()."\r\nORGANIZER;CN=".$this->getCalendarOrganizer().":mailto:".$this->getCalendarOrganizerEmail()."\r\nLOCATION:".$this->getCalendarLocation()."\r\nDESCRIPTION:".$this->getCalendarDescription()."\r\n$participants.END:VEVENT\r\nEND:VCALENDAR\r\n";
+        $message = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Deathstar-mailer//theforce/NONSGML v1.0//EN\r\nMETHOD:REQUEST\r\nBEGIN:VEVENT\r\nUID:" . md5(uniqid(mt_rand(),
+                true)) . "example.com\r\nDTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\nDTSTART:" . $this->getCalendarDate() . "T" . $this->getCalendarStartTime() . "00\r\nDTEND:" . $this->getCalendarDate() . "T" . $this->getCalendarEndTime() . "00\r\nSUMMARY:" . $this->getCalendarSubject() . "\r\nORGANIZER;CN=" . $this->getCalendarOrganizer() . ":mailto:" . $this->getCalendarOrganizerEmail() . "\r\nLOCATION:" . $this->getCalendarLocation() . "\r\nDESCRIPTION:" . str_replace(array(
+                "\r",
+                "\n"
+            ), '', $this->getCalendarDescription()) . "\r\n$participants.END:VEVENT\r\nEND:VCALENDAR\r\n";
 
         $headers .= $message;
         $this->setHeaders($headers);

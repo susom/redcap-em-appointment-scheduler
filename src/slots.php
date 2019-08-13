@@ -9,6 +9,7 @@ if(isset($_GET['date'])){
     $date = preg_replace("([^0-9/])", "", $_GET['date']);
     $event_id = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
     $slots = $module->getDateAvailableSlots($date, $event_id);
+    $primary = \REDCap::getRecordIdField();
     if(!empty($slots)){
         foreach ($slots as $record){
             /**
@@ -24,7 +25,7 @@ if(isset($_GET['date'])){
 
             ?>
             <button type="button"
-                    data-record-id="<?php echo $slot['record_id'] ?>" <?php echo $slot['booked'] ? 'disabled' : '' ?>
+                    data-record-id="<?php echo $slot[$primary] ?>" <?php echo $slot['booked'] ? 'disabled' : '' ?>
                     data-date="<?php echo date('Ymd', strtotime($slot['start'])) ?>"
                     data-event-id="<?php echo $event_id ?>"
                     data-notes-label="<?php echo $module->getNoteLabel(); ?>"
