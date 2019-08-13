@@ -32,7 +32,9 @@ try {
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#<?php echo NO_SHOW_TEXT ?>" role="tab" data-toggle="tab">
-                        <?php echo NO_SHOW_TEXT ?>
+                        <?php
+                        $text = str_replace("_", " ", NO_SHOW_TEXT);
+                        echo $text ?>
                     </a>
                 </li>
             </ul>

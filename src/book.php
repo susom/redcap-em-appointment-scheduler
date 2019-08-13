@@ -7,7 +7,7 @@ namespace Stanford\AppointmentScheduler;
 
 try {
 
-    if (!defined(USERID)) {
+    if (!defined('USERID')) {
         throw new \LogicException('Please login.');
     }
 
@@ -21,7 +21,7 @@ try {
         $data['sunet_id' . $module->getSuffix()] = USERID;
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
         $date = date('Y-m-d', strtotime(preg_replace("([^0-9/])", "", $_POST['calendarDate'])));
-        $module->doesUserHaveSameDateReservation($date, $data['email' . $module->getSuffix()], $module->getSuffix(),
+        $module->doesUserHaveSameDateReservation($date, USERID, $module->getSuffix(),
             $data['event_id'], $reservationEventId);
         /**
          * let mark it as complete so we can send the survey if needed.

@@ -1104,16 +1104,16 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @param int $slotEventId
      * @param int $reservationEventId
      */
-    public function doesUserHaveSameDateReservation($slotDate, $email, $suffix, $slotEventId, $reservationEventId)
+    public function doesUserHaveSameDateReservation($slotDate, $sunetId, $suffix, $slotEventId, $reservationEventId)
     {
 
-        $filter = "[email] = $email ";
+        $filter = "[sunet_id] = $sunetId ";
         $param = array(
             'filterLogic' => $filter,
             'return_format' => 'array',
             'events' => \REDCap::getEventNames(true, true, $reservationEventId)
         );
-        $reservations = $this->participant->getUserParticipation($email, $suffix, RESERVED);
+        $reservations = $this->participant->getUserParticipation($sunetId, $suffix, RESERVED);
 
         foreach ($reservations as $reservation) {
             $record = $reservation[$reservationEventId];

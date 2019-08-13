@@ -27,7 +27,7 @@ $instance = $module->getEventInstance();
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Date (mm/dd/yyyy)</div>
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Location</div>
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Time (PDT)</div>
-        <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Office Hour Slots</div>
+        <div class="p-3 mb-2 col-lg-3 text-light bg-dark"><?php echo $instance['title'] ?> Slots</div>
     </div>
     <?php
 
@@ -74,7 +74,7 @@ if (empty($data)) {
             $days[$day][$slot['record_id']]['available' . $suffix] = $days[$day][$slot['record_id']]['number_of_participants' . $suffix] - $days[$day][$slot['record_id']]['booked_slots' . $suffix];
         } else {
             $days[$day][$slot['record_id']]['booked' . $suffix] = true;
-            $days[$day][$slot['record_id']]['notes' . $suffix] = 'No available spots <br>\\TODO WHAT DO DISPLAY HERE!';
+            $days[$day][$slot['record_id']]['notes' . $suffix] = 'Full <br>';
         }
     }
 
