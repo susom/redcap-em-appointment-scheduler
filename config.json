@@ -85,6 +85,12 @@
       "repeatable": true,
       "sub_settings": [
         {
+          "key": "instance_description",
+          "name": "<b>Add a description for this instance</b><br/>",
+          "required": true,
+          "type": "textarea"
+        },
+        {
           "key": "slot_event_id",
           "name": "<b>Appointment Slot Event</b><br>Select the arm/event where each record corresponds to an appointment slot that can be reserved.  This event must have the 'Slots' form enabled",
           "required": true,

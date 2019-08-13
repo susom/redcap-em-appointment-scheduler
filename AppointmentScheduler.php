@@ -915,6 +915,24 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @param int $eventId
      * @return string
      */
+    public function getInstanceDescription($eventId)
+    {
+        $instances = $this->getInstances();
+        foreach ($instances as $instance) {
+            /**
+             * if the event id passed is survey_complementary_slot_event_id or survey_complementary_reservation_event_id
+             */
+            if ($instance['slot_event_id'] == $eventId || $instance['reservation_event_id'] == $eventId) {
+                return $instance['instance_description'];
+            }
+        }
+        return '';
+    }
+
+    /**
+     * @param int $eventId
+     * @return string
+     */
     public function getSuffixViaEventId($eventId)
     {
         $instances = $this->getInstances();

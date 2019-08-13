@@ -8,11 +8,13 @@ $url = $module->getUrl('src/list.php', true, true);
 
 <div class="container">
     <div class="row p-3 mb-2">
-        <div class="col text-right">
+        <div class="col-8">
+            <?php echo $module->getInstanceDescription($eventId) ?>
+        </div>
+        <div class="col-4 text-right">
             <a class="btn btn-danger list-view" data-key="<?php echo $eventId ?>" href="javascript:;"
                data-url="<?php echo $url . '&config=' . $key . '&event_id=' . $eventId ?>" role="button">List View</a>
         </div>
-
     </div>
 
     <div class="row">
