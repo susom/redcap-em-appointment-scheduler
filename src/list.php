@@ -63,6 +63,7 @@ if (empty($data)) {
         $days[$day][$slot['record_id']]['start' . $suffix] = date('H:i', strtotime($slot['start' . $suffix]));
         $days[$day][$slot['record_id']]['end' . $suffix] = date('H:i', strtotime($slot['end' . $suffix]));
         $days[$day][$slot['record_id']]['location' . $suffix] = $slot['location' . $suffix];
+        $days[$day][$slot['record_id']]['attending_options' . $suffix] = $slot['attending_options' . $suffix];
         $days[$day][$slot['record_id']]['number_of_participants' . $suffix] = $slot['number_of_participants' . $suffix];
         $days[$day][$slot['record_id']]['booked_slots' . $suffix] = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
             $reservationEventId, $suffix);
@@ -106,6 +107,7 @@ if (empty($data)) {
                                         data-event-id="<?php echo $eventId ?>"
                                         data-notes-label="<?php echo $module->getNoteLabel(); ?>"
                                         data-show-projects="<?php echo $module->showProjectIds(); ?>"
+                                        data-show-locations="<?php echo(empty($record['attending_options' . $suffix]) ? CAMPUS_AND_VIRTUAL : $record['attending_options' . $suffix]); ?>"
                                         data-show-notes="<?php echo $module->showNotes(); ?>"
                                         data-date="<?php echo date('Ymd', strtotime($record['date' . $suffix])) ?>"
                                         data-start="<?php echo date('Hi', strtotime($record['start' . $suffix])) ?>"

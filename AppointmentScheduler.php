@@ -997,6 +997,15 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * @return boolean
      */
+    public function showLocationsOptions()
+    {
+        $instance = $this->identifyCurrentInstance($this->getEventId());
+        return $instance['location_options'];
+    }
+
+    /**
+     * @return boolean
+     */
     public function showProjectIds()
     {
         $instance = $this->identifyCurrentInstance($this->getEventId());

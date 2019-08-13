@@ -82,14 +82,14 @@ if (!isset($module)) {
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="type" id="type-campus"
                                    value="<?php echo CAMPUS_ONLY ?>" checked>
-                            <label class="form-check-label" for="type-campus">
+                            <label class="form-check-label" for="type-campus" id="type-campus-text">
                                 <?php echo CAMPUS_ONLY_TEXT ?>
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="type" id="type-online"
                                    value="<?php echo VIRTUAL_ONLY ?>">
-                            <label class="form-check-label" for="type-online">
+                            <label class="form-check-label" for="type-online" id="type-online-text">
                                 <?php echo VIRTUAL_ONLY_TEXT ?>
                             </label>
                         </div>

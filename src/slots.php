@@ -31,6 +31,7 @@ if(isset($_GET['date'])){
                     data-notes-label="<?php echo $module->getNoteLabel(); ?>"
                     data-show-projects="<?php echo $module->showProjectIds(); ?>"
                     data-show-notes="<?php echo $module->showNotes(); ?>"
+                    data-show-locations="<?php echo(empty($slot['attending_options']) ? CAMPUS_AND_VIRTUAL : $record['attending_options']); ?>"
                     data-start="<?php echo date('Hi', strtotime($slot['start'])) ?>"
                     data-end="<?php echo date('Hi', strtotime($slot['end'])) ?>"
                     data-modal-title="<?php echo date('h:i A',

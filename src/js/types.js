@@ -1,6 +1,11 @@
 var record = {};
 
 var currentView = '';
+
+const CAMPUS_AND_VIRTUAL = 0;
+const VIRTUAL_ONLY = 1;
+const CAMPUS_ONLY = 2;
+
 /**
  * Show Form to complete for selected time
  */
@@ -129,6 +134,24 @@ jQuery(document).on('click', '.time-slot', function () {
         jQuery("#show-notes").hide();
     }
 
+    if (jQuery(this).data('show-locations') == VIRTUAL_ONLY) {
+        jQuery("#type-campus").hide();
+        jQuery("#type-campus-text").hide();
+        jQuery("#type-online").show();
+        jQuery("#type-online-text").show();
+        jQuery("#type-online").attr('checked', 'checked');
+    } else if (jQuery(this).data('show-locations') == CAMPUS_ONLY) {
+        jQuery("#type-online-text").hide();
+        jQuery("#type-online").hide();
+        jQuery("#type-campus").show();
+        jQuery("#type-campus-text").show();
+        jQuery("#type-campus").attr('checked', 'checked');
+    } else {
+        jQuery("#type-online-text").show();
+        jQuery("#type-online").show();
+        jQuery("#type-campus").show();
+        jQuery("#type-campus-text").show();
+    }
     /**
      * Capture start and end time for Email calendar
      */
@@ -209,7 +232,7 @@ jQuery(document).on('click', '.manage', function () {
             type: 'GET',
             datatype: 'json',
             success: function (data) {
-                jQuery('#generic-modal').find('.modal-title').html('Manage your appointments');
+                jQuery('#generic-modal').find('.modal-title').html('Manage My appointments');
                 jQuery('#generic-modal').find('.modal-body').html(data);
                 $('#generic-modal').modal('show');
 
