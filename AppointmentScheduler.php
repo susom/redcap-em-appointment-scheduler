@@ -208,7 +208,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             $sid = $this->getProjectSetting('twilio_sid');
             $token = $this->getProjectSetting('twilio_token');
             if ($sid != '' && $token != '') {
-                $this->setTwilioClient(new Client($sid, $token));
+                //    $this->setTwilioClient(new Client($sid, $token));
             }
 
         } catch (\Exception $e) {
