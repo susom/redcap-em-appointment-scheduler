@@ -54,15 +54,6 @@
       }
     ]
   },
-  "crons": [
-    {
-      "cron_name": "test_cron",
-      "cron_description": "This is just for fun to test cron functionality",
-      "method": "testCron",
-      "cron_frequency": "5",
-      "cron_max_run_time": "1200"
-    }
-  ],
   "system-settings": [
     {
       "key": "enable-system-debug-logging",
