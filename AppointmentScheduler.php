@@ -152,11 +152,18 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             /**
              * so when you enable this it does not throw an error !!
              */
-            if ($_GET) {
+            if ($_GET && $_GET['pid'] != null) {
                 /**
                  * This call must be done after parent constructor is called
                  */
                 $this->setInstances();
+
+                // Initiate Twilio Client
+                $sid = $this->getProjectSetting('twilio_sid');
+                $token = $this->getProjectSetting('twilio_token');
+                if ($sid != '' && $token != '') {
+                    $this->setTwilioClient(new Client($sid, $token));
+                }
             }
 
 
@@ -194,12 +201,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 $this->setEventInstance($this->getEventId());
             }
 
-            // Initiate Twilio Client
-            $sid = $this->getProjectSetting('twilio_sid');
-            $token = $this->getProjectSetting('twilio_token');
-            if ($sid != '' && $token != '') {
-                //    $this->setTwilioClient(new Client($sid, $token));
-            }
 
         } catch (\Exception $e) {
             echo $e->getMessage();

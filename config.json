@@ -1,7 +1,7 @@
 {
   "name" : "Appointment Scheduler",
   "namespace" : "Stanford\\AppointmentScheduler",
-  "description" : "TODO",
+  "description": "Allow users to Schedule Office Hours or training sessions",
   "authors" : [
     {
       "name" : "Ihab Zeedia",
