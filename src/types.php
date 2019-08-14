@@ -17,6 +17,7 @@ $instances = $module->getInstances();
 //JS and CSS with inputs URLs
 require_once 'urls.php';
 ?>
+<link rel="stylesheet" href="<?php echo $module->getUrl('src/css/types.css') ?>">
     <div class="container">
         <nav class="navbar navbar-expand-sm bg-light navbar-light">
             <ul class="navbar-nav">
@@ -83,3 +84,4 @@ require_once 'urls.php';
     <?php
 require_once 'models.php';
 ?>
+<div class="loader"><!-- Place at bottom of page --></div>
