@@ -131,11 +131,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     private $calendarParams;
 
     /**
-     * @var \Monolog\Logger
-     */
-    private $logger;
-
-    /**
      * @var \Participant;
      */
     private $participant;
@@ -163,11 +158,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  */
                 $this->setInstances();
             }
-
-            /*
-             * Initiate PSR logger
-             */
-            $this->setLogger();
 
 
             /**
@@ -314,29 +304,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
 
     /**
-     * @return mixed
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Initiate logger object
-     */
-    public function setLogger()
-    {
-        try {
-            $this->logger = new Logger(MODULE_NAME);
-            $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/' . MODULE_NAME . '.log',
-                Logger::DEBUG));
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            echo $e->getMessage();
-        }
-    }
-
-    /**
      * @return array
      */
     public function getEventInstance()
@@ -406,7 +373,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \Exception('No Type exists');
             }
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
         }
     }
 
@@ -436,7 +402,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not a valid date, Aborting!');
             }
         } catch (\LogicException $e) {
-            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -462,7 +427,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not event id passed, Aborting!');
             }
         } catch (\LogicException $e) {
-            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -522,7 +486,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('Not event id passed, Aborting!');
             }
         } catch (\LogicException $e) {
-            $this->logger->error($e->getMessage());
+            //error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -543,7 +507,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             );
             return REDCap::getData($param);
         } catch (\LogicException $e) {
-            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -577,7 +540,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \LogicException('No slots found');
             }
         } catch (\LogicException $e) {
-            $this->logger->error($e->getMessage());
             echo $e->getMessage();
         }
     }
@@ -650,10 +612,8 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 throw new \Twilio\Exceptions\TwilioException('Cant send message');
             }
         } catch (\LogicException $e) {
-            $this->logger->error($e->getMessage());
             echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
         } catch (\Twilio\Exceptions\TwilioException $e) {
-            $this->logger->error($e->getMessage());
             echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
         }
     }
@@ -796,12 +756,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
     }
 
-
-    public function testCron()
-    {
-
-        $this->logger->debug('Logging from cron. this is so easy');
-    }
 
 
     public function getNextRecordsId($eventId, $projectId)
