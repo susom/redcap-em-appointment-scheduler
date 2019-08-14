@@ -12,6 +12,7 @@
     height: 100%;
     width: 100%;
     background: rgba(82, 77, 77, 0.8) url('../../../../redcap_v9.2.5/Resources/images/loader_simple.gif') 50% 50% no-repeat;
+    z-index: 10000;
 }
 
 /* When the body has the loading class, we turn
