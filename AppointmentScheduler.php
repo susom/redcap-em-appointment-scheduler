@@ -597,18 +597,17 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 $user['mobile'],
                 $message
             );
-
-
             /**
              * log sent message.
              */
             if ($result->errorCode == null) {
-                $sql = sprintf("insert into redcap_user_received_text_messages (user_id, sender, receiver, message, created_at) values (" . UI_ID . ", '$result->from', '$result->to', '$result->body', " . time() . ")"
-                );
-
-                if (!db_query($sql)) {
-                    throw new \LogicException('cant save sent text message ');
-                }
+                $this->log('Text message sent to ' . $result->to, array(
+                    'user_id' => UI_ID,
+                    'from' => $result->from,
+                    'to' => $result->to,
+                    'body' => $result->body,
+                    'time' => time()
+                ));
             } elseif ($result->errorCode) {
                 throw new \Twilio\Exceptions\TwilioException('Cant send message');
             }
