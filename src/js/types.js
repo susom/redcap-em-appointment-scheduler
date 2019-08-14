@@ -267,7 +267,14 @@ jQuery(document).on('click', '.manage-calendars', function () {
                 jQuery('#generic-modal').modal('show');
                 jQuery('#generic-modal').modal('show');
 
-                jQuery('#calendar-datatable').DataTable();
+                jQuery('#calendar-datatable').DataTable(
+                    {
+                        pageLength: 50,
+                        columnDefs: [
+                            {"type": "date", "targets": 3}
+                        ]
+                    }
+                );
             },
             error: function (request, error) {
                 alert("Request: " + JSON.stringify(request));

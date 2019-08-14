@@ -28,6 +28,7 @@ try {
                     <th>#</th>
                     <th>Instructor</th>
                     <th>Location</th>
+                    <th>Date</th>
                     <th>Time</th>
                     <th>Actions</th>
                 </tr>
@@ -42,9 +43,11 @@ try {
                         <td><?php echo $slot['instructor'] ?></td>
                         <td><strong><?php echo $slot['event_name'] ?></strong>
                             - <?php echo $slot['location' . $suffix] ?></td>
-                        <td><?php echo date('m/d/Y',
+                        <td>
+                            <?php echo date('m/d/Y',
                                 strtotime($slot['start' . $suffix])) ?>
-                            <br><?php echo date('H:i',
+                        </td>
+                        <td><?php echo date('H:i',
                                 strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
                                 strtotime($slot['end' . $suffix])) ?></td>
                         <td><?php
