@@ -37,10 +37,10 @@ try {
         $data[\REDCap::getRecordIdField()] = $module->getNextRecordsId($reservationEventId, PROJECT_ID);
         $response = \REDCap::saveData('json', json_encode(array($data)));
         if (empty($response['errors'])) {
-            $module->notifyUser($data);
+            $return = $module->notifyUser($data);
             echo json_encode(array(
                 'status' => 'ok',
-                'message' => 'Appointment saved successfully!',
+                'message' => 'Appointment saved successfully!' . (isset($return['error']) ? $return['message'] : ''),
                 'id' => array_pop($response['ids']),
                 'email' => $data['email']
             ));

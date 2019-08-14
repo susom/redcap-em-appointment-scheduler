@@ -582,7 +582,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                         strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
                         strtotime($this->calendarParams['calendarEndTime']))
             );
-            $this->sendTextMessage($user, $message);
+            return $this->sendTextMessage($user, $message);
         }
     }
 
@@ -612,10 +612,11 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             } elseif ($result->errorCode) {
                 throw new \Twilio\Exceptions\TwilioException('Cant send message');
             }
+            return array('status' => 'success', 'message' => 'Message sent successfully');
         } catch (\LogicException $e) {
-            echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+            return array('status' => 'error', 'message' => $e->getMessage());
         } catch (\Twilio\Exceptions\TwilioException $e) {
-            echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+            return array('status' => 'error', 'message' => $e->getMessage());
         }
     }
 

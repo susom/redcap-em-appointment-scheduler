@@ -64,15 +64,26 @@ try {
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
                                         <?php echo date('m/d/Y',
                                             strtotime($slot['start' . $suffix])) ?>
-                                        <br><?php echo date('H:i',
-                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                        <br><?php echo date('h:i A',
+                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('h:i A',
                                             strtotime($slot['end' . $suffix])) ?></div>
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
-                                        <button type="button"
-                                                data-participation-id="<?php echo $reserved[\REDCap::getRecordIdField()] ?>"
-                                                data-event-id="<?php echo $module->getReservationEventIdViaSlotEventId($eventId) ?>"
-                                                class="cancel-appointment btn btn-block btn-danger">Cancel
-                                        </button>
+                                        <?php
+                                        if (strtotime($slot['start' . $suffix]) > time()) {
+                                            ?>
+                                            <button type="button"
+                                                    data-participation-id="<?php echo $reserved[\REDCap::getRecordIdField()] ?>"
+                                                    data-event-id="<?php echo $module->getReservationEventIdViaSlotEventId($eventId) ?>"
+                                                    class="cancel-appointment btn btn-block btn-danger">Cancel
+                                            </button>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            Appointment Completed
+                                            <?php
+                                        }
+                                        ?>
+
                                     </div>
                                 </div>
                                 <?php
@@ -98,8 +109,8 @@ try {
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
                                         <?php echo date('m/d/Y',
                                             strtotime($slot['start' . $suffix])) ?>
-                                        <br><?php echo date('H:i',
-                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                        <br><?php echo date('h:i A',
+                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('h:i A',
                                             strtotime($slot['end' . $suffix])) ?></div>
                                     <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo
                                             $canceled['notes' . $suffix] . ($slot['notes' . $suffix] != '' ? '<br>Instructor Notes:' . $slot['notes' . $suffix] : '') ?></div>
@@ -130,8 +141,8 @@ try {
                                     <div class="p-3 mb-2 col-lg-4 text-dark">
                                         <?php echo date('m/d/Y',
                                             strtotime($slot['start' . $suffix])) ?>
-                                        <br><?php echo date('H:i',
-                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                        <br><?php echo date('h:i A',
+                                            strtotime($slot['start' . $suffix])) ?> – <?php echo date('h:i A',
                                             strtotime($slot['end' . $suffix])) ?></div>
                                     <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo
                                             $canceled['notes' . $suffix] . ($slot['notes' . $suffix] != '' ? '<br>Instructor Notes:' . $slot['notes' . $suffix] : '') ?></div>
