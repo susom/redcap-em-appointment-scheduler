@@ -217,6 +217,7 @@ class CalendarEmail extends Message
         $this->setCalendarOrganizer($param['calendarOrganizer']);
         $this->setCalendarSubject($param['calendarSubject']);
         $this->setCalendarDescription($param['calendarDescription']);
+        $this->setcalendarLocation($param['calendarLocation']);
         $this->setCalendarDate($param['calendarDate']);
         $this->setCalendarStartTime($param['calendarStartTime']);
         $this->setCalendarEndTime($param['calendarEndTime']);
