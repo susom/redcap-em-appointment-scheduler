@@ -636,8 +636,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $this->emailClient->setBody($body);
         if ($calendar) {
             $this->emailClient->sendCalendarEmail($this->calendarParams);
+        } else {
+            $this->emailClient->send();
         }
-        $this->emailClient->send();
+
     }
 
     /**

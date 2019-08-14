@@ -227,7 +227,18 @@ class CalendarEmail extends Message
      * Generate header and body of the calendar event
      */
     public function buildCalendarBody(){
-        $headers = 'Content-Type:text/calendar; Content-Disposition: inline; charset=utf-8;\r\n';
+        $from = $this->getFrom();
+        $headers = "MIME-Version: 1.0" . PHP_EOL;
+        $headers .= "From: " . $from . PHP_EOL;
+        if ($this->getCc() != "") {
+            $headers .= "Cc: " . $this->getCc() . PHP_EOL;
+        }
+        if ($this->getBcc() != "") {
+            $headers .= "Bcc: " . $this->getBcc() . PHP_EOL;
+        }
+        $headers .= "Reply-To: " . $this->getFrom() . PHP_EOL;
+        $headers .= "Return-Path: " . $this->getFrom() . PHP_EOL;
+        $headers .= 'Content-Type:text/calendar; Content-Disposition: inline; charset=utf-8;\r\n';
         $headers .= "Content-Type: text/plain;charset=\"utf-8\"\r\n"; #EDIT: TYPO
 
         $participants = '';
@@ -254,6 +265,8 @@ class CalendarEmail extends Message
     public function sendCalendarEmail($param){
         $this->prepareCalendarData($param);
         $this->buildCalendarBody();
-        return mail($this->getTo(), $this->getCalendarSubject(), $this->getCalendarBody(), $this->getHeaders());
+        $from = $this->getTo();
+        return mail($this->getTo(), $this->getCalendarSubject(), $this->getCalendarBody(), $this->getHeaders(),
+            "-f $from");
     }
 }
