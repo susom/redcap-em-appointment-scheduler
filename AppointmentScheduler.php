@@ -708,11 +708,12 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
     public function notifyParticipants($slotId, $eventId, $message)
     {
+        $instance = $this->getEventInstance();
         $participants = $this->participant->getSlotActualReservedSpots($slotId, $eventId);
         foreach ($participants as $participant) {
             $result = end($participant);
             $this->emailClient->setTo($result['email']);
-            $this->emailClient->setFrom('ihabz@stanford.edu');
+            $this->emailClient->setFrom(($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME));
             $this->emailClient->setFromName($result['email']);
             $this->emailClient->setSubject($message['subject']);
             $this->emailClient->setBody($message['body']);

@@ -2,6 +2,8 @@
 
 namespace Stanford\AppointmentScheduler;
 
+use REDCap;
+
 /** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
 
 
@@ -24,11 +26,15 @@ try {
         $data['instructor' . $suffix] = filter_var($_POST['instructor'], FILTER_SANITIZE_STRING);
         $data['location' . $suffix] = filter_var($_POST['location'], FILTER_SANITIZE_STRING);
         $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
+        $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
         $response = \REDCap::saveData('json', json_encode(array($data)));
         if (!empty($response['errors'])) {
             throw new \LogicException(implode("\n", $response['errors']));
         } else {
-            //TODO notify participants about the cancellation
+            $message['subject'] = $message['body'] = 'Your ' . REDCap::getEventNames(false, false,
+                    $data['event_id']) . ' at' . date('m/d/Y',
+                    strtotime($data['start' . $suffix])) . ' has been updated';
+            $module->notifyParticipants($data['record_id'], $reservationEventId, $message);
             echo json_encode(array('status' => 'ok', 'message' => 'Slot Updated successfully!'));
         }
     }
