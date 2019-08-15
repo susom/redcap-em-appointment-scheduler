@@ -28,7 +28,7 @@ try {
             throw new \LogicException(implode("\n", $response['errors']));
         } else {
 
-            $slot = AppointmentScheduler::getSlot($data[$primary], $data['event_id'], $module->getProjectId(),
+            $slot = AppointmentScheduler::getSlot($data[$primary], $eventId, $module->getProjectId(),
                 $module->getPrimaryRecordFieldName());
             $message['subject'] = $message['body'] = 'Your ' . $module->getUniqueEventName($data['event_id']) . ' at' . date('m/d/Y',
                     strtotime($slot['start' . $suffix])) . ' at ' . date('H:i',

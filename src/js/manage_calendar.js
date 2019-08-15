@@ -15,8 +15,9 @@ jQuery(document).on('click', '.cancel-slot', function () {
             url: url + '&record_id=' + record_id + '&event_id=' + event_id,
             type: 'GET',
             datatype: 'json',
-            success: function (data) {
-                alert(data.message)
+            success: function (response) {
+                var response = JSON.parse(response);
+                alert(response.message)
             },
             error: function (request, error) {
                 alert("Request: " + JSON.stringify(request));
@@ -77,6 +78,7 @@ jQuery(document).on('click', '#submit-reschedule-form', function () {
         data: slot,
         datatype: 'json',
         success: function (response) {
+            var response = JSON.parse(response);
             if (response.status == 'ok') {
                 alert(response.message);
                 $('#booking').modal('hide');
