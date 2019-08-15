@@ -57,20 +57,31 @@ require_once 'urls.php';
             }
             $slotEvent = REDCap::getEventNames(false, false, $slotsEventId);
             ?>
-            <div class="row  p-3 mb-2">
-                <a class="type" data-key="<?php echo $slotsEventId ?>" data-name="<?php echo $slotEvent ?>"
-                   href="javascript:;"
-                   data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>">
-                    <div class="btn btn-block btn-info"><?php echo $title ?></div>
-                </a>
+
+            <div class="card">
+                <input type="hidden" id="<?php echo $slotsEventId ?>-reservation-event-id"
+                       value="<?php echo $reservationEventId ?>"
+                       class="hidden"/>
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="type btn btn-link collapsed" type="button"
+                                data-toggle="collapse-<?php echo $slotsEventId ?>"
+                                data-target="#collapse-<?php echo $slotsEventId ?>" aria-expanded="true"
+                                aria-controls="collapse-<?php echo $slotsEventId ?>"
+                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>"
+                                data-key="<?php echo $slotsEventId ?>" data-name="<?php echo $slotEvent ?>">
+                            <?php echo $title ?>
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapse-<?php echo $slotsEventId ?>" class="collapse" aria-labelledby="headingOne"
+                     data-parent="#accordionExample">
+                    <div class="card-body" id="<?php echo $slotsEventId ?>-calendar">
+                    </div>
+                </div>
             </div>
-            <input type="hidden" id="<?php echo $slotsEventId ?>-reservation-event-id"
-                   value="<?php echo $reservationEventId ?>"
-                   class="hidden"/>
-            <div class="row">
-                <div class="slots-container" id="<?php echo $slotsEventId ?>-calendar"
-                     style="width: 100%;"></div>
-            </div>
+
             <?php
         }
         ?>

@@ -28,7 +28,14 @@ jQuery(document).on('click', '.type', function () {
             jQuery('.slots-container').html('');
         },
         'success': function (data) {
-            jQuery("#" + key + "-calendar").hide().html(data).slideDown("slow");
+            if (!jQuery("#" + key + "-calendar").is(":visible")) {
+                jQuery(document).removeClass('show');
+                jQuery("#" + key + "-calendar").hide().html(data).slideDown("slow");
+                jQuery("#collapse-" + key).addClass('show');
+            } else {
+                jQuery("#" + key + "-calendar").html(data);
+            }
+
             currentView = $elem;
         },
         'error': function (request, error) {
@@ -293,7 +300,7 @@ jQuery(document).on('click', '.manage-calendars', function () {
  */
 $(document).ready(function () {
     var instance = jQuery("#triggered-instance").val();
-    var instances = jQuery("a.type");
+    var instances = jQuery("button.type");
     console.log(instance);
     if (instance == '') {
         var $elem = jQuery(instances[0]);
