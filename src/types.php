@@ -55,7 +55,6 @@ require_once 'urls.php';
                 $slotsEventId = $instance['slot_event_id'];
                 $reservationEventId = $instance['reservation_event_id'];
             }
-            $slotEvent = REDCap::getEventNames(false, false, $slotsEventId);
             ?>
 
             <div class="card">
@@ -68,8 +67,8 @@ require_once 'urls.php';
                                 data-toggle="collapse-<?php echo $slotsEventId ?>"
                                 data-target="#collapse-<?php echo $slotsEventId ?>" aria-expanded="true"
                                 aria-controls="collapse-<?php echo $slotsEventId ?>"
-                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>"
-                                data-key="<?php echo $slotsEventId ?>" data-name="<?php echo $slotEvent ?>">
+                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+                                data-key="<?php echo $slotsEventId ?>" data-name="<?php echo $title ?>">
                             <?php echo $title ?>
                         </button>
                     </h2>

@@ -18,6 +18,7 @@
   "permissions": [
     "redcap_every_page_before_render",
     "redcap_survey_complete",
+    "redcap_module_link_check_display",
     "redcap_survey_page_top"
   ],
   "no-auth-pages": [
@@ -27,18 +28,6 @@
     "src/book",
     "src/manage",
     "src/manage_calendars",
-    "src/cancel",
-    "src/reschedule",
-    "src/participants_list",
-    "src/list"
-  ],
-  "any-auth-pages": [
-    "src/types",
-    "src/calendar",
-    "src/slots",
-    "src/summary",
-    "src/book",
-    "src/manage",
     "src/cancel",
     "src/reschedule",
     "src/participants_list",

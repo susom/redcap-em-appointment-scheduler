@@ -9,9 +9,10 @@ use REDCap;
 
 try {
     $suffix = $module->getSuffix();
-    $data['record_id'] = filter_var($_GET['record_id'], FILTER_SANITIZE_NUMBER_INT);
+    $primary = $module->getPrimaryRecordFieldName();
+    $data[$primary] = filter_var($_GET['record_id'], FILTER_SANITIZE_NUMBER_INT);
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
-    if ($data['record_id'] == '') {
+    if ($data[$primary] == '') {
         throw new \LogicException('Record ID is missing');
     }
     if ($eventId == '') {
@@ -21,21 +22,21 @@ try {
         throw new \LogicException('You should not be here');
     } else {
         $data['slot_status' . $suffix] = CANCELED;
-        $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
-        $response = \REDCap::saveData('json', json_encode(array($data)));
+        $data['redcap_event_name'] = $module->getUniqueEventName($eventId);
+        $response = \REDCap::saveData($module->getProjectId(), 'json', json_encode(array($data)));
         if (!empty($response['errors'])) {
             throw new \LogicException(implode("\n", $response['errors']));
         } else {
 
-            $slot = AppointmentScheduler::getSlot($data['record_id'], $data['event_id']);
-            $message['subject'] = $message['body'] = 'Your ' . REDCap::getEventNames(false, false,
-                    $data['event_id']) . ' at' . date('m/d/Y',
+            $slot = AppointmentScheduler::getSlot($data[$primary], $data['event_id'], $module->getProjectId(),
+                $module->getPrimaryRecordFieldName());
+            $message['subject'] = $message['body'] = 'Your ' . $module->getUniqueEventName($data['event_id']) . ' at' . date('m/d/Y',
                     strtotime($slot['start' . $suffix])) . ' at ' . date('H:i',
                     strtotime($slot['start' . $suffix])) . ' to ' . date('H:i',
                     strtotime($slot['end' . $suffix])) . ' has been canceled';
-            $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
+            $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
 
-            $module->notifyParticipants($data['record_id'], $reservationEventId, $message);
+            $module->notifyParticipants($data[$primary], $reservationEventId, $message);
             echo json_encode(array('status' => 'ok', 'message' => 'Slot canceled successfully!'));
         }
     }

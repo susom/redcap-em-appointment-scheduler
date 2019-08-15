@@ -6,7 +6,7 @@ namespace Stanford\AppointmentScheduler;
 
 
 try {
-    $primary = \REDCap::getRecordIdField();
+    $primary = $module->getPrimaryRecordFieldName();
     $data[$primary] = $_GET[$primary];
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
     if ($data[$primary] == '') {
@@ -14,8 +14,8 @@ try {
     } else {
 
         $data['participant_status' . $module->getSuffix()] = CANCELED;
-        $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
-        $response = \REDCap::saveData('json', json_encode(array($data)));
+        $data['redcap_event_name'] = $module->getUniqueEventName($eventId);
+        $response = \REDCap::saveData($module->getProjectId(), 'json', json_encode(array($data)));
 
         if (empty($response['errors'])) {
             //TODO notify instructor about the cancellation

@@ -22,35 +22,48 @@ namespace Stanford\AppointmentScheduler;
 <!--
         ***********Add COMPLEMENTARY_SUFFIX to the end of each URL so the suffix can be loaded when ever you instantiate $module ***********
         -->
-<input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', false, true,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-<input type="hidden" id="calendar-url" value="<?php echo $module->getUrl('src/calendar.php', false, true,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-<input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', false, true,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-<input type="hidden" id="book-submit-url" value="<?php echo $module->getUrl('src/book.php', false, true,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-<input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', false, true,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-<input type="hidden" id="list-view-url" value="<?php echo $module->getUrl('src/list.php', false, true,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-<input type="hidden" id="manage-url" value="<?php echo $module->getUrl('src/manage.php', false, true,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+<input type="hidden" id="slots-url" value="<?php echo $module->getUrl('src/slots.php', false,
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
+<input type="hidden" id="calendar-url" value="<?php echo $module->getUrl('src/calendar.php', false,
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
+<input type="hidden" id="book-slot-url" value="<?php echo $module->getUrl('src/slots.php', false,
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
+<input type="hidden" id="book-submit-url" value="<?php echo $module->getUrl('src/book.php', false,
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
+<input type="hidden" id="summary-url" value="<?php echo $module->getUrl('src/summary.php', false,
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
+<input type="hidden" id="list-view-url" value="<?php echo $module->getUrl('src/list.php', false,
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
+<input type="hidden" id="manage-url" value="<?php echo $module->getUrl('src/manage.php', false,
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
 <input type="hidden" id="manage-calendar-url"
        value="<?php echo $module->getUrl('src/manage_calendars.php', false,
-               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
 <input type="hidden" id="cancel-appointment-url"
-       value="<?php echo $module->getUrl('src/cancel.php', false, true,
-               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
-<input type="hidden" id="cancel-slot-url" value="<?php echo $module->getUrl('src/cancel_slot.php', false,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+       value="<?php echo $module->getUrl('src/cancel.php', false,
+               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
+<input type="hidden" id="cancel-slot-url" value="<?php echo $module->getUrl('src/cancel_slot.php',
+        false) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
 <input type="hidden" id="reschedule-submit-url" value="<?php echo $module->getUrl('src/reschedule.php', false,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
 <input type="hidden" id="participants-list-url"
        value="<?php echo $module->getUrl('src/participants_list.php', false,
-               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
 <input type="hidden" id="participants-no-show-url" value="<?php echo $module->getUrl('src/no_show.php', false,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>" class="hidden"/>
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+       class="hidden"/>
 <input type="hidden" id="event-id" value="" class="hidden"/>
 <input type="hidden" id="user-email" value="<?php echo $user_email ?>" class="hidden"/>
 <input type="hidden" id="complementary-suffix" value="<?php echo $module->getSuffix() ?>" class="hidden"/>

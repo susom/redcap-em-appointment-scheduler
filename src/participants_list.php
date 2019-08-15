@@ -16,7 +16,8 @@ try {
     $recordId = filter_var($_GET['record_id'], FILTER_SANITIZE_NUMBER_INT);
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
     $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
-    $participants = $module->getParticipant()->getSlotParticipants($recordId, $reservationEventId, $suffix);
+    $participants = $module->getParticipant()->getSlotParticipants($recordId, $reservationEventId, $suffix,
+        $module->getProjectId());
     if (!empty($participants)) {
         ?>
         <table id="participants-datatable" class="display">

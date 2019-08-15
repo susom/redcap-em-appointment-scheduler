@@ -13,7 +13,7 @@ try {
         throw new \LogicException('Please login.');
     }
 
-    $records = $module->getParticipant()->getUserParticipation(USERID, $module->getSuffix());
+    $records = $module->getParticipant()->getUserParticipation(USERID, $module->getSuffix(), $module->getProjectId());
     if (count($records) > 0) {
 
         ?>
@@ -47,7 +47,8 @@ try {
                         $module->getSuffix());
                     if ($reservedRecords) {
                         foreach ($reservedRecords as $reserved) {
-                            $slots = $module->getParticipant()->getParticipationSlotData($reserved['slot_id' . $module->getSuffix()]);
+                            $slots = $module->getParticipant()->getParticipationSlotData($reserved['slot_id' . $module->getSuffix()],
+                                $module->getProjectId(), $module->getPrimaryRecordFieldName());
 
                             foreach ($slots as $eventId => $slot) {
                                 $suffix = $module->getSuffixViaEventId($eventId);
@@ -72,7 +73,7 @@ try {
                                         if (strtotime($slot['start' . $suffix]) > time()) {
                                             ?>
                                             <button type="button"
-                                                    data-participation-id="<?php echo $reserved[\REDCap::getRecordIdField()] ?>"
+                                                    data-participation-id="<?php echo $reserved[$module->getPrimaryRecordFieldName()] ?>"
                                                     data-event-id="<?php echo $module->getReservationEventIdViaSlotEventId($eventId) ?>"
                                                     class="cancel-appointment btn btn-block btn-danger">Cancel
                                             </button>
@@ -100,7 +101,8 @@ try {
                         $module->getSuffix());
                     if ($canceledRecords) {
                         foreach ($canceledRecords as $canceled) {
-                            $slots = $module->getParticipant()->getParticipationSlotData($canceled['slot_id' . $module->getSuffix()]);
+                            $slots = $module->getParticipant()->getParticipationSlotData($canceled['slot_id' . $module->getSuffix()],
+                                $module->getProjectId(), $module->getPrimaryRecordFieldName());
                             foreach ($slots as $eventId => $slot) {
                                 $suffix = $module->getSuffixViaEventId($eventId);
                                 ?>
@@ -131,7 +133,8 @@ try {
                         $module->getSuffix());
                     if ($noShowRecords) {
                         foreach ($noShowRecords as $noShow) {
-                            $slots = $module->getParticipant()->getParticipationSlotData($noShow['slot_id' . $module->getSuffix()]);
+                            $slots = $module->getParticipant()->getParticipationSlotData($noShow['slot_id' . $module->getSuffix()],
+                                $module->getProjectId(), $module->getPrimaryRecordFieldName());
 
                             foreach ($slots as $eventId => $slot) {
                                 $suffix = $module->getSuffixViaEventId($eventId);

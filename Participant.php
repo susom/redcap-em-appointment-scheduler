@@ -39,20 +39,17 @@ class Participant
      * @param int $record_id
      * @return array
      */
-    public function getParticipationSlotData($record_id)
+    public function getParticipationSlotData($recodId, $projectId, $primary)
     {
         try {
-            /*
-             * TODO Check if date within allowed window
-             */
-            $primary = \REDCap::getRecordIdField();
-            $filter = "[$primary] = '" . $record_id . "'";
+            $filter = "[$primary] = '" . $recodId . "'";
             $param = array(
+                'project_id' => $projectId,
                 'filterLogic' => $filter,
                 'return_format' => 'array',
             );
             $record = \REDCap::getData($param);
-            return $record[$record_id];
+            return $record[$recodId];
         } catch (\LogicException $e) {
             echo $e->getMessage();
         }
@@ -62,13 +59,14 @@ class Participant
      * @param int $record_id
      * @return int
      */
-    public function getSlotActualCountReservedSpots($slotId, $eventId, $suffix)
+    public function getSlotActualCountReservedSpots($slotId, $eventId, $suffix, $projectId)
     {
         try {
             $counter = 0;
             $param = array(
+                'project_id' => $projectId,
                 'return_format' => 'array',
-                'events' => \REDCap::getEventNames(true, true, $eventId)
+                'events' => $eventId
             );
             $records = \REDCap::getData($param);
             foreach ($records as $record) {
@@ -86,15 +84,16 @@ class Participant
      * @param int $record_id
      * @return bool|\mysqli_result
      */
-    public function getSlotActualReservedSpots($slotId, $eventId)
+    public function getSlotActualReservedSpots($slotId, $eventId, $projectId)
     {
         try {
 
             $filter = "[slot_id] = '" . $slotId . "' AND [participant_status] ='" . RESERVED . "'";
             $param = array(
+                'project_id' => $projectId,
                 'filterLogic' => $filter,
                 'return_format' => 'array',
-                'events' => \REDCap::getEventNames(true, true, $eventId)
+                'events' => $eventId
             );
             $record = \REDCap::getData($param);
             return $record;
@@ -108,15 +107,16 @@ class Participant
      * @param int $record_id
      * @return bool|\mysqli_result
      */
-    public function getSlotParticipants($recordId, $eventId, $suffix)
+    public function getSlotParticipants($recordId, $eventId, $suffix, $projectId)
     {
         try {
 
             $filter = "[slot_id$suffix] = '" . $recordId . "'";
             $param = array(
+                'project_id' => $projectId,
                 'filterLogic' => $filter,
                 'return_format' => 'array',
-                'events' => \REDCap::getEventNames(true, true, $eventId)
+                'events' => $eventId
             );
             $record = \REDCap::getData($param);
             return $record;
@@ -129,9 +129,9 @@ class Participant
      * @param int $record_id
      * @return bool
      */
-    public function isThereAvailableSpotsInAppointment($event_id, $record_id)
+    public function isThereAvailableSpotsInAppointment($event_id, $record_id, $projectId, $primary)
     {
-        $slot = AppointmentScheduler::getSlot($record_id, $event_id);
+        $slot = AppointmentScheduler::getSlot($record_id, $event_id, $projectId, $primary);
         if ($slot['number_of_participants'] > $this->getSlotActualCountReservedSpots($record_id)) {
             return true;
         } else {
@@ -141,11 +141,13 @@ class Participant
 
 
     /**
-     * @param string $sunetID
+     * @param $sunetID
+     * @param $suffix
+     * @param $projectId
      * @param null $status
      * @return mixed
      */
-    public function getUserParticipation($sunetID, $suffix, $status = null)
+    public function getUserParticipation($sunetID, $suffix, $projectId, $status = null)
     {
         try {
             if (is_null($status)) {
@@ -154,9 +156,9 @@ class Participant
                 $filter = "[sunet_id$suffix] = '" . $sunetID . "' AND [participant_status$suffix] = $status";
             }
             $param = array(
+                'project_id' => $projectId,
                 'filterLogic' => $filter,
-                'return_format' => 'array',
-                'events' => \REDCap::getEventNames(true, true)
+                'return_format' => 'array'
             );
             $records = \REDCap::getData($param);
             return $records;

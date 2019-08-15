@@ -72,6 +72,7 @@ define('COMPLEMENTARY_PROJECT_ID', 'complementary_project_id');
 
 
 define('COMPLEMENTARY_SUFFIX', 'complementary_suffix');
+define('PROJECTID', 'projectid');
 
 define("SURVEY_RESERVATION_FIELD", "survey_reservation_id");
 define("RESERVATION_SLOT_FIELD", "slot_id");
@@ -91,6 +92,8 @@ define("DEFAULT_NAME", "REDCap Admin");
  * @property \Monolog\Logger $logger
  * @property string $suffix
  * @property int $mainSurveyId
+ * @property int $projectId
+ * @property \Project $project
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
@@ -141,6 +144,13 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     private $suffix;
 
     /**
+     * @var int
+     */
+    private $projectId;
+
+
+    private $project;
+    /**
      * AppointmentScheduler constructor.
      */
     public function __construct()
@@ -152,18 +162,22 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             /**
              * so when you enable this it does not throw an error !!
              */
-            if ($_GET && $_GET['pid'] != null) {
+            if ($_GET && $_GET['projectid'] != null) {
+
+                $this->setProjectId(filter_var($_GET['projectid'], FILTER_SANITIZE_NUMBER_INT));
                 /**
                  * This call must be done after parent constructor is called
                  */
                 $this->setInstances();
 
                 // Initiate Twilio Client
-                $sid = $this->getProjectSetting('twilio_sid');
-                $token = $this->getProjectSetting('twilio_token');
+                $sid = $this->getProjectSetting('twilio_sid', $this->getProjectId());
+                $token = $this->getProjectSetting('twilio_token', $this->getProjectId());
                 if ($sid != '' && $token != '') {
                     $this->setTwilioClient(new Client($sid, $token));
                 }
+
+                $this->setProject(new \Project($this->getProjectId()));
             }
 
 
@@ -206,6 +220,39 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             echo $e->getMessage();
         }
     }
+
+    /**
+     * @return \Project
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * @param \Project $project
+     */
+    public function setProject($project)
+    {
+        $this->project = $project;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProjectId()
+    {
+        return $this->projectId;
+    }
+
+    /**
+     * @param int $projectId
+     */
+    public function setProjectId($projectId)
+    {
+        $this->projectId = $projectId;
+    }
+
 
     /**
      * @return Client
@@ -354,7 +401,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public function setInstances()
     {
-        $this->instances = $this->getSubSettings('instance');;
+        $this->instances = $this->getSubSettings('instance', $this->getProjectId());;
     }
 
     /**
@@ -469,10 +516,12 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     $start = date('Y-m-d');
                     $end = date('Y-m-d', strtotime('first day of next month'));
                 }
-
+                $filter = "[slot_status] != '" . CANCELED . "'";
                 $param = array(
+                    'project_id' => $this->getProjectId(),
+                    'filterLogic' => $filter,
                     'return_format' => 'array',
-                    'events' => REDCap::getEventNames(true, false, $eventId)
+                    'events' => $eventId
                 );
                 $data = array();
                 $records = REDCap::getData($param);
@@ -503,6 +552,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  */
             $filter = "[start$suffix] > '" . date('Y-m-d') . "' AND " . "[slot_status$suffix] != '" . CANCELED . "'";
             $param = array(
+                'project_id' => $this->getProjectId(),
                 'filterLogic' => $filter,
                 'return_format' => 'array'
             );
@@ -527,7 +577,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 foreach ($records as $slots) {
                     foreach ($slots as $event_id => $slot) {
                         if (!isset($events[$event_id])) {
-                            $events[$event_id] = REDCap::getEventNames(false, false, $event_id);
+                            $events[$event_id] = $this->getUniqueEventName($event_id);
                         }
 
                         $slot['event_name'] = $events[$event_id];
@@ -663,8 +713,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
          * For Event data you do not need to append suffix info because it will not be saved.
          */
         $data['event_id'] = filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT);
-        $data['redcap_event_name'] = \REDCap::getEventNames(true, true,
-            filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT));
+        $data['redcap_event_name'] = $this->getUniqueEventName($data['event_id']);
         // $data['date'] = date('Y-m-d', strtotime(filter_var($_POST['date'], FILTER_SANITIZE_NUMBER_INT)));
 
         return $data;
@@ -711,7 +760,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     public function notifyParticipants($slotId, $eventId, $message)
     {
         $instance = $this->getEventInstance();
-        $participants = $this->participant->getSlotActualReservedSpots($slotId, $eventId);
+        $participants = $this->participant->getSlotActualReservedSpots($slotId, $eventId, $this->getProjectId());
         foreach ($participants as $participant) {
             $result = end($participant);
             $this->emailClient->setTo($result['email']);
@@ -737,19 +786,19 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @param int $record_id
      * @return array
      */
-    public static function getSlot($record_id, $event_id)
+    public static function getSlot($record_id, $event_id, $projectId, $primary)
     {
         try {
             if ($event_id) {
-                $primary = \REDCap::getRecordIdField();
                 /*
                  * TODO Check if date within allowed window
                  */
                 $filter = "[$primary] = '" . $record_id . "'";
                 $param = array(
+                    'project_id' => $projectId,
                     'filterLogic' => $filter,
                     'return_format' => 'array',
-                    'events' => REDCap::getEventNames(true, false, $event_id)
+                    'events' => $event_id
                 );
                 $record = REDCap::getData($param);
                 return $record[$record_id][$event_id];
@@ -830,12 +879,13 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
          * get survey record
          */
         $this->setMainSurveyId($instrument);
-        $primary = \REDCap::getRecordIdField();
+        $primary = $this->getPrimaryRecordFieldName();
         $filter = "[$primary] = '" . $record . "'";
         $param = array(
+            'project_id' => $this->getProjectId(),
             'filterLogic' => $filter,
             'return_format' => 'array',
-            'events' => \REDCap::getEventNames(true, true, $event_id)
+            'events' => $event_id
         );
         $survey = REDCap::getData($param);
         if (!empty($survey)) {
@@ -846,9 +896,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             $reservationEventId = $this->getReservationEventId();
             $filter = "[$primary] = '" . $reservationId . "'";
             $param = array(
+                'project_id' => $this->getProjectId(),
                 'filterLogic' => $filter,
                 'return_format' => 'array',
-                'events' => \REDCap::getEventNames(true, true, $reservationEventId)
+                'events' => $reservationEventId
             );
             $reservation = REDCap::getData($param);
 
@@ -861,9 +912,10 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
                 $filter = "[$primary] = '" . $slotId . "'";
                 $param = array(
+                    'project_id' => $this->getProjectId(),
                     'filterLogic' => $filter,
                     'return_format' => 'array',
-                    'events' => \REDCap::getEventNames(true, true, $slotEventId)
+                    'events' => $slotEventId
                 );
                 $slot = REDCap::getData($param);
                 if (!empty($slot)) {
@@ -1074,22 +1126,39 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public function doesUserHaveSameDateReservation($slotDate, $sunetId, $suffix, $slotEventId, $reservationEventId)
     {
-
-        $filter = "[sunet_id] = $sunetId ";
-        $param = array(
-            'filterLogic' => $filter,
-            'return_format' => 'array',
-            'events' => \REDCap::getEventNames(true, true, $reservationEventId)
-        );
-        $reservations = $this->participant->getUserParticipation($sunetId, $suffix, RESERVED);
+        $reservations = $this->participant->getUserParticipation($sunetId, $suffix, $this->getProjectId(), RESERVED);
 
         foreach ($reservations as $reservation) {
             $record = $reservation[$reservationEventId];
-            $reservationSlot = self::getSlot($record['slot_id'], $slotEventId);
+            $reservationSlot = self::getSlot($record['slot_id'], $slotEventId, $this->getProjectId(),
+                $this->getPrimaryRecordFieldName());
             $reservationSlotDate = date('Y-m-d', strtotime($reservationSlot['start']));
             if ($reservationSlotDate == $slotDate) {
                 throw new \LogicException("you cant book more than one reservation on same date. please select another date");
             }
         }
+    }
+
+    public function redcap_module_link_check_display($project_id, $link)
+    {
+        $link['url'] .= '&projectid=' . $project_id;
+        return $link;
+    }
+
+    /**
+     * @param $eventId
+     * @return array|mixed|null
+     */
+    public function getUniqueEventName($eventId)
+    {
+        return $this->getProject()->getUniqueEventNames($eventId);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrimaryRecordFieldName()
+    {
+        return $this->getProject()->table_pk;
     }
 }

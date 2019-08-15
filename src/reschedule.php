@@ -9,9 +9,10 @@ use REDCap;
 
 try {
     $suffix = $module->getSuffix();
-    $data['record_id'] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
+    $primary = $module->getPrimaryRecordFieldName();
+    $data[$primary] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
     $eventId = filter_var($_POST['event_id'], FILTER_SANITIZE_NUMBER_INT);
-    if ($data['record_id'] == '') {
+    if ($data[$primary] == '') {
         throw new \LogicException('Record ID is missing');
     }
     if ($eventId == '') {
@@ -25,14 +26,13 @@ try {
         $data['notes' . $suffix] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
         $data['instructor' . $suffix] = filter_var($_POST['instructor'], FILTER_SANITIZE_STRING);
         $data['location' . $suffix] = filter_var($_POST['location'], FILTER_SANITIZE_STRING);
-        $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
+        $data['redcap_event_name'] = $module->getUniqueEventName($eventId);
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
-        $response = \REDCap::saveData('json', json_encode(array($data)));
+        $response = \REDCap::saveData($module->getProjectId(), 'json', json_encode(array($data)));
         if (!empty($response['errors'])) {
             throw new \LogicException(implode("\n", $response['errors']));
         } else {
-            $message['subject'] = $message['body'] = 'Your ' . REDCap::getEventNames(false, false,
-                    $data['event_id']) . ' at' . date('m/d/Y',
+            $message['subject'] = $message['body'] = 'Your ' . $module->getUniqueEventName($data['event_id']) . ' at' . date('m/d/Y',
                     strtotime($data['start' . $suffix])) . ' has been updated';
             $module->notifyParticipants($data['record_id'], $reservationEventId, $message);
             echo json_encode(array('status' => 'ok', 'message' => 'Slot Updated successfully!'));

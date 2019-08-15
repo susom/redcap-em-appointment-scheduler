@@ -8,7 +8,6 @@ $suffix = $module->getSuffix();
 $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $data = $module->getMonthSlots($eventId);
 $url = $module->getUrl('src/calendar.php', true, true);
-
 $instance = $module->getEventInstance();
 ?>
 
@@ -40,7 +39,6 @@ if (empty($data)) {
     <?php
 } else {
     $reservationEventId = $module->getReservationEventIdViaSlotEventId($eventId);
-    $primary = \REDCap::getRecordIdField();
     /**
      * prepare data
      */
@@ -56,7 +54,7 @@ if (empty($data)) {
          * if the record id has different name just use whatever is provided.
          */
         if (!isset($slot['record_id'])) {
-            $slot['record_id'] = $slot[$primary];
+            $slot['record_id'] = array_pop(array_reverse($slot));
         }
 
         $days[$day][$slot['record_id']]['date' . $suffix] = date('Y-m-d', strtotime($slot['start' . $suffix]));
@@ -66,7 +64,7 @@ if (empty($data)) {
         $days[$day][$slot['record_id']]['attending_options' . $suffix] = $slot['attending_options' . $suffix];
         $days[$day][$slot['record_id']]['number_of_participants' . $suffix] = $slot['number_of_participants' . $suffix];
         $days[$day][$slot['record_id']]['booked_slots' . $suffix] = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
-            $reservationEventId, $suffix);
+            $reservationEventId, $suffix, $module->getProjectId());
         /**
          * check if we have slots available
          */

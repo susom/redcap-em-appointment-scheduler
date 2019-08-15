@@ -17,6 +17,7 @@ try {
     $data = $module->prepareInstructorsSlots($records, $suffix);
     $instructors = array_keys($data);
     $pointer = 0;
+    $primary = $module->getPrimaryRecordFieldName();
     if ($instructors) {
         ?>
         <div class="container">
@@ -36,10 +37,11 @@ try {
                 <tbody>
                 <?php
                 $pointer = 1;
+                $primary = $module->getPrimaryRecordFieldName();
                 foreach ($data as $slot) {
                     ?>
                     <tr>
-                        <td><?php echo $pointer ?></td>
+                        <td><?php echo $slot[$primary] ?></td>
                         <td><?php echo $slot['instructor'] ?></td>
                         <td><strong><?php echo $slot['event_name'] ?></strong>
                             - <?php echo $slot['location' . $suffix] ?></td>
@@ -58,7 +60,7 @@ try {
                             } else {
                                 ?>
                                 <button type="button"
-                                        data-record-id="<?php echo $slot['record_id'] ?>"
+                                        data-record-id="<?php echo $slot[$primary] ?>"
                                         data-event-id="<?php echo $slot['event_id'] ?>"
                                         class="cancel-slot"><i class="fas fa-power-off"></i>
                                 </button>
@@ -66,7 +68,7 @@ try {
                             }
                             ?>
                             <button type="button"
-                                    data-record-id="<?php echo $slot['record_id'] ?>"
+                                    data-record-id="<?php echo $slot[$primary] ?>"
                                     data-event-id="<?php echo $slot['event_id'] ?>"
                                     data-location="<?php echo $slot['location' . $suffix] ?>"
                                     data-date="<?php echo date('m/d/Y',
@@ -78,7 +80,7 @@ try {
                                     class="reschedule-slot"><i class="fas fa-edit"></i>
                             </button>
                             <button type="button"
-                                    data-record-id="<?php echo $slot['record_id'] ?>"
+                                    data-record-id="<?php echo $slot[$primary] ?>"
                                     data-event-id="<?php echo $slot['event_id'] ?>"
                                     data-modal-title="<?php echo date('m/d/Y',
                                         strtotime($slot['start' . $suffix])) ?> <?php echo date('H:i',
