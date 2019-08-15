@@ -29,9 +29,10 @@ jQuery(document).on('click', '.type', function () {
         },
         'success': function (data) {
             if (!jQuery("#" + key + "-calendar").is(":visible")) {
-                jQuery(document).removeClass('show');
-                jQuery("#" + key + "-calendar").hide().html(data).slideDown("slow");
+                jQuery(".collapse").removeClass('show');
+                jQuery("#" + key + "-calendar").html(data).collapse();
                 jQuery("#collapse-" + key).addClass('show');
+                jQuery("#" + key + "-calendar").addClass('show');
             } else {
                 jQuery("#" + key + "-calendar").html(data);
             }
