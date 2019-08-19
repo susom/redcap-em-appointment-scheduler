@@ -22,24 +22,31 @@ require_once 'urls.php';
         <nav class="navbar navbar-expand-sm bg-light navbar-light">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Logged in as: <?php echo USERID ?></a>
+                    <a class="nav-link" href="#">Logged in
+                        as: <?php echo(defined('USERID') ? USERID : ' NOT LOGGED IN') ?></a>
                 </li>
             </ul>
             <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="manage nav-link" href="#">Manage my Appointments</a>
-                    </li>
-                    <?php
-                    if (SUPER_USER) {
+                <?php
+                if (defined(USERID)) {
                         ?>
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="manage-calendars nav-link" href="#">Manage Calendars</a>
+                            <a class="manage nav-link" href="#">Manage my Appointments</a>
                         </li>
                         <?php
+                        if (SUPER_USER) {
+                            ?>
+                            <li class="nav-item">
+                                <a class="manage-calendars nav-link" href="#">Manage Calendars</a>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+                        <?php
                     }
-                    ?>
-                </ul>
+                ?>
             </div>
         </nav>
     </div>
@@ -67,7 +74,7 @@ require_once 'urls.php';
                                 data-toggle="collapse-<?php echo $slotsEventId ?>"
                                 data-target="#collapse-<?php echo $slotsEventId ?>" aria-expanded="true"
                                 aria-controls="collapse-<?php echo $slotsEventId ?>"
-                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() . '&NOAUTH' ?>"
                                 data-key="<?php echo $slotsEventId ?>" data-name="<?php echo $title ?>">
                             <?php echo $title ?>
                         </button>
