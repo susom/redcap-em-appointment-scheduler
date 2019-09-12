@@ -162,7 +162,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             /**
              * so when you enable this it does not throw an error !!
              */
-            if ($_GET && $_GET['projectid'] != null) {
+            if ($_GET && ($_GET['projectid'] != null || $_GET['pid'] != null)) {
 
                 $this->setProjectId(filter_var($_GET['projectid'], FILTER_SANITIZE_NUMBER_INT));
                 /**
@@ -1066,6 +1066,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $response_id = null,
         $repeat_instance = 1
     ) {
+        $this->setInstances();
         $this->setMainSurveyId($instrument);
         require __DIR__ . '/src/survey.php';
     }

@@ -66,7 +66,7 @@
       "sub_settings": [
         {
           "key": "instance_description",
-          "name": "<b>Add a description for this instance</b><br/>",
+          "name": "<b>Add a description for this scheduler</b><br/>",
           "required": true,
           "type": "textarea"
         },
@@ -89,7 +89,7 @@
         },
         {
           "key": "instrument_id_for_complementary_appointment",
-          "name": "<b>Instrument Id for Complementary Appointment</b></br>Please select survey instrument that will be followed by an option to schedule an appointment.",
+          "name": "<b>Instrument Id for Complementary Survey</b></br>Please select survey instrument that will be followed by an option to schedule an appointment.",
           "required": false,
           "type": "form-list"
         },
