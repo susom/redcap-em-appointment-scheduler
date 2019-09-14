@@ -164,7 +164,9 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
              */
             if ($_GET && ($_GET['projectid'] != null || $_GET['pid'] != null)) {
 
-                $this->setProjectId(filter_var($_GET['projectid'], FILTER_SANITIZE_NUMBER_INT));
+                $projectId = ($_GET['projectid'] != null ? filter_var($_GET['projectid'],
+                    FILTER_SANITIZE_NUMBER_INT) : filter_var($_GET['pid'], FILTER_SANITIZE_NUMBER_INT));
+                $this->setProjectId($projectId);
                 /**
                  * This call must be done after parent constructor is called
                  */
