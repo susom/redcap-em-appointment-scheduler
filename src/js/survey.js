@@ -5,10 +5,11 @@ const reserved_event_id = "reserved_event_id";
  * trigger function to load instance
  */
 $(document).ready(function () {
-    if (jQuery("input[name=survey_reservation_id]").length) {
-        if (jQuery("input[name=survey_reservation_id]").val() == '') {
-            var $elem = jQuery("input[name=survey_reservation_id]").parent();
-            jQuery("input[name=survey_reservation_id]").attr('type', 'hidden');
+    var survey_record_id_field = jQuery("#survey-record-id-field").val();
+    if (jQuery("input[name=" + survey_record_id_field + "]").length) {
+        if (jQuery("input[name=" + survey_record_id_field + "]").val() == '') {
+            var $elem = jQuery("input[name=" + survey_record_id_field + "]").parent();
+            jQuery("input[name=" + survey_record_id_field + "]").attr('type', 'hidden');
             var url = jQuery("#survey-scheduler-url").val();
             var key = jQuery("#slots-events-id").val();
             var surveyRecordId = jQuery("#survey-record-id").val();

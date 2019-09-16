@@ -94,6 +94,12 @@
           "type": "form-list"
         },
         {
+          "key": "survey_record_id_field",
+          "name": "<b>Please select survey instrument field that will be replaced with reservation button</b>",
+          "required": false,
+          "type": "field-list"
+        },
+        {
           "key": "title",
           "name": "<b>Title for Appointment</b><br/>Alternately you can add a title before you pipe in the result",
           "required": false,

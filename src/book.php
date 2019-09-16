@@ -43,10 +43,10 @@ try {
 
         $response = \REDCap::saveData($module->getProjectId(), 'json', json_encode(array($data)));
         if (empty($response['errors'])) {
-            //$return = $module->notifyUser($data);
+            $return = $module->notifyUser($data);
             echo json_encode(array(
                 'status' => 'ok',
-                'message' => 'Appointment saved successfully!',
+                'message' => 'Appointment saved successfully!' . (isset($return['error']) ? ' with following errors' . $return['message'] : ''),
                 'id' => array_pop($response['ids']),
                 'email' => $data['email']
             ));
