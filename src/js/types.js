@@ -201,7 +201,10 @@ jQuery(document).on('click', '#submit-booking-form', function () {
                 alert(response.message);
                 $('#booking').modal('hide');
                 record = {};
-                currentView.trigger('click');
+                if (currentView != '') {
+                    currentView.trigger('click');
+                }
+
                 /**
                  * when this book came from survey page lets return the reservation id back to the survey.
                  */
@@ -302,7 +305,6 @@ jQuery(document).on('click', '.manage-calendars', function () {
 $(document).ready(function () {
     var instance = jQuery("#triggered-instance").val();
     var instances = jQuery("button.type");
-    console.log(instance);
     if (instance == '') {
         var $elem = jQuery(instances[0]);
         $elem.trigger('click');

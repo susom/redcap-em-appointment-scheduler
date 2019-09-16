@@ -11,7 +11,8 @@ $(document).ready(function () {
             jQuery("input[name=survey_reservation_id]").attr('type', 'hidden');
             var url = jQuery("#survey-scheduler-url").val();
             var key = jQuery("#slots-events-id").val();
-            $elem.append('<div data-url="' + url + '" id="survey-controller" data-key="' + key + '" class="survey-type btn btn-block btn-info">Schedule Appointment</div>')
+            var surveyRecordId = jQuery("#survey-record-id").val();
+            $elem.append('<div data-url="' + url + '" id="survey-controller" data-survey-record-id="' + surveyRecordId + '" data-key="' + key + '" class="survey-type btn btn-block btn-info">Schedule Appointment</div>')
         }
     }
 });
@@ -26,6 +27,8 @@ jQuery(document).on("click", ".survey-type", function () {
      * @type {jQuery}
      */
     record.event_id = jQuery('#' + key + "-reservation-event-id").val();
+    record.survey_record_id = jQuery(this).data('survey-record-id');
+    ;
     jQuery.ajax({
         'url': url + "&event_id=" + jQuery("#slots-events-id").val(),
         'type': 'GET',

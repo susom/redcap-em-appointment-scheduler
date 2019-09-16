@@ -93,6 +93,7 @@ define("DEFAULT_NAME", "REDCap Admin");
  * @property string $suffix
  * @property int $mainSurveyId
  * @property int $projectId
+ * @property int $recordId
  * @property \Project $project
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
@@ -148,7 +149,13 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     private $projectId;
 
-
+    /**
+     * @var
+     */
+    private $recordId;
+    /**
+     * @var
+     */
     private $project;
     /**
      * AppointmentScheduler constructor.
@@ -221,6 +228,22 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function getRecordId()
+    {
+        return $this->recordId;
+    }
+
+    /**
+     * @param int $recordId
+     */
+    public function setRecordId($recordId)
+    {
+        $this->recordId = $recordId;
     }
 
     /**
@@ -1069,6 +1092,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $repeat_instance = 1
     ) {
         $this->setInstances();
+        $this->setRecordId($record);
         $this->setMainSurveyId($instrument);
         require __DIR__ . '/src/survey.php';
     }

@@ -21,8 +21,7 @@ try {
         $data['sunet_id' . $module->getSuffix()] = USERID;
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
         $date = date('Y-m-d', strtotime(preg_replace("([^0-9/])", "", $_POST['calendarDate'])));
-        $module->doesUserHaveSameDateReservation($date, USERID, $module->getSuffix(),
-            $data['event_id'], $reservationEventId);
+        //$module->doesUserHaveSameDateReservation($date, USERID, $module->getSuffix(),$data['event_id'], $reservationEventId);
         /**
          * let mark it as complete so we can send the survey if needed.
          * Complete status has different naming convention based on the instrument name. so you need to get instrument name and append _complete to it.
@@ -34,14 +33,20 @@ try {
         $data[$second] = REDCAP_COMPLETE;
 
         $data['redcap_event_name'] = $module->getUniqueEventName($reservationEventId);
-        $data[$module->getPrimaryRecordFieldName()] = $module->getNextRecordsId($reservationEventId,
-            $module->getProjectId());
+        if (!isset($_POST['survey_record_id'])) {
+            $data[$module->getPrimaryRecordFieldName()] = $module->getNextRecordsId($reservationEventId,
+                $module->getProjectId());
+        } else {
+            $data[$module->getPrimaryRecordFieldName()] = filter_var($_POST['survey_record_id'],
+                FILTER_SANITIZE_STRING);
+        }
+
         $response = \REDCap::saveData($module->getProjectId(), 'json', json_encode(array($data)));
         if (empty($response['errors'])) {
-            $return = $module->notifyUser($data);
+            //$return = $module->notifyUser($data);
             echo json_encode(array(
                 'status' => 'ok',
-                'message' => 'Appointment saved successfully!' . (isset($return['error']) ? $return['message'] : ''),
+                'message' => 'Appointment saved successfully!',
                 'id' => array_pop($response['ids']),
                 'email' => $data['email']
             ));
