@@ -89,7 +89,7 @@
         },
         {
           "key": "instrument_id_for_complementary_appointment",
-          "name": "<b>Instrument Id for Complementary Survey</b></br>Please select survey instrument that will be followed by an option to schedule an appointment.",
+          "name": "<b>Instrument Id for Follow up Survey</b></br>Please select survey instrument that will be followed by an option to schedule an appointment.",
           "required": false,
           "type": "form-list"
         },
@@ -124,8 +124,8 @@
           "type": "text"
         },
         {
-          "key": "show_projects",
-          "name": "<b>Display Projects ID field on reservation form</b>",
+          "key": "show_notes",
+          "name": "<b>Display Notes field on reservation form</b>",
           "required": false,
           "type": "dropdown",
           "choices": [
@@ -140,8 +140,8 @@
           ]
         },
         {
-          "key": "show_notes",
-          "name": "<b>Display Notes field on reservation form</b>",
+          "key": "show_projects",
+          "name": "<b>Display Projects ID field on reservation form</b>",
           "required": false,
           "type": "dropdown",
           "choices": [

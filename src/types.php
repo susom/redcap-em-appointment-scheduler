@@ -28,7 +28,7 @@ require_once 'urls.php';
             </ul>
             <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
                 <?php
-                if (defined(USERID)) {
+                if (defined('USERID')) {
                         ?>
                     <ul class="navbar-nav">
                         <li class="nav-item">
