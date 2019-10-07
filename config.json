@@ -89,13 +89,13 @@
         },
         {
           "key": "instrument_id_for_complementary_appointment",
-          "name": "<b>Instrument Id for Follow up Survey</b></br>Please select survey instrument that will be followed by an option to schedule an appointment.",
+          "name": "<b>Select Survey Instrument</b></br>Select Survey Instrument to be followed by Option to Book follow up appointment.",
           "required": false,
           "type": "form-list"
         },
         {
           "key": "survey_record_id_field",
-          "name": "<b>Please select survey instrument field that will be replaced with reservation button</b>",
+          "name": "<b>Please select survey instrument field that will be replaced with reservation button and will hold reservation ID after submitting the survey.</b>",
           "required": false,
           "type": "field-list"
         },
