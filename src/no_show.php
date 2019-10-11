@@ -12,9 +12,10 @@ try {
     if (!SUPER_USER) {
         throw new \LogicException('You cant be here');
     }
-    $data['record_id'] = filter_var($_GET[\REDCap::getRecordIdField()], FILTER_SANITIZE_NUMBER_INT);
+    $primaryField = \REDCap::getRecordIdField();
+    $data[$primaryField] = filter_var($_GET[$primaryField], FILTER_SANITIZE_NUMBER_INT);
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
-    if ($data['record_id'] == '') {
+    if ($data[$primaryField] == '') {
         throw new \LogicException('Participation ID is missing');
     }
     if ($eventId == '') {
@@ -27,7 +28,7 @@ try {
 
         if (empty($response['errors'])) {
             //TODO notify instructor about the cancellation
-            echo json_encode(array('status' => 'ok', 'message' => 'Appointment canceled successfully!'));
+            echo json_encode(array('status' => 'ok', 'message' => 'Appointment mark No Show!'));
         } else {
             throw new \LogicException(implode(",", $response['errors']));
         }

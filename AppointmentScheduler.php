@@ -76,7 +76,7 @@ define('PROJECTID', 'projectid');
 
 define("SURVEY_RESERVATION_FIELD", "survey_reservation_id");
 define("RESERVATION_SLOT_FIELD", "slot_id");
-define("DEFAULT_EMAIL", "admin@stanford.edu");
+define("DEFAULT_EMAIL", "redcap-scheduler@stanford.edu");
 define("DEFAULT_NAME", "REDCap Admin");
 
 /**
@@ -157,6 +157,8 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @var
      */
     private $project;
+
+
     /**
      * AppointmentScheduler constructor.
      */
@@ -464,11 +466,12 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  * TODO Check if date within allowed window
                  */
                 $filter = "[start] > '" . date('Y-m-d', strtotime($date)) . "' AND " . "[start] < '" . date('Y-m-d',
-                        strtotime($date . ' + 1 DAY')) . "'";
+                        strtotime($date . ' + 1 DAY')) . "' AND [slot_status] != '" . CANCELED . "'";
                 $param = array(
+                    'project_id' => $this->getProjectId(),
                     'filterLogic' => $filter,
                     'return_format' => 'array',
-                    'events' => REDCap::getEventNames(true, false, $event_id)
+                    'events' => $event_id
                 );
                 return REDCap::getData($param);
             } else {
@@ -638,7 +641,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
                 strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
                 strtotime($this->calendarParams['calendarEndTime']));
-        $this->sendEmail($user,
+        $this->sendEmail($user['email'],
             ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL),
             ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME),
             '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
@@ -649,6 +652,18 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             true
         );
 
+        if ($user['instructor']) {
+            $this->sendEmail($user['instructor'] . '@stanford.edu',
+                ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL),
+                ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME),
+                '--CONFIRMATION-- ' . $user['email'] . ' scheduled an appointment at ' . date('m/d/Y',
+                    strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
+                    strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
+                    strtotime($this->calendarParams['calendarEndTime'])),
+                $instance['calendar_body'],
+                true
+            );
+        }
         if ($user['mobile'] && $this->getTwilioClient()) {
             $message = array(
                 'from' => '+' . $instance['phone_number_country_code'] . $instance['twilio_sender_number'],
@@ -697,20 +712,22 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
     /**
      * send calendar or regular emails
-     * @param array $user
+     * @param string $email
      * @param string $senderEmail
      * @param string $senderName
      * @param string $subject
      * @param string $body
      * @param bool $calendar
+     * @param string $url
      */
-    private function sendEmail($user, $senderEmail, $senderName, $subject, $body, $calendar = false)
+    private function sendEmail($email, $senderEmail, $senderName, $subject, $body, $calendar = false, $url = '')
     {
-        $this->emailClient->setTo($user['email']);
+        $this->emailClient->setTo($email);
         $this->emailClient->setFrom($senderEmail);
         $this->emailClient->setFromName($senderName);
         $this->emailClient->setSubject($subject);
         $this->emailClient->setBody($body);
+        $this->emailClient->setUrlString("<a href='" . $this->getSchedulerURL() . "'>View Appointment Scheduler</a>");
         if ($calendar) {
             $this->emailClient->sendCalendarEmail($this->calendarParams);
         } else {
@@ -1187,5 +1204,11 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     public function getPrimaryRecordFieldName()
     {
         return $this->getProject()->table_pk;
+    }
+
+    public function getSchedulerURL()
+    {
+        return $this->getUrl('src/type.php', true,
+                false) . '&' . $this->getSuffix() . '&' . PROJECTID . '=' . $this->getProjectId();
     }
 }

@@ -45,24 +45,26 @@ namespace Stanford\AppointmentScheduler;
        class="hidden"/>
 <input type="hidden" id="manage-calendar-url"
        value="<?php echo $module->getUrl('src/manage_calendars.php', false,
-               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() ?>"
        class="hidden"/>
 <input type="hidden" id="cancel-appointment-url"
        value="<?php echo $module->getUrl('src/cancel.php', false,
                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
        class="hidden"/>
+<!--URLS for admin functionality need pid instead of projectid because we need to be in project context and admin MUST be in the project -->
 <input type="hidden" id="cancel-slot-url" value="<?php echo $module->getUrl('src/cancel_slot.php',
-        false) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+        false) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() ?>"
        class="hidden"/>
 <input type="hidden" id="reschedule-submit-url" value="<?php echo $module->getUrl('src/reschedule.php', false,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() ?>"
        class="hidden"/>
 <input type="hidden" id="participants-list-url"
        value="<?php echo $module->getUrl('src/participants_list.php', false,
-               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() ?>"
        class="hidden"/>
+
 <input type="hidden" id="participants-no-show-url" value="<?php echo $module->getUrl('src/no_show.php', false,
-        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"
+        true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() ?>"
        class="hidden"/>
 <input type="hidden" id="event-id" value="" class="hidden"/>
 <input type="hidden" id="user-email" value="<?php echo $user_email ?>" class="hidden"/>

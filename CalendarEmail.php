@@ -13,6 +13,7 @@
  * @property string $calendarSubject
  * @property string $calendarDescription
  * @property array $calendarParticipants
+ * @property string $urlString
  *
  */
 class CalendarEmail extends Message
@@ -29,6 +30,23 @@ class CalendarEmail extends Message
     private $calendarEndTime;
     private $calendarSubject;
     private $calendarDescription;
+    private $urlString;
+
+    /**
+     * @return string
+     */
+    public function getUrlString()
+    {
+        return $this->urlString;
+    }
+
+    /**
+     * @param string $urlString
+     */
+    public function setUrlString($urlString)
+    {
+        $this->urlString = $urlString;
+    }
 
     /**
      * @return string
@@ -255,7 +273,6 @@ class CalendarEmail extends Message
 
         $headers .= $message;
         $this->setHeaders($headers);
-        $this->setCalendarBody($message);
     }
 
     /**
@@ -267,7 +284,7 @@ class CalendarEmail extends Message
         $this->prepareCalendarData($param);
         $this->buildCalendarBody();
         $from = $this->getTo();
-        return mail($this->getTo(), $this->getCalendarSubject(), $this->getCalendarBody(), $this->getHeaders(),
+        return mail($this->getTo(), $this->getSubject(), $this->getBody() . $this->getUrlString(), $this->getHeaders(),
             "-f $from");
     }
 }

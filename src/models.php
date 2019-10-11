@@ -71,12 +71,12 @@ if (!isset($module)) {
                                    FILTER_SANITIZE_NUMBER_INT) : '') ?>"
                                placeholder="Mobile/Phone Number" required>
                     </div>
-                    <div class="form-check">
+                    <!--div class="form-check">
                         <input class="form-check-input" name="private" type="checkbox" value="1" id="private">
                         <label class="form-check-label" for="private">
                             Private (wont show up in calendar for other users)
                         </label>
-                    </div>
+                    </div-->
                     <div class="form-group">
                         <label for="private">How do you plan to attend the appointment?</label>
                         <div class="form-check">
@@ -102,7 +102,7 @@ if (!isset($module)) {
                     </div>
                     <?php
                     //for surveys no need for projects to be displayed
-                    if (is_numeric(USERID)) {
+                    if (defined("USERID")) {
                         ?>
                         <div class="form-group" id="show-projects">
                             <label for="project_id">Project ID(Optional)</label>

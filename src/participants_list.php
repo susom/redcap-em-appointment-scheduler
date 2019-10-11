@@ -34,7 +34,7 @@ try {
             <tbody>
             <?php
             $pointer = 1;
-            foreach ($participants as $record) {
+            foreach ($participants as $participantId => $record) {
             $participant = $record[$reservationEventId];
             ?>
                 <tr>
@@ -49,7 +49,7 @@ try {
                     if ($participant['participant_status' . $suffix] == RESERVED) {
                         ?>
                         <button type="button"
-                                data-participant-id="<?php echo $participant['record_id'] ?>"
+                                data-participant-id="<?php echo $participantId ?>"
                                 data-event-id="<?php echo $reservationEventId ?>"
                                 class="participants-no-show">No Show
                         </button>

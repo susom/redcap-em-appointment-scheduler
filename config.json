@@ -163,7 +163,7 @@
         },
         {
           "key": "sender_email",
-          "name": "<b>Sender Email(By default admin@stanford.edu)</b>",
+          "name": "<b>Sender Email(By default redcap-scheduler@stanford.edu)</b>",
           "required": false,
           "type": "text"
         },
