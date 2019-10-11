@@ -727,7 +727,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $this->emailClient->setFromName($senderName);
         $this->emailClient->setSubject($subject);
         $this->emailClient->setBody($body);
-        //$this->emailClient->setUrlString("<a href='" . $this->getSchedulerURL() . "'>View Appointment Scheduler</a>");
+        $this->emailClient->setUrlString("<a href='" . $this->getSchedulerURL() . "'>View Appointment Scheduler</a>");
         if ($calendar) {
             $this->emailClient->sendCalendarEmail($this->calendarParams);
         } else {
