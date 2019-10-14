@@ -273,8 +273,8 @@ class CalendarEmail extends Message
                 "\n"
             ), '', $this->getCalendarDescription()) . "\r\n" . $participants . "END:VEVENT\r\nEND:VCALENDAR\r\n";
 
-        $headers .= $message;
-        //$this->setHeaders($headers);
+        //$headers .= $message;
+        $this->setHeaders($headers);
         $this->setBody($message . $this->getBody());
     }
 
