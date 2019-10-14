@@ -285,7 +285,6 @@ class CalendarEmail extends Message
         $this->prepareCalendarData($param);
         $this->buildCalendarBody();
         $from = $this->getTo();
-        return mail($this->getTo(), $this->getSubject(), $this->getBody() . $this->getUrlString(), $this->getHeaders(),
-            "-f $from");
+        return $this->send();
     }
 }
