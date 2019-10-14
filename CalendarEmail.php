@@ -1,5 +1,7 @@
 <?php
 
+use Html2Text\Html2Text;
+
 /**
  * Class CalendarEmail
  * @property string $headers
@@ -285,6 +287,25 @@ class CalendarEmail extends Message
         $this->prepareCalendarData($param);
         $this->buildCalendarBody();
         $from = $this->getTo();
-        return $this->send();
+        $content = '';
+
+        $content = $this->getBody() . $this->getUrlString();
+        // Set separator hash
+        $separator = md5(uniqid(time()));
+        // Plain text body
+        $content .= PHP_EOL . "--alt-" . $separator . PHP_EOL;
+        $content .= "Content-Type: text/plain; charset=utf-8" . PHP_EOL;
+        $content .= "Content-Transfer-Encoding: base64" . PHP_EOL . PHP_EOL;
+        $content .= rtrim(chunk_split(base64_encode(\Html2Text\Html2Text::convert($this->getBody())))) . PHP_EOL;
+        // HTML body
+        $content .= PHP_EOL . "--alt-" . $separator . PHP_EOL;
+        $content .= "Content-Type: text/html; charset=utf-8" . PHP_EOL;
+        $content .= "Content-Transfer-Encoding: base64" . PHP_EOL . PHP_EOL;
+        $content .= rtrim(chunk_split(base64_encode($this->getBody()))) . PHP_EOL;
+        // Ending separator
+        $content .= PHP_EOL . "--alt-" . $separator . "--";
+
+        return mail($this->getTo(), $this->getSubject(), $content, $this->getHeaders(),
+            "-f $from");
     }
 }
