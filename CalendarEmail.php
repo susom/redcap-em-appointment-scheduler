@@ -257,7 +257,7 @@ class CalendarEmail extends Message
         }
         $headers .= "Reply-To: " . $this->getFrom() . PHP_EOL;
         $headers .= "Return-Path: " . $this->getFrom() . PHP_EOL;
-        $headers .= 'Content-Type:text/calendar; Content-Disposition: inline; charset=utf-8;\r\n';
+        $headers .= 'Content-Type:text/calendar; Content-Disposition: filename=invite.ics; inline; charset=utf-8;\r\n';
         $headers .= "Content-Type: text/plain;charset=\"utf-8\"\r\n"; #EDIT: TYPO
 
         $participants = '';
