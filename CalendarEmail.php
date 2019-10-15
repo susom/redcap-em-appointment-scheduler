@@ -1,5 +1,12 @@
 <?php
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
+// Load Composer's autoloader
+require 'vendor/autoload.php';
 /**
  * Class CalendarEmail
  * @property string $headers
@@ -14,6 +21,7 @@
  * @property string $calendarDescription
  * @property array $calendarParticipants
  * @property string $urlString
+ * @property PHPMailer $mail
  *
  */
 class CalendarEmail extends Message
@@ -31,6 +39,24 @@ class CalendarEmail extends Message
     private $calendarSubject;
     private $calendarDescription;
     private $urlString;
+    private $mail;
+
+    /**
+     * @return PHPMailer
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * @param PHPMailer $mail
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+    }
+
 
     /**
      * @return string
@@ -257,8 +283,9 @@ class CalendarEmail extends Message
         }
         $headers .= "Reply-To: " . $this->getFrom() . PHP_EOL;
         $headers .= "Return-Path: " . $this->getFrom() . PHP_EOL;
-        $headers .= 'Content-Type:text/calendar; Content-Disposition: filename=invite.ics; inline; charset=utf-8;\r\n';
-        $headers .= "Content-Type: text/plain;charset=\"utf-8\"\r\n"; #EDIT: TYPO
+        $headers .= 'Content-Type:text/calendar; Content-Disposition: inline; charset=utf-8;\r\n';
+        $headers .= "Content-Transfer-Encoding: 7bit";
+        //$headers .= "Content-Type: text/plain;charset=\"utf-8\"\r\n"; #EDIT: TYPO
 
         $participants = '';
         foreach ($this->getCalendarParticipants() as $name => $email){
@@ -282,10 +309,50 @@ class CalendarEmail extends Message
      * @return bool
      */
     public function sendCalendarEmail($param){
-        $this->prepareCalendarData($param);
+
+        try {
+            $this->prepareCalendarData($param);
+            $mail = new PHPMailer();
+            $mail->setFrom($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer());
+            $mail->addReplyTo($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer());
+            $mail->addAddress($this->getTo(), '');
+            $mail->ContentType = 'text/calendar';
+
+            $mail->Subject = "Outlooked Event";
+            $mail->addCustomHeader('MIME-version', "1.0");
+            $mail->addCustomHeader('Content-type', "text/calendar; method=REQUEST; charset=UTF-8");
+            $mail->addCustomHeader('Content-Transfer-Encoding', "7bit");
+            $mail->addCustomHeader('X-Mailer', "Microsoft Office Outlook 12.0");
+            $mail->addCustomHeader("Content-class: urn:content-classes:calendarmessage");
+
+            $participants = '';
+            foreach ($this->getCalendarParticipants() as $name => $email) {
+                $participants .= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN" . $name . ";X-NUM-GUESTS=0:MAILTO:" . $email . "\r\n";
+            }
+            $message = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Deathstar-mailer//theforce/NONSGML v1.0//EN\r\nMETHOD:REQUEST\r\nBEGIN:VEVENT\r\nUID:" . md5(uniqid(mt_rand(),
+                    true)) . "example.com\r\nDTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\nDTSTART:" . $this->getCalendarDate() . "T" . $this->getCalendarStartTime() . "00\r\nDTEND:" . $this->getCalendarDate() . "T" . $this->getCalendarEndTime() . "00\r\nSUMMARY:" . $this->getCalendarSubject() . "\r\nORGANIZER;CN=" . $this->getCalendarOrganizer() . ":mailto:" . $this->getCalendarOrganizerEmail() . "\r\nLOCATION:" . $this->getCalendarLocation() . "\r\nDESCRIPTION:" . str_replace(array(
+                    "\r",
+                    "\n"
+                ), '', $this->getCalendarDescription()) . "\r\n" . $participants . "END:VEVENT\r\nEND:VCALENDAR\r\n";
+
+            $mail->Body = $message;
+
+//send the message, check for errors
+            if (!$mail->send()) {
+                $this->error = "Mailer Error: " . $mail->ErrorInfo;
+                return false;
+            } else {
+                $this->error = "Message sent!";
+                return true;
+            }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+
+        /*
         $this->buildCalendarBody();
         $from = $this->getTo();
         return mail($this->getTo(), $this->getSubject(), $this->getBody() . $this->getUrlString(), $this->getHeaders(),
-            "-f $from");
+            "-f $from");*/
     }
 }
