@@ -283,8 +283,8 @@ class CalendarEmail extends Message
         }
         $headers .= "Reply-To: " . $this->getFrom() . PHP_EOL;
         $headers .= "Return-Path: " . $this->getFrom() . PHP_EOL;
-        $headers .= 'Content-Type:text/calendar; Content-Disposition: inline; charset=utf-8;\r\n';
-        $headers .= "Content-Transfer-Encoding: 7bit";
+        //$headers .= 'Content-Type:text/calendar; Content-Disposition: attachment; charset=utf-8;\r\n';
+        //$headers .= "Content-Transfer-Encoding: 7bit";
         //$headers .= "Content-Type: text/plain;charset=\"utf-8\"\r\n"; #EDIT: TYPO
 
         $participants = '';
@@ -292,15 +292,43 @@ class CalendarEmail extends Message
             $participants.= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN".$name.";X-NUM-GUESTS=0:MAILTO:".$email."\r\n";
         }
 
-        $message = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Deathstar-mailer//theforce/NONSGML v1.0//EN\r\nMETHOD:REQUEST\r\nBEGIN:VEVENT\r\nUID:" . md5(uniqid(mt_rand(),
+
+        //Create Mime Boundry
+        $mime_boundary = "----Meeting Booking----" . MD5(TIME());
+
+        //Create Email Body (HTML)
+        $message = "--$mime_boundary\\r\
+";
+        $message .= "Content-Type: text/html; charset=UTF-8\
+";
+        $message .= "Content-Transfer-Encoding: 8bit\
+\
+";
+        $message .= "<html>\
+";
+        $message .= "<body>\
+";
+        $message .= '<p>Dear ' . $this->getTo() . ',</p>';
+        $message .= '<p>' . $this->getBody() . '</p>';
+        $message .= "</body>\
+";
+        $message .= "</html>\
+";
+        $message .= "--$mime_boundary\\r\
+";
+        $calendar = 'Content-Type: text/calendar; Content-Disposition: attachment;name="meeting.ics";method=REQUEST\
+';
+        $calendar .= "Content-Transfer-Encoding: 8bit\
+\
+";
+        $calendar .= "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Deathstar-mailer//theforce/NONSGML v1.0//EN\r\nMETHOD:REQUEST\r\nBEGIN:VEVENT\r\nUID:" . md5(uniqid(mt_rand(),
                 true)) . "example.com\r\nDTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\nDTSTART:" . $this->getCalendarDate() . "T" . $this->getCalendarStartTime() . "00\r\nDTEND:" . $this->getCalendarDate() . "T" . $this->getCalendarEndTime() . "00\r\nSUMMARY:" . $this->getCalendarSubject() . "\r\nORGANIZER;CN=" . $this->getCalendarOrganizer() . ":mailto:" . $this->getCalendarOrganizerEmail() . "\r\nLOCATION:" . $this->getCalendarLocation() . "\r\nDESCRIPTION:" . str_replace(array(
                 "\r",
                 "\n"
             ), '', $this->getCalendarDescription()) . "\r\n" . $participants . "END:VEVENT\r\nEND:VCALENDAR\r\n";
-
-        $headers .= $message;
+        $message .= $calendar;
         $this->setHeaders($headers);
-        $this->setBody($message . $this->getBody());
+        $this->setBody($message);
     }
 
     /**
@@ -310,49 +338,11 @@ class CalendarEmail extends Message
      */
     public function sendCalendarEmail($param){
 
-        try {
-            $this->prepareCalendarData($param);
-            $mail = new PHPMailer();
-            $mail->setFrom($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer());
-            $mail->addReplyTo($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer());
-            $mail->addAddress($this->getTo(), '');
-            $mail->ContentType = 'text/calendar';
 
-            $mail->Subject = "Outlooked Event";
-            $mail->addCustomHeader('MIME-version', "1.0");
-            $mail->addCustomHeader('Content-type', "text/calendar; method=REQUEST; charset=UTF-8");
-            $mail->addCustomHeader('Content-Transfer-Encoding', "7bit");
-            $mail->addCustomHeader('X-Mailer', "Microsoft Office Outlook 12.0");
-            $mail->addCustomHeader("Content-class: urn:content-classes:calendarmessage");
-
-            $participants = '';
-            foreach ($this->getCalendarParticipants() as $name => $email) {
-                $participants .= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN" . $name . ";X-NUM-GUESTS=0:MAILTO:" . $email . "\r\n";
-            }
-            $message = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Deathstar-mailer//theforce/NONSGML v1.0//EN\r\nMETHOD:REQUEST\r\nBEGIN:VEVENT\r\nUID:" . md5(uniqid(mt_rand(),
-                    true)) . "example.com\r\nDTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\nDTSTART:" . $this->getCalendarDate() . "T" . $this->getCalendarStartTime() . "00\r\nDTEND:" . $this->getCalendarDate() . "T" . $this->getCalendarEndTime() . "00\r\nSUMMARY:" . $this->getCalendarSubject() . "\r\nORGANIZER;CN=" . $this->getCalendarOrganizer() . ":mailto:" . $this->getCalendarOrganizerEmail() . "\r\nLOCATION:" . $this->getCalendarLocation() . "\r\nDESCRIPTION:" . str_replace(array(
-                    "\r",
-                    "\n"
-                ), '', $this->getCalendarDescription()) . "\r\n" . $participants . "END:VEVENT\r\nEND:VCALENDAR\r\n";
-
-            $mail->Body = $message;
-
-//send the message, check for errors
-            if (!$mail->send()) {
-                $this->error = "Mailer Error: " . $mail->ErrorInfo;
-                return false;
-            } else {
-                $this->error = "Message sent!";
-                return true;
-            }
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
-
-        /*
+        $this->prepareCalendarData($param);
         $this->buildCalendarBody();
         $from = $this->getTo();
         return mail($this->getTo(), $this->getSubject(), $this->getBody() . $this->getUrlString(), $this->getHeaders(),
-            "-f $from");*/
+            "-f $from");
     }
 }
