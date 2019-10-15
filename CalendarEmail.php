@@ -309,7 +309,7 @@ class CalendarEmail extends Message
         $message .= "<body>\
 ";
         $message .= '<p>Dear ' . $this->getTo() . ',</p>';
-        $message .= '<p>' . $this->getBody() . '</p>';
+        $message .= '<p>' . $this->getBody() . $this->getUrlString() . '</p>';
         $message .= "</body>\
 ";
         $message .= "</html>\
@@ -342,7 +342,7 @@ class CalendarEmail extends Message
         $this->prepareCalendarData($param);
         $this->buildCalendarBody();
         $from = $this->getTo();
-        return mail($this->getTo(), $this->getSubject(), $this->getBody() . $this->getUrlString(), $this->getHeaders(),
+        return mail($this->getTo(), $this->getSubject(), $this->getBody(), $this->getHeaders(),
             "-f $from");
     }
 }
