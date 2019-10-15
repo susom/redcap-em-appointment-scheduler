@@ -346,13 +346,8 @@ method=REQUEST;\
             $this->prepareCalendarData($param);
             $email = new PHPMailer();
             $email->SetFrom($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer()); //Name is optional
-            $email->IsHTML(true);
+            //$email->IsHTML(true);
             $email->addCustomHeader('MIME-version', "1.0");
-            $email->addCustomHeader('Content-type',
-                "text/calendar; method=REQUEST;boundary=" . $boundary . " charset=UTF-8");
-            $email->addCustomHeader('Content-Transfer-Encoding', "7bit");
-            $email->addCustomHeader('X-Mailer', "Microsoft Office Outlook 12.0");
-            $email->addCustomHeader("Content-class: urn:content-classes:calendarmessage");
             $email->ContentType = 'application/ics;';
             /*$participants = '';
             foreach ($this->getCalendarParticipants() as $name => $e){
@@ -362,7 +357,7 @@ method=REQUEST;\
             $vcalendar = Vcalendar::factory([Vcalendar::UNIQUE_ID => mt_rand(),])
 
                 // with calendaring info
-                ->setMethod(Vcalendar::PUBLISH)
+                ->setMethod(Vcalendar::REQUEST)
                 ->setXprop(
                     Vcalendar::X_WR_CALNAME,
                     $this->getSubject()
@@ -471,9 +466,10 @@ method=REQUEST;\
             //$email->msgHTML($this->getBody());
             //$email->addCustomHeader('Content-type',"text/calendar; charset=utf-8; method=REQUEST");
 
+
+            $email->Body = $this->getBody();
             $email->Ical = $vcalendarString;
-            $email->AltBody = $vcalendarString;
-            $email->msgHTML($this->getBody());
+            $email->AltBody = $this->getBody();
             $email->Subject = $this->getSubject();
             $email->AddAddress($this->getTo());
 
