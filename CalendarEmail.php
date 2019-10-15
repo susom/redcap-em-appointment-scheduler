@@ -354,21 +354,22 @@ method=REQUEST;\
             $email->addCustomHeader('X-Mailer', "Microsoft Office Outlook 12.0");
             $email->addCustomHeader("Content-class: urn:content-classes:calendarmessage");
             $email->ContentType = 'application/ics;';
-            $participants = '';
-            foreach ($this->getCalendarParticipants() as $name => $e) {
-                $participants .= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN" . $name . ";X-NUM-GUESTS=0:MAILTO:" . $e . "\r\n";
-            }
+            /*$participants = '';
+            foreach ($this->getCalendarParticipants() as $name => $e){
+                $participants.= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN".$name.";X-NUM-GUESTS=0:MAILTO:".$e."\r\n";
+            }*/
             // create a new calendar
             $vcalendar = Vcalendar::factory([Vcalendar::UNIQUE_ID => mt_rand(),])
+
                 // with calendaring info
                 ->setMethod(Vcalendar::PUBLISH)
                 ->setXprop(
                     Vcalendar::X_WR_CALNAME,
-                    "Calendar Sample"
+                    $this->getSubject()
                 )
                 ->setXprop(
                     Vcalendar::X_WR_CALDESC,
-                    "This is a demo calendar"
+                    $this->getSubject()
                 )
                 ->setXprop(
                     Vcalendar::X_WR_RELCALID,
@@ -384,7 +385,7 @@ method=REQUEST;\
                 ->setClass(Vcalendar::P_BLIC)
                 ->setSequence(1)
                 // describe the event
-                ->setSummary('Scheduled meeting with five occurrences')
+                ->setSummary($this->getSubject())
                 ->setDescription(
                     $this->getCalendarDescription(),
                     [
@@ -440,27 +441,20 @@ method=REQUEST;\
                 // organizer, chair and some participants
                 ->setOrganizer(
                     $this->getCalendarOrganizerEmail(),
-                    [Vcalendar::CN => 'Secretary CoffeeBean']
-                )
-                ->setAttendee(
-                    'ihab.zeedia@gmail.com',
-                    [
-                        Vcalendar::ROLE => Vcalendar::CHAIR,
-                        Vcalendar::PARTSTAT => Vcalendar::ACCEPTED,
-                        Vcalendar::RSVP => Vcalendar::FALSE,
-                        Vcalendar::CN => 'President CoffeeBean',
-                    ]
-                )
-                ->setAttendee(
-                    'ihab.zeedia@stanford.edu',
+                    [Vcalendar::CN => $this->getCalendarOrganizer()]
+                );
+            $participants = '';
+            foreach ($this->getCalendarParticipants() as $name => $e) {
+                $event1->setAttendee(
+                    $e,
                     [
                         Vcalendar::ROLE => Vcalendar::REQ_PARTICIPANT,
                         Vcalendar::PARTSTAT => Vcalendar::NEEDS_ACTION,
                         Vcalendar::RSVP => Vcalendar::TRUE,
-                        Vcalendar::CN => 'Participant1 CoffeeBean',
+                        Vcalendar::CN => $name,
                     ]
                 );
-
+            }
             $vcalendarString =
                 // apply appropriate Vtimezone with Standard/DayLight components
                 $vcalendar->vtimezonePopulate()
@@ -479,7 +473,7 @@ method=REQUEST;\
 
             $email->Ical = $vcalendarString;
             $email->AltBody = $vcalendarString;
-            $email->msgHTML("Zeft hena");
+            $email->msgHTML($this->getBody());
             $email->Subject = $this->getSubject();
             $email->AddAddress($this->getTo());
 
