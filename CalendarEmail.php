@@ -267,82 +267,14 @@ class CalendarEmail extends Message
     }
 
     /**
-     * Generate header and body of the calendar event
-     */
-    public function buildCalendarBody(){
-        $from = $this->getFrom();
-        $headers = "MIME-Version: 1.0" . PHP_EOL;
-        $headers .= "From: " . $from . PHP_EOL;
-        if ($this->getCc() != "") {
-            $headers .= "Cc: " . $this->getCc() . PHP_EOL;
-        }
-        if ($this->getBcc() != "") {
-            $headers .= "Bcc: " . $this->getBcc() . PHP_EOL;
-        }
-        $headers .= "Reply-To: " . $this->getFrom() . PHP_EOL;
-        $headers .= "Return-Path: " . $this->getFrom() . PHP_EOL;
-        $headers .= "Content-Type: text/calendar;\
-method=REQUEST;\
-";
-        $headers .= '        charset="UTF-8"';
-        $headers .= "\
-";
-        $headers .= "Content-Transfer-Encoding: 7bit";
-        //$headers .= "Content-Transfer-Encoding: 7bit";
-        //$headers .= "Content-Type: text/plain;charset=\"utf-8\"\r\n"; #EDIT: TYPO
-
-        $participants = '';
-        foreach ($this->getCalendarParticipants() as $name => $email){
-            $participants.= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN".$name.";X-NUM-GUESTS=0:MAILTO:".$email."\r\n";
-        }
-
-
-        //Create Mime Boundry
-        $mime_boundary = "----Meeting Booking----" . MD5(TIME());
-
-        //Create Email Body (HTML)
-        $message = "--$mime_boundary\\r\
-";
-        $message .= "Content-Type: text/html; charset=UTF-8\
-";
-        $message .= "Content-Transfer-Encoding: 8bit\
-\
-";
-        $message .= "<html>\
-";
-        $message .= "<body>\
-";
-        $message .= '<p>Dear ' . $this->getTo() . ',</p>';
-        $message .= '<p>' . $this->getBody() . $this->getUrlString() . '</p>';
-        $message .= "</body>\
-";
-        $message .= "</html>\
-";
-        $message .= "--$mime_boundary\\r\
-";
-        $calendar = 'Content-Type: text/calendar;name="meeting.ics";method=REQUEST\
-';
-        $calendar .= "Content-Transfer-Encoding: 8bit\
-\
-";
-        $calendar .= "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Deathstar-mailer//theforce/NONSGML v1.0//EN\r\nMETHOD:REQUEST\r\nBEGIN:VEVENT\r\nUID:" . md5(uniqid(mt_rand(),
-                true)) . "example.com\r\nDTSTAMP:" . gmdate('Ymd') . 'T' . gmdate('His') . "Z\r\nDTSTART:" . $this->getCalendarDate() . "T" . $this->getCalendarStartTime() . "00\r\nDTEND:" . $this->getCalendarDate() . "T" . $this->getCalendarEndTime() . "00\r\nSUMMARY:" . $this->getCalendarSubject() . "\r\nORGANIZER;CN=" . $this->getCalendarOrganizer() . ":mailto:" . $this->getCalendarOrganizerEmail() . "\r\nLOCATION:" . $this->getCalendarLocation() . "\r\nDESCRIPTION:" . str_replace(array(
-                "\r",
-                "\n"
-            ), '', $this->getCalendarDescription()) . "\r\n" . $participants . "END:VEVENT\r\nEND:VCALENDAR\r\n";
-        $message .= $calendar;
-        $this->setHeaders($headers);
-        $this->setBody($message);
-    }
-
-    /**
      * send calendar event email
      * @param array $param
      * @return bool
      */
     public function sendCalendarEmail($param){
         try {
-            $boundary = "--" . md5(time());
+
+
             $this->prepareCalendarData($param);
             $email = new PHPMailer();
             $email->SetFrom($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer()); //Name is optional
@@ -385,7 +317,7 @@ method=REQUEST;\
                     $this->getCalendarDescription(),
                     [
                         Vcalendar::ALTREP =>
-                            'CID:<FFFF__=0ABBE548DFE235B58f9e8a93d@coffeebean.com>'
+                            'CID:<FFFF__=0ABBE548DFE235B58f9e8a93d@stanford.edu>'
                     ]
                 )
                 //->setComment( 'It\'s going to be fun..' )
@@ -438,7 +370,7 @@ method=REQUEST;\
                     $this->getCalendarOrganizerEmail(),
                     [Vcalendar::CN => $this->getCalendarOrganizer()]
                 );
-            $participants = '';
+            //set event participants
             foreach ($this->getCalendarParticipants() as $name => $e) {
                 $event1->setAttendee(
                     $e,
@@ -450,13 +382,15 @@ method=REQUEST;\
                     ]
                 );
             }
+
+            //generate event string.
             $vcalendarString =
                 // apply appropriate Vtimezone with Standard/DayLight components
                 $vcalendar->vtimezonePopulate()
                     // and create the (string) calendar
                     ->createCalendar();
 
-
+            //attache it to the email for gmail clients.
             if (!empty($vcalendarString)) {
                 // $email->addStringAttachment($vcalendarString,'ical2.ics','base64','text/calendar; charset=utf-8; method=REQUEST');
                 $email->addStringAttachment($vcalendarString, 'ical.ics', 'base64', 'application/ics');
@@ -468,8 +402,10 @@ method=REQUEST;\
 
 
             $email->Body = $this->getBody();
+            //for outlook add string to ICal when AltString is available.
             $email->Ical = $vcalendarString;
             $email->AltBody = $this->getBody();
+
             $email->Subject = $this->getSubject();
             $email->AddAddress($this->getTo());
 
