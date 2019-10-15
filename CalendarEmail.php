@@ -283,7 +283,13 @@ class CalendarEmail extends Message
         }
         $headers .= "Reply-To: " . $this->getFrom() . PHP_EOL;
         $headers .= "Return-Path: " . $this->getFrom() . PHP_EOL;
-        //$headers .= 'Content-Type:text/calendar; Content-Disposition: attachment; charset=utf-8;\r\n';
+        $headers .= "Content-Type: text/calendar;\
+method=REQUEST;\
+";
+        $headers .= '        charset="UTF-8"';
+        $headers .= "\
+";
+        $headers .= "Content-Transfer-Encoding: 7bit";
         //$headers .= "Content-Transfer-Encoding: 7bit";
         //$headers .= "Content-Type: text/plain;charset=\"utf-8\"\r\n"; #EDIT: TYPO
 
@@ -316,7 +322,7 @@ class CalendarEmail extends Message
 ";
         $message .= "--$mime_boundary\\r\
 ";
-        $calendar = 'Content-Type: text/calendar; Content-Disposition: attachment;name="meeting.ics";method=REQUEST\
+        $calendar = 'Content-Type: text/calendar;name="meeting.ics";method=REQUEST\
 ';
         $calendar .= "Content-Transfer-Encoding: 8bit\
 \
