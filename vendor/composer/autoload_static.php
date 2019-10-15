@@ -6,6 +6,10 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
 {
+    public static $files = array(
+        '47b18101462cdeb25f661813113e3182' => __DIR__ . '/..' . '/kigkonsult/icalcreator/autoload.php',
+    );
+
     public static $prefixLengthsPsr4 = array(
         'T' =>
             array(
@@ -19,6 +23,10 @@ class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
         'M' =>
             array(
                 'Monolog\\' => 8,
+            ),
+        'K' =>
+            array(
+                'Kigkonsult\\Icalcreator\\' => 23,
             ),
     );
 
@@ -38,6 +46,12 @@ class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
         'Monolog\\' =>
             array(
                 0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+            ),
+        'Kigkonsult\\Icalcreator\\' =>
+            array(
+                0 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src',
+                1 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src/Util',
+                2 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src/Traits',
             ),
     );
 

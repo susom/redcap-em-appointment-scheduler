@@ -2,9 +2,7 @@
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
+use Kigkonsult\Icalcreator\Vcalendar;
 // Load Composer's autoloader
 require 'vendor/autoload.php';
 /**
@@ -343,12 +341,155 @@ method=REQUEST;\
      * @return bool
      */
     public function sendCalendarEmail($param){
+        try {
+            $boundary = "--" . md5(time());
+            $this->prepareCalendarData($param);
+            $email = new PHPMailer();
+            $email->SetFrom($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer()); //Name is optional
+            $email->IsHTML(true);
+            $email->addCustomHeader('MIME-version', "1.0");
+            $email->addCustomHeader('Content-type',
+                "text/calendar; method=REQUEST;boundary=" . $boundary . " charset=UTF-8");
+            $email->addCustomHeader('Content-Transfer-Encoding', "7bit");
+            $email->addCustomHeader('X-Mailer', "Microsoft Office Outlook 12.0");
+            $email->addCustomHeader("Content-class: urn:content-classes:calendarmessage");
+            $email->ContentType = 'application/ics;';
+            $participants = '';
+            foreach ($this->getCalendarParticipants() as $name => $e) {
+                $participants .= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN" . $name . ";X-NUM-GUESTS=0:MAILTO:" . $e . "\r\n";
+            }
+            // create a new calendar
+            $vcalendar = Vcalendar::factory([Vcalendar::UNIQUE_ID => mt_rand(),])
+                // with calendaring info
+                ->setMethod(Vcalendar::PUBLISH)
+                ->setXprop(
+                    Vcalendar::X_WR_CALNAME,
+                    "Calendar Sample"
+                )
+                ->setXprop(
+                    Vcalendar::X_WR_CALDESC,
+                    "This is a demo calendar"
+                )
+                ->setXprop(
+                    Vcalendar::X_WR_RELCALID,
+                    "3E26604A-50F4-4449-8B3E-E4F4932D05B5"
+                )
+                ->setXprop(
+                    Vcalendar::X_WR_TIMEZONE,
+                    "America/Los_Angeles"
+                );
+
+            $event1 = $vcalendar->newVevent()
+                ->setTransp(Vcalendar::OPAQUE)
+                ->setClass(Vcalendar::P_BLIC)
+                ->setSequence(1)
+                // describe the event
+                ->setSummary('Scheduled meeting with five occurrences')
+                ->setDescription(
+                    $this->getCalendarDescription(),
+                    [
+                        Vcalendar::ALTREP =>
+                            'CID:<FFFF__=0ABBE548DFE235B58f9e8a93d@coffeebean.com>'
+                    ]
+                )
+                //->setComment( 'It\'s going to be fun..' )
+                // place the event
+                //->setLocation( 'Kafé Ekorren Stockholm' )
+                //->setGeo( '59.32206', '18.12485' )
+                // set the time
+                ->setDtstart(
+                    new DateTime(
+                        $this->getCalendarDate() . "T" . $this->getCalendarStartTime(),
+                        new DateTimezone('America/Los_Angeles')
+                    )
+                )
+                ->setDtend(
+                    new DateTime(
+                        $this->getCalendarDate() . "T" . $this->getCalendarEndTime(),
+                        new DateTimezone("America/Los_Angeles")
+                    )
+                )
+                // with recurrence rule
+                /* ->setRrule(
+                     [
+                         Vcalendar::FREQ  => Vcalendar::WEEKLY,
+                         Vcalendar::COUNT => 5,
+                     ]
+                 )*/
+                // and set another on a specific date
+                /* ->setRdate(
+                     [
+                         new DateTime(
+                             '20190609T090000',
+                             new DateTimezone( 'Europe/Stockholm' )
+                         ),
+                         new DateTime(
+                             '20190609T110000',
+                             new DateTimezone( 'Europe/Stockholm' )
+                         ),
+                     ],
+                     [ Vcalendar::VALUE => Vcalendar::PERIOD ]
+                 )
+                 // and revoke a recurrence date
+                 ->setExdate(
+                     new DateTime(
+                         '2019-05-12 09:00:00',
+                         new DateTimezone( 'Europe/Stockholm' )
+                     )
+                 )*/
+                // organizer, chair and some participants
+                ->setOrganizer(
+                    $this->getCalendarOrganizerEmail(),
+                    [Vcalendar::CN => 'Secretary CoffeeBean']
+                )
+                ->setAttendee(
+                    'ihab.zeedia@gmail.com',
+                    [
+                        Vcalendar::ROLE => Vcalendar::CHAIR,
+                        Vcalendar::PARTSTAT => Vcalendar::ACCEPTED,
+                        Vcalendar::RSVP => Vcalendar::FALSE,
+                        Vcalendar::CN => 'President CoffeeBean',
+                    ]
+                )
+                ->setAttendee(
+                    'ihab.zeedia@stanford.edu',
+                    [
+                        Vcalendar::ROLE => Vcalendar::REQ_PARTICIPANT,
+                        Vcalendar::PARTSTAT => Vcalendar::NEEDS_ACTION,
+                        Vcalendar::RSVP => Vcalendar::TRUE,
+                        Vcalendar::CN => 'Participant1 CoffeeBean',
+                    ]
+                );
+
+            $vcalendarString =
+                // apply appropriate Vtimezone with Standard/DayLight components
+                $vcalendar->vtimezonePopulate()
+                    // and create the (string) calendar
+                    ->createCalendar();
 
 
-        $this->prepareCalendarData($param);
-        $this->buildCalendarBody();
-        $from = $this->getTo();
-        return mail($this->getTo(), $this->getSubject(), $this->getBody(), $this->getHeaders(),
-            "-f $from");
+            if (!empty($vcalendarString)) {
+                // $email->addStringAttachment($vcalendarString,'ical2.ics','base64','text/calendar; charset=utf-8; method=REQUEST');
+                $email->addStringAttachment($vcalendarString, 'ical.ics', 'base64', 'application/ics');
+
+            }
+
+            //$email->msgHTML($this->getBody());
+            //$email->addCustomHeader('Content-type',"text/calendar; charset=utf-8; method=REQUEST");
+
+            $email->Ical = $vcalendarString;
+            $email->AltBody = $vcalendarString;
+            $email->msgHTML("Zeft hena");
+            $email->Subject = $this->getSubject();
+            $email->AddAddress($this->getTo());
+
+            if (!$email->Send()) {
+                throw new \LogicException($email->ErrorInfo);
+            }
+        } catch (\LogicException $e) {
+            $e->getMessage();
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
     }
 }
