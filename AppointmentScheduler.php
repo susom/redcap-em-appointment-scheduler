@@ -856,15 +856,17 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
     public function getNextRecordsId($eventId, $projectId)
     {
-        $sql = sprintf("SELECT max(record) as record_id from redcap_data WHERE project_id = $projectId AND event_id = $eventId");
+        $sql = sprintf("SELECT max(record) as record_id from redcap_data WHERE project_id = '$projectId' AND event_id = '$eventId'");
 
         $result = db_query($sql);
         if (!$result) {
-            throw new \LogicException('cant save sent text message ');
+            throw new \LogicException('cant find next record ');
         }
 
         $data = db_fetch_assoc($result);
-        return (int)$data['record_id'] + 1;
+        $id = $data['record_id'];
+        $id++;
+        return $id;
     }
 
     /**

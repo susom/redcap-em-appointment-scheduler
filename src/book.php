@@ -22,7 +22,10 @@ try {
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
         $slot = $module::getSlot(filter_var($_POST['record_id'], FILTER_SANITIZE_STRING), $data['event_id'],
             $module->getProjectId(), $module->getPrimaryRecordFieldName());
-        //$module->doesUserHaveSameDateReservation($date, USERID, $module->getSuffix(),$data['event_id'], $reservationEventId);
+
+        $date = date('Y-m-d', strtotime(preg_replace("([^0-9/])", "", $_POST['calendarDate'])));
+        $module->doesUserHaveSameDateReservation($date, USERID, $module->getSuffix(), $data['event_id'],
+            $reservationEventId);
         /**
          * let mark it as complete so we can send the survey if needed.
          * Complete status has different naming convention based on the instrument name. so you need to get instrument name and append _complete to it.
