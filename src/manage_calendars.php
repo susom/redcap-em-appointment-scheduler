@@ -43,8 +43,8 @@ try {
                     <tr>
                         <td><?php echo $slot[$primary] ?></td>
                         <td><?php echo $slot['instructor'] ?></td>
-                        <td><strong><?php echo $slot['event_name'] ?></strong>
-                            - <?php echo $slot['location' . $suffix] ?></td>
+                        <td>
+                            <?php echo $slot['location' . $suffix] ?></td>
                         <td>
                             <?php echo date('m/d/Y',
                                 strtotime($slot['start' . $suffix])) ?>
