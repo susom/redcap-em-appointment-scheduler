@@ -858,14 +858,17 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     {
         $sql = sprintf("SELECT max(record) as record_id from redcap_data WHERE project_id = '$projectId' AND event_id = '$eventId'");
 
+        $this->emLog("SQL Statement:", $sql);
         $result = db_query($sql);
         if (!$result) {
             throw new \LogicException('cant find next record ');
         }
 
         $data = db_fetch_assoc($result);
+        $this->emLog("Resulted Data:", $data);
         $id = $data['record_id'];
         $id++;
+        $this->emLog("Return ID", $id);
         return $id;
     }
 
