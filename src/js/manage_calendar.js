@@ -1,9 +1,13 @@
 var slot = {};
+var recordId = null;
+
 /**
  * Cancel Time Slot
  */
-jQuery(document).on('click', '.cancel-slot', function () {
-
+jQuery(document).on('click', '.cancel-slot', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     if (confirm("Are you sure you want to cancel this Time Slot?")) {
         var record_id = jQuery(this).data('record-id');
         var event_id = jQuery(this).data('event-id');
@@ -29,8 +33,10 @@ jQuery(document).on('click', '.cancel-slot', function () {
 /**
  * call reschedule form and populate with data
  */
-jQuery(document).on('click', '.reschedule-slot', function () {
-
+jQuery(document).on('click', '.reschedule-slot', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     slot.date = jQuery(this).data('date');
     slot.start = jQuery(this).data('start');
     slot.end = jQuery(this).data('end');
@@ -64,12 +70,15 @@ function fillSlotForm(data, callback) {
 /**
  * Submit Reschedule
  */
-jQuery(document).on('click', '#submit-reschedule-form', function () {
-
+jQuery(document).on('click', '#submit-reschedule-form', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     slot.start = jQuery("#start").val();
     slot.end = jQuery("#end").val();
     slot.instructor = jQuery("#instructor").val();
     slot.notes = jQuery("#reschedule-notes").val();
+    slot.location = jQuery("#location").val();
 
     var url = jQuery("#reschedule-submit-url").val();
     jQuery.ajax({
@@ -96,9 +105,11 @@ jQuery(document).on('click', '#submit-reschedule-form', function () {
 /**
  * Participants List
  */
-jQuery(document).on('click', '.participants-list', function () {
-
-    var record_id = jQuery(this).data('record-id');
+jQuery(document).on('click', '.participants-list', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var record_id = recordId = jQuery(this).data('record-id');
     var event_id = jQuery(this).data('event-id');
     var title = jQuery(this).data('modal-title');
     var url = jQuery("#participants-list-url").val();
@@ -123,7 +134,10 @@ jQuery(document).on('click', '.participants-list', function () {
 /**
  * No Show appointment
  */
-jQuery(document).on('click', '.participants-no-show', function () {
+jQuery(document).on('click', '.participants-no-show', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var participation_id = jQuery(this).data('participant-id');
     var event_id = jQuery(this).data('event-id');
     var url = jQuery('#participants-no-show-url').val();
@@ -138,7 +152,10 @@ jQuery(document).on('click', '.participants-no-show', function () {
             type: 'GET',
             datatype: 'json',
             success: function (data) {
-                alert(data.message)
+                data = JSON.parse(data);
+                alert(data.message);
+                console.log(jQuery('.participants-list[data-record-id=' + recordId + ']'));
+                jQuery('.participants-list[data-record-id=' + recordId + ']').trigger('click');
             },
             error: function (request, error) {
                 alert("Request: " + JSON.stringify(request));

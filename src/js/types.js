@@ -9,7 +9,10 @@ const CAMPUS_ONLY = 2;
 /**
  * Show Form to complete for selected time
  */
-jQuery(document).on('click', '.type', function () {
+jQuery(document).on('click', '.type', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var url = jQuery(this).data('url');
     var key = jQuery(this).data('key');
     var $elem = jQuery(this)
@@ -48,7 +51,10 @@ jQuery(document).on('click', '.type', function () {
 /**
  * Show list view
  */
-jQuery(document).on('click', '.calendar-view', function () {
+jQuery(document).on('click', '.calendar-view', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var url = jQuery(this).data('url');
     var key = jQuery(this).data('key');
     $(".date-picker-2").datepicker("destroy");
@@ -120,7 +126,10 @@ function populateMonthSummary(key, year, month) {
 /**
  * Show Form to complete for selected time
  */
-jQuery(document).on('click', '.time-slot', function () {
+jQuery(document).on('click', '.time-slot', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     record.record_id = jQuery(this).data('record-id');
     record.event_id = jQuery(this).data('event-id');
     var dateText = jQuery(this).data('modal-title');
@@ -179,8 +188,10 @@ jQuery(document).on('click', '.time-slot', function () {
 /**
  * Complete booking form
  */
-jQuery(document).on('click', '#submit-booking-form', function () {
-
+jQuery(document).on('click', '#submit-booking-form', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     record.email = jQuery("#email").val();
     record.name = jQuery("#name").val();
     record.mobile = jQuery("#mobile").val();
@@ -225,7 +236,10 @@ jQuery(document).on('click', '#submit-booking-form', function () {
 /**
  * load calendar view by clicking on the main button and pass the appropriate key
  */
-jQuery(document).on('click', '.list-view', function () {
+jQuery(document).on('click', '.list-view', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var key = jQuery(this).data('key');
     jQuery('.type[data-key="' + key + '"]').get(0).click();
 
@@ -235,7 +249,10 @@ jQuery(document).on('click', '.list-view', function () {
 /**
  * Get Manage modal to let user manage their saved appointments
  */
-jQuery(document).on('click', '.manage', function () {
+jQuery(document).on('click', '.manage', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var url = jQuery("#manage-url").val();
     if (email != '') {
         jQuery.ajax({
@@ -265,7 +282,10 @@ jQuery(document).on('click', '.manage', function () {
 /**
  * Get Manage Calendar modal to let instructors manage all calendars
  */
-jQuery(document).on('click', '.manage-calendars', function () {
+jQuery(document).on('click', '.manage-calendars', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var url = jQuery("#manage-calendar-url").val();
     if (email != '') {
         jQuery.ajax({

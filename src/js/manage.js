@@ -1,8 +1,10 @@
 /**
  * Cancel appointment
  */
-jQuery(document).on('click', '.cancel-appointment', function () {
-
+jQuery(document).on('click', '.cancel-appointment', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
     if (confirm("Are you sure you want to cancel this appointment?")) {
         var participation_id = jQuery(this).data('participation-id');
         var event_id = jQuery(this).data('event-id');
