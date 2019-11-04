@@ -1137,12 +1137,14 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public function getReservationEventId()
     {
-        foreach ($this->getInstances() as $instance) {
-            if ($instance['instrument_id_for_complementary_appointment'] == $this->getMainSurveyId()) {
-                return $instance['reservation_event_id'];
+        if ($this->getInstances()) {
+            foreach ($this->getInstances() as $instance) {
+                if ($instance['instrument_id_for_complementary_appointment'] == $this->getMainSurveyId()) {
+                    return $instance['reservation_event_id'];
+                }
             }
+            throw new \LogicException("No Event is assigned");
         }
-        throw new \LogicException("No Event is assigned");
     }
 
     /**
