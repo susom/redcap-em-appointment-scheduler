@@ -143,9 +143,9 @@ jQuery(document).on('click', '.time-slot', function (e) {
         jQuery("#attending-options").hide();
         var option = jQuery(this).data('show-attending-default');
         console.log(option)
-        if (option === 1) {
+        if (option === VIRTUAL_ONLY) {
             jQuery("#type-online").prop('checked', true);
-        } else if (option === 2) {
+        } else if (option === CAMPUS_ONLY) {
             jQuery("#type-campus").prop('checked', true);
         }
     }
