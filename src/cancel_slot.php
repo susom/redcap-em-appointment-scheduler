@@ -18,7 +18,7 @@ try {
     if ($eventId == '') {
         throw new \LogicException('Event ID is missing');
     }
-    if (!SUPER_USER) {
+    if (!$module::isUserHasManagePermission()) {
         throw new \LogicException('You should not be here');
     } else {
         $data['slot_status' . $suffix] = CANCELED;
