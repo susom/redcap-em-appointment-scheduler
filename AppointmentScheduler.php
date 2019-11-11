@@ -1218,4 +1218,17 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         return $this->getUrl('src/type.php', true,
                 false) . '&' . $this->getSuffix() . '&' . PROJECTID . '=' . $this->getProjectId();
     }
+
+    /**
+     * @return bool
+     */
+    public static function isUserHasManagePermission()
+    {
+        $right = REDCap::getUserRights();
+        $user = end($right);
+        if ($user['design'] === "1") {
+            return true;
+        }
+        return false;
+    }
 }

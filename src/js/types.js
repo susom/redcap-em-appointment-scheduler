@@ -219,7 +219,8 @@ jQuery(document).on('click', '#submit-booking-form', function (e) {
                 /**
                  * when this book came from survey page lets return the reservation id back to the survey.
                  */
-                if (jQuery("input[name=survey_reservation_id]").length) {
+                var survey_record_id_field = jQuery("#survey-record-id-field").val();
+                if (jQuery("input[name=" + survey_record_id_field + "]").length) {
                     completeSurveyReservation(response);
                 }
 

@@ -18,7 +18,7 @@ try {
     if ($eventId == '') {
         throw new \LogicException('Event ID is missing');
     }
-    if (!SUPER_USER) {
+    if (!$module::isUserHasManagePermission()) {
         throw new \LogicException('You should not be here');
     } else {
         $data['start' . $suffix] = date('Y-m-d H:i:s', strtotime(preg_replace("([^0-9/])", "", $_POST['start'])));

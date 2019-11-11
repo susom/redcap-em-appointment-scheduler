@@ -81,7 +81,8 @@ jQuery(document).on('click', '.survey-calendar-view', function () {
 
 
 function completeSurveyReservation(response) {
-    jQuery("input[name=survey_reservation_id]").val(response.id);
+    var survey_record_id_field = jQuery("#survey-record-id-field").val();
+    jQuery("input[name=" + survey_record_id_field + "]").val(response.id);
     jQuery("#reserved-email").val(response.email);
     jQuery("#survey-controller").text("Reservation Completed");
     jQuery("#survey-controller").removeClass("survey-type survey-calendar-view");

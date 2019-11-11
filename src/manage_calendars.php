@@ -9,7 +9,7 @@ try {
     /**
      * check if user still logged in
      */
-    if (!SUPER_USER) {
+    if (!$module::isUserHasManagePermission()) {
         throw new \LogicException('You cant be here');
     }
     $suffix = $module->getSuffix();

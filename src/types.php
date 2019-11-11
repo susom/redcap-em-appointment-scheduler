@@ -35,7 +35,7 @@ require_once 'urls.php';
                             <a class="manage nav-link" href="#">Manage my Appointments</a>
                         </li>
                         <?php
-                        if (SUPER_USER) {
+                        if ($module::isUserHasManagePermission()) {
                             ?>
                             <li class="nav-item">
                                 <a class="manage-calendars nav-link" href="#">Manage Calendars</a>
