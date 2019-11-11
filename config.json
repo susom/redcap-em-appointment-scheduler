@@ -118,10 +118,40 @@
           "type": "checkbox"
         },
         {
-          "key": "note_textarea_label",
-          "name": "<b>Textarea Label</b><br>Label will be displayed above note textarea",
+          "key": "show_attending_options",
+          "name": "<b>Display Attending Options</b>",
           "required": false,
-          "type": "text"
+          "type": "dropdown",
+          "choices": [
+            {
+              "name": "Yes",
+              "value": "1"
+            },
+            {
+              "name": "No",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "key": "show_attending_default",
+          "name": "<b>Select the Default Attending Option</b>",
+          "required": false,
+          "type": "dropdown",
+          "branchingLogic": {
+            "field": "show_attending_options",
+            "value": "0"
+          },
+          "choices": [
+            {
+              "name": "Virtual via Zoom Meeting",
+              "value": "1"
+            },
+            {
+              "name": "Redwood City Campus",
+              "value": "2"
+            }
+          ]
         },
         {
           "key": "show_notes",
@@ -138,6 +168,16 @@
               "value": "0"
             }
           ]
+        },
+        {
+          "key": "note_textarea_label",
+          "name": "<b>Textarea Label</b><br>Label will be displayed above note textarea",
+          "required": false,
+          "type": "text",
+          "branchingLogic": {
+            "field": "show_notes",
+            "value": "1"
+          }
         },
         {
           "key": "show_projects",

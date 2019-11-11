@@ -1073,6 +1073,24 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * @return boolean
      */
+    public function showAttendingOptions()
+    {
+        $instance = $this->identifyCurrentInstance($this->getEventId());
+        return $instance['show_attending_options'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultAttendingOption()
+    {
+        $instance = $this->identifyCurrentInstance($this->getEventId());
+        return $instance['show_attending_default'];
+    }
+
+    /**
+     * @return boolean
+     */
     public function showNotes()
     {
         $instance = $this->identifyCurrentInstance($this->getEventId());

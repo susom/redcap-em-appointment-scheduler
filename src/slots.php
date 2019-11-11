@@ -34,6 +34,8 @@ if(isset($_GET['date'])){
                         data-event-id="<?php echo $eventId ?>"
                         data-notes-label="<?php echo $module->getNoteLabel(); ?>"
                         data-show-projects="<?php echo $module->showProjectIds(); ?>"
+                        data-show-attending-options="<?php echo $module->showAttendingOptions(); ?>"
+                        data-show-attending-default="<?php echo $module->getDefaultAttendingOption(); ?>"
                         data-show-notes="<?php echo $module->showNotes(); ?>"
                         data-show-locations="<?php echo(empty($slot['attending_options']) ? CAMPUS_AND_VIRTUAL : $record['attending_options']); ?>"
                         data-start="<?php echo date('Hi', strtotime($slot['start'])) ?>"

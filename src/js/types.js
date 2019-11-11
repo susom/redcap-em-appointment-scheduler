@@ -135,6 +135,22 @@ jQuery(document).on('click', '.time-slot', function (e) {
     var dateText = jQuery(this).data('modal-title');
 
     /**
+     * do we need to show attending options based on config.json
+     */
+    if (jQuery(this).data('show-attending-options') == "1") {
+        jQuery("#attending-options").show();
+    } else {
+        jQuery("#attending-options").hide();
+        var option = jQuery(this).data('show-attending-default');
+        console.log(option)
+        if (option === 1) {
+            jQuery("#type-online").prop('checked', true);
+        } else if (option === 2) {
+            jQuery("#type-campus").prop('checked', true);
+        }
+    }
+
+    /**
      * do we need to show notes and projects section based on config.json
      */
     if (jQuery(this).data('show-projects') == "1") {

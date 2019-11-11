@@ -105,6 +105,8 @@ if (empty($data)) {
                                         data-event-id="<?php echo $eventId ?>"
                                         data-notes-label="<?php echo $module->getNoteLabel(); ?>"
                                         data-show-projects="<?php echo $module->showProjectIds(); ?>"
+                                        data-show-attending-options="<?php echo $module->showAttendingOptions(); ?>"
+                                        data-show-attending-default="<?php echo $module->getDefaultAttendingOption(); ?>"
                                         data-show-locations="<?php echo(empty($record['attending_options' . $suffix]) ? CAMPUS_AND_VIRTUAL : $record['attending_options' . $suffix]); ?>"
                                         data-show-notes="<?php echo $module->showNotes(); ?>"
                                         data-date="<?php echo date('Ymd', strtotime($record['date' . $suffix])) ?>"

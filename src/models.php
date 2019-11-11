@@ -77,11 +77,11 @@ if (!isset($module)) {
                             Private (wont show up in calendar for other users)
                         </label>
                     </div-->
-                    <div class="form-group">
+                    <div class="form-group" id="attending-options">
                         <label for="private">How do you plan to attend the appointment?</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="type" id="type-campus"
-                                   value="<?php echo CAMPUS_ONLY ?>" checked>
+                                   value="<?php echo CAMPUS_ONLY ?>">
                             <label class="form-check-label" for="type-campus" id="type-campus-text">
                                 <?php echo CAMPUS_ONLY_TEXT ?>
                             </label>
