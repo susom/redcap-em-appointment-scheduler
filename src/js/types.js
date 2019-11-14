@@ -208,6 +208,11 @@ jQuery(document).on('click', '#submit-booking-form', function (e) {
     e.stopPropagation();
     e.preventDefault();
     e.stopImmediatePropagation();
+
+    /**
+     * create object to submit reservation.
+     * @type {*|jQuery|string|undefined}
+     */
     record.email = jQuery("#email").val();
     record.name = jQuery("#name").val();
     record.mobile = jQuery("#mobile").val();

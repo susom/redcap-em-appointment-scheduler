@@ -1272,6 +1272,11 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
 
+    /**
+     * get project name
+     * @param $projectId
+     * @return mixed
+     */
     public static function getProjectName($projectId)
     {
         try {
