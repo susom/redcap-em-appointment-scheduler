@@ -50,6 +50,10 @@ if (!$module->getMainSurveyId()) {
        value="<?php echo $module->getUrl('src/manage_calendars.php', false,
                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() ?>"
        class="hidden"/>
+<input type="hidden" id="manage-booked-slots-url"
+       value="<?php echo $module->getUrl('src/booked_slots.php', false,
+               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() ?>"
+       class="hidden"/>
 <input type="hidden" id="cancel-appointment-url"
        value="<?php echo $module->getUrl('src/cancel.php', false,
                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() ?>"

@@ -37,8 +37,15 @@ require_once 'urls.php';
                         <?php
                         if ($module::isUserHasManagePermission()) {
                             ?>
-                            <li class="nav-item">
-                                <a class="manage-calendars nav-link" href="#">Manage Calendars</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Manage Calendar
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="manage-calendars nav-link" href="#">Manage Time Slots</a>
+                                    <a class="booked-slots nav-link" href="#">Manage Booked Slots</a>
+                                </div>
                             </li>
                             <?php
                         }

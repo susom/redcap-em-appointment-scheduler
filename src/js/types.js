@@ -213,7 +213,8 @@ jQuery(document).on('click', '#submit-booking-form', function (e) {
     record.mobile = jQuery("#mobile").val();
     record.notes = jQuery("#notes").val();
     record.private = jQuery("#private").val();
-    record.type = $("input[name='type']:checked").val();
+    record.type = jQuery("input[name='type']:checked").val();
+    record.project_id = $('#project_id').find(":selected").val();
     record.date = record.calendarDate;
 
     var url = jQuery("#book-submit-url").val();
@@ -282,6 +283,47 @@ jQuery(document).on('click', '.manage', function (e) {
                 $('#generic-modal').modal('show');
 
                 $('#myTabs a[href="#profile"]').tab('show')
+            },
+            error: function (request, error) {
+                alert("Request: " + JSON.stringify(request));
+            }
+        });
+    } else {
+        /**
+         * user not logged in refresh to force sign in
+         */
+        location.reload();
+    }
+});
+
+/**
+ * Get Booked Slots Modal to
+ */
+jQuery(document).on('click', '.booked-slots', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var url = jQuery("#manage-booked-slots-url").val();
+    if (email != '') {
+        jQuery.ajax({
+            url: url,
+            type: 'GET',
+            data: {event_id: jQuery(this).data('event-id')},
+            datatype: 'json',
+            success: function (data) {
+                jQuery('#generic-modal').find('.modal-title').html('Manage Booked Slots');
+                jQuery('#generic-modal').find('.modal-body').html(data);
+                jQuery('#generic-modal').modal('show');
+                jQuery('#generic-modal').modal('show');
+
+                jQuery('#calendar-datatable').DataTable(
+                    {
+                        pageLength: 50,
+                        columnDefs: [
+                            {"type": "date", "targets": 3}
+                        ]
+                    }
+                );
             },
             error: function (request, error) {
                 alert("Request: " + JSON.stringify(request));

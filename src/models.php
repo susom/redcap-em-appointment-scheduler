@@ -106,7 +106,7 @@ if (!isset($module)) {
                         ?>
                         <div class="form-group" id="show-projects">
                             <label for="project_id">Project ID(Optional)</label>
-                            <select name="project_id" class="form-control">
+                            <select name="project_id" id="project_id" class="form-control">
                                 <option value="" selected>No Project Available</option>
                                 <?php
                                 $projects = $module->getUserProjects(USERID);

@@ -572,13 +572,34 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * @return array
      */
-    public function getAllOpenSlots($suffix)
+    public function getAllOpenSlots($suffix = '')
     {
         try {
             /*
                  * TODO Check if date within allowed window
                  */
             $filter = "[start$suffix] > '" . date('Y-m-d') . "' AND " . "[slot_status$suffix] != '" . CANCELED . "'";
+            $param = array(
+                'project_id' => $this->getProjectId(),
+                'filterLogic' => $filter,
+                'return_format' => 'array'
+            );
+            return REDCap::getData($param);
+        } catch (\LogicException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getBookedSlots($suffix)
+    {
+        try {
+            /*
+                 * TODO Check if date within allowed window
+                 */
+            $filter = "[start$suffix] > '" . date('Y-m-d') . "' AND " . "[slot_status$suffix] = '" . RESERVED . "'";
             $param = array(
                 'project_id' => $this->getProjectId(),
                 'filterLogic' => $filter,
@@ -1248,5 +1269,18 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             return true;
         }
         return false;
+    }
+
+
+    public static function getProjectName($projectId)
+    {
+        try {
+            $project = new \Project($projectId);
+            $name = $project->project['app_title'];
+            unset($project);
+            return $name;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }
