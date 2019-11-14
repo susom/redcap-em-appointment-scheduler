@@ -55,6 +55,19 @@ class Participant
         }
     }
 
+    public static function isSuperUser()
+    {
+        return defined('SUPER_USER');
+    }
+
+    public static function canUserUpdateReservations($sunetId)
+    {
+        if ((defined('USERID') && USERID == $sunetId) || $userid == $sunetId || AppointmentScheduler::isUserHasManagePermission()) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param int $record_id
      * @return int
@@ -62,6 +75,8 @@ class Participant
     public function getSlotActualCountReservedSpots($slotId, $eventId, $suffix, $projectId)
     {
         try {
+            //this flag will determine if logged in user booked this slot
+            $userBookThisSlot = false;
             $counter = 0;
             $param = array(
                 'project_id' => $projectId,
@@ -69,12 +84,17 @@ class Participant
                 'events' => $eventId
             );
             $records = \REDCap::getData($param);
-            foreach ($records as $record) {
+            foreach ($records as $id => $record) {
                 if ($record[$eventId]["slot_id$suffix"] == $slotId && $record[$eventId]["participant_status$suffix"] == RESERVED) {
+                    if (self::canUserUpdateReservations($record[$eventId]["sunet_id"])) {
+                        //capture record id for cancellation
+                        $record[$eventId]['record_id'] = $id;
+                        $userBookThisSlot[] = $record[$eventId];
+                    }
                     $counter++;
                 }
             }
-            return $counter;
+            return array('counter' => $counter, 'userBookThisSlot' => $userBookThisSlot);
         } catch (\LogicException $e) {
             echo $e->getMessage();
         }

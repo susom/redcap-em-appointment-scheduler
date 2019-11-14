@@ -189,6 +189,14 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 }
 
                 $this->setProject(new \Project($this->getProjectId()));
+
+                //when loaded for first time cache user name and is super user
+                if (defined('USERID')) {
+                    $this->setCachedUsername(USERID);
+                }
+                if (defined('SUPER_USER')) {
+                    $this->setCachedIsSuperUser(SUPER_USER);
+                }
             }
 
 
@@ -1263,11 +1271,14 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public static function isUserHasManagePermission()
     {
-        $right = REDCap::getUserRights();
-        $user = end($right);
-        if ($user['design'] === "1") {
-            return true;
+        if (defined('PROJECT_ID')) {
+            $right = REDCap::getUserRights();
+            $user = end($right);
+            if ($user['design'] === "1") {
+                return true;
+            }
         }
+
         return false;
     }
 
@@ -1287,5 +1298,30 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+
+    public function setCachedUsername($username)
+    {
+        if (!$_SESSION['APPOINTMENT_SCHEDULER_USERNAME']) {
+            $_SESSION['APPOINTMENT_SCHEDULER_USERNAME'] = $username;
+        }
+    }
+
+    public function setCachedIsSuperUser($bool)
+    {
+        if (!$_SESSION['APPOINTMENT_SCHEDULER_IS_SUPER_USER']) {
+            $_SESSION['APPOINTMENT_SCHEDULER_IS_SUPER_USER'] = $bool;
+        }
+    }
+
+    public function getCachedUsername()
+    {
+        return $_SESSION['APPOINTMENT_SCHEDULER_USERNAME'];
+    }
+
+    public function getCachedIsSuperUser()
+    {
+        return $_SESSION['APPOINTMENT_SCHEDULER_IS_SUPER_USER'];
     }
 }

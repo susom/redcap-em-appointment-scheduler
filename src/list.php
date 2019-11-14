@@ -63,17 +63,68 @@ if (empty($data)) {
         $days[$day][$slot['record_id']]['location' . $suffix] = $slot['location' . $suffix];
         $days[$day][$slot['record_id']]['attending_options' . $suffix] = $slot['attending_options' . $suffix];
         $days[$day][$slot['record_id']]['number_of_participants' . $suffix] = $slot['number_of_participants' . $suffix];
-        $days[$day][$slot['record_id']]['booked_slots' . $suffix] = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
+
+        //get number of seats booked for this slot
+        $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
             $reservationEventId, $suffix, $module->getProjectId());
+        $days[$day][$slot['record_id']]['booked_slots' . $suffix] = $counter['counter'];
         /**
          * check if we have slots available
          */
         if ($days[$day][$slot['record_id']]['number_of_participants' . $suffix] > $days[$day][$slot['record_id']]['booked_slots' . $suffix]) {
             $days[$day][$slot['record_id']]['booked' . $suffix] = false;
             $days[$day][$slot['record_id']]['available' . $suffix] = $days[$day][$slot['record_id']]['number_of_participants' . $suffix] - $days[$day][$slot['record_id']]['booked_slots' . $suffix];
+
+            //build admin section is reservation exists for this slot
+            if ($counter['userBookThisSlot']) {
+                if ($module::isUserHasManagePermission()) {
+                    foreach ($counter['userBookThisSlot'] as $reservation) {
+                        $days[$day][$slot['record_id']]['admin' . $suffix] .= '<div class="alert alert-primary" role="alert">
+                            ' . $reservation['name'] . '<button type="button"
+                                                                      data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-event-id="' . $reservationEventId . '"
+                                                                      class="cancel-appointment btn btn-block btn-danger">Cancel
+                            </button>
+                        </div>';
+                    }
+                } else {
+
+                    //todo figure out how to get user info whih NOAUTH and out of project context.
+                }
+            }
+
         } else {
             $days[$day][$slot['record_id']]['booked' . $suffix] = true;
-            $days[$day][$slot['record_id']]['notes' . $suffix] = 'Full <br>';
+
+            //if logged in user booked this slot give the option to cancel their reservation.
+            if ($counter['userBookThisSlot']) {
+
+                //for admin few display user name and option to cancel
+                if ($module::isUserHasManagePermission()) {
+                    foreach ($counter['userBookThisSlot'] as $reservation) {
+                        $days[$day][$slot['record_id']]['notes' . $suffix] .= '<div class="alert alert-primary" role="alert">
+                            ' . $reservation['name'] . '<button type="button"
+                                                                      data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-event-id="' . $reservationEventId . '"
+                                                                      class="cancel-appointment btn btn-block btn-danger">Cancel
+                            </button>
+                        </div>';
+                    }
+                } else {
+                    //if not admin regular user will have only one record!
+                    $reservation = end($counter['userBookThisSlot']);
+                    $days[$day][$slot['record_id']]['notes' . $suffix] = '<div class="alert alert-primary" role="alert">
+                            ' . $reservation['name'] . '<button type="button"
+                                                                      data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-event-id="' . $reservationEventId . '"
+                                                                      class="cancel-appointment btn btn-block btn-danger">Cancel
+                            </button>
+                        </div>';
+                }
+            } else {
+                $days[$day][$slot['record_id']]['notes' . $suffix] = 'Full <br>';
+            }
+
         }
     }
 
@@ -117,6 +168,12 @@ if (empty($data)) {
                                             strtotime($record['end' . $suffix])) ?>"
                                         class="time-slot btn btn-block btn-success">Book
                                 </button>
+                                <?php
+                                //for now this is for admin
+                                if ($record['admin' . $suffix]) {
+                                    echo $record['admin' . $suffix];
+                                }
+                                ?>
                                 <small>* (<?php echo $record['available' . $suffix] ?>) seats is still available</small>
                                 <?php
                             }

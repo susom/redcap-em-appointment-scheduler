@@ -9,7 +9,6 @@ if (!isset($module)) {
     $module = $this;
 }
 $url = $module->getUrl('src/list.php', false, true, true);
-$aaaaaaaaa = $module->getProjectSetting("survey_record_id_field");
 ?>
 <?php
 try {

@@ -171,6 +171,3 @@ try {
     echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
 }
 ?>
-<!-- LOAD JS -->
-<script src="<?php echo $module->getUrl('src/js/manage.js') ?>"></script>
-
