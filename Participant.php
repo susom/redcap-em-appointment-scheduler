@@ -172,7 +172,8 @@ class Participant
     public function isThereAvailableSpotsInAppointment($event_id, $record_id, $projectId, $primary)
     {
         $slot = AppointmentScheduler::getSlot($record_id, $event_id, $projectId, $primary);
-        if ($slot['number_of_participants'] > $this->getSlotActualCountReservedSpots($record_id)) {
+        if ($slot['number_of_participants'] > $this->getSlotActualCountReservedSpots($record_id, $event_id, '',
+                $projectId)) {
             return true;
         } else {
             return false;
