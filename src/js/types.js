@@ -18,6 +18,7 @@ jQuery(document).on('click', '.type', function (e) {
     e.stopImmediatePropagation();
     var url = jQuery(this).data('url');
     var key = jQuery(this).data('key');
+    var view = jQuery(this).data('default-view');
     var $elem = jQuery(this)
     /**
      * init the reservation event id for selected slot.
@@ -49,7 +50,7 @@ jQuery(document).on('click', '.type', function (e) {
             alert("Request: " + JSON.stringify(request));
         },
         'complete': function () {
-            loadDefaultView()
+            loadDefaultView(view)
         }
     });
 });
@@ -434,9 +435,8 @@ $(document).ready(function () {
 
 });
 
-function loadDefaultView() {
-    var defaultView = parseInt(jQuery("#default-view").val());
-    if (defaultView == CALENDAR_VIEW) {
+function loadDefaultView(view) {
+    if (view == CALENDAR_VIEW) {
         if (jQuery(".survey-calendar-view").length > 0) {
             jQuery(".survey-calendar-view").trigger("click");
         } else {

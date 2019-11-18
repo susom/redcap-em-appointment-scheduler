@@ -25,6 +25,7 @@ $(document).ready(function () {
 jQuery(document).on("click", ".survey-type", function () {
     var url = jQuery("#list-view-url").val();
     var key = jQuery(this).data('key');
+    var view = jQuery(this).data('default-view');
     /**
      * init the reservation event id for selected slot.
      * @type {jQuery}
@@ -53,7 +54,7 @@ jQuery(document).on("click", ".survey-type", function () {
             alert("Request: " + JSON.stringify(request));
         },
         'complete': function () {
-            loadDefaultView()
+            loadDefaultView(view)
         }
     });
 });

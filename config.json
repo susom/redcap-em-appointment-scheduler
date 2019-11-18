@@ -58,22 +58,6 @@
       "type": "descriptive"
     },
     {
-      "key": "default_view",
-      "name": "<b>Select Default View</b>",
-      "required": false,
-      "type": "dropdown",
-      "choices": [
-        {
-          "name": "List",
-          "value": "1"
-        },
-        {
-          "name": "Calendar",
-          "value": "2"
-        }
-      ]
-    },
-    {
       "key": "instance",
       "name": "<b>Configure Appointment Scheduler Instance</b>",
       "required": true,
@@ -85,6 +69,22 @@
           "name": "<b>Add a description for this scheduler</b><br/>",
           "required": true,
           "type": "textarea"
+        },
+        {
+          "key": "default_view",
+          "name": "<b>Select Default View</b>",
+          "required": false,
+          "type": "dropdown",
+          "choices": [
+            {
+              "name": "List",
+              "value": "1"
+            },
+            {
+              "name": "Calendar",
+              "value": "2"
+            }
+          ]
         },
         {
           "key": "slot_event_id",
