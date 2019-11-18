@@ -552,18 +552,16 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     $start = date('Y-m-d');
                     $end = date('Y-m-d', strtotime('first day of next month'));
                 }
-                $filter = "[slot_status] != '" . CANCELED . "'";
+                $filter = "[start] > '" . $start . "' AND [start] < '" . $end . "' AND " . "[slot_status] != '" . CANCELED . "'";
                 $param = array(
                     'project_id' => $this->getProjectId(),
-                    'filterLogic' => $filter,
                     'return_format' => 'array',
                     'events' => $eventId
                 );
                 $data = array();
                 $records = REDCap::getData($param);
                 foreach ($records as $record) {
-                    if (date('Y-m-d', strtotime($record[$eventId][$variable])) > $start && date('Y-m-d',
-                            strtotime($record[$eventId][$variable])) < $end) {
+                    if (strtotime($record[$eventId][$variable]) > strtotime($start) && strtotime($record[$eventId][$variable]) < strtotime($end)) {
                         $data[] = $record;
                     }
                 }
@@ -776,7 +774,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $data['mobile' . $this->getSuffix()] = filter_var($_POST['mobile'], FILTER_SANITIZE_STRING);
         $data['participant_notes' . $this->getSuffix()] = filter_var($_POST['notes'], FILTER_SANITIZE_STRING);
         $data['project_id' . $this->getSuffix()] = filter_var($_POST['project_id'], FILTER_SANITIZE_NUMBER_INT);
-        $data['slot_id' . $this->getSuffix()] = filter_var($_POST['record_id'], FILTER_SANITIZE_NUMBER_INT);
+        $data['slot_id' . $this->getSuffix()] = filter_var($_POST['record_id'], FILTER_SANITIZE_STRING);
         $data['private' . $this->getSuffix()] = filter_var($_POST['private'], FILTER_SANITIZE_NUMBER_INT);
         $data['participant_location' . $this->getSuffix()] = filter_var($_POST['type'], FILTER_SANITIZE_NUMBER_INT);
 
@@ -1163,6 +1161,12 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $this->setInstances();
         $this->setRecordId($record);
         $this->setMainSurveyId($instrument);
+
+        //this included for ajax loader
+        echo '<style>';
+        require __DIR__ . '/src/css/types.css';
+        echo '</style>';
+
         require __DIR__ . '/src/survey.php';
     }
 

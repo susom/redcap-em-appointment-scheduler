@@ -80,3 +80,5 @@ if (!$module->getMainSurveyId()) {
 <input type="hidden" name="triggered-instance" id="triggered-instance"
        value="<?php echo(isset($_GET['trigger']) ? filter_var($_GET['trigger'],
            FILTER_SANITIZE_STRING) : '') ?>">
+<input type="hidden" name="default-view" id="default-view"
+       value="<?php echo $module->getProjectSetting("default_view") ?>">

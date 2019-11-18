@@ -14,6 +14,8 @@ $(document).ready(function () {
             var key = jQuery("#slots-events-id").val();
             var surveyRecordId = jQuery("#survey-record-id").val();
             $elem.append('<div data-url="' + url + '" id="survey-controller" data-survey-record-id="' + surveyRecordId + '" data-key="' + key + '" class="survey-type btn btn-block btn-info">Schedule Appointment</div>')
+            //append this to show loader when ajax is fired
+            $elem.append('<div class="loader"><!-- Place at bottom of page --></div>')
         }
     }
 });
@@ -49,6 +51,9 @@ jQuery(document).on("click", ".survey-type", function () {
         },
         'error': function (request, error) {
             alert("Request: " + JSON.stringify(request));
+        },
+        'complete': function () {
+            loadDefaultView()
         }
     });
 });
@@ -88,3 +93,12 @@ function completeSurveyReservation(response) {
     jQuery("#survey-controller").removeClass("survey-type survey-calendar-view");
     jQuery("#survey-controller").addClass("manage");
 }
+
+$(document).on({
+    ajaxStart: function () {
+        $body.addClass("loading");
+    },
+    ajaxStop: function () {
+        $body.removeClass("loading");
+    }
+});

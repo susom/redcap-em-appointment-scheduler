@@ -6,6 +6,9 @@ const CAMPUS_AND_VIRTUAL = 0;
 const VIRTUAL_ONLY = 1;
 const CAMPUS_ONLY = 2;
 
+
+const LIST_VIEW = 1;
+const CALENDAR_VIEW = 2;
 /**
  * Show Form to complete for selected time
  */
@@ -44,6 +47,9 @@ jQuery(document).on('click', '.type', function (e) {
         },
         'error': function (request, error) {
             alert("Request: " + JSON.stringify(request));
+        },
+        'complete': function () {
+            loadDefaultView()
         }
     });
 });
@@ -425,7 +431,22 @@ $(document).ready(function () {
         var $elem = jQuery('a.type[data-name="' + instance + '"]');
         $elem.trigger('click');
     }
+
 });
+
+function loadDefaultView() {
+    var defaultView = parseInt(jQuery("#default-view").val());
+    if (defaultView == CALENDAR_VIEW) {
+        if (jQuery(".survey-calendar-view").length > 0) {
+            jQuery(".survey-calendar-view").trigger("click");
+        } else {
+            jQuery(".calendar-view").trigger("click");
+        }
+    }
+
+    //now after loading for first time clear the value so the user can switch between list and calendar.
+    jQuery("#default-view").val('')
+}
 
 //Calendar functions
 function popupCal(cal_id, width) {
