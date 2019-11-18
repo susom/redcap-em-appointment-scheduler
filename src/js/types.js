@@ -25,6 +25,7 @@ jQuery(document).on('click', '.type', function (e) {
      * @type {jQuery}
      */
     record.event_id = jQuery('#' + key + "-reservation-event-id").val();
+    console.log(url)
     jQuery.ajax({
         'url': url,
         'type': 'GET',

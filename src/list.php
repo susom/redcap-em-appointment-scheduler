@@ -89,7 +89,14 @@ if (empty($data)) {
                     }
                 } else {
 
-                    //todo figure out how to get user info whih NOAUTH and out of project context.
+                    $reservation = end($counter['userBookThisSlot']);
+                    $days[$day][$slot['record_id']]['admin' . $suffix] = '<div class="alert alert-primary" role="alert">
+                            ' . $reservation['name'] . '<button type="button"
+                                                                      data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-event-id="' . $reservationEventId . '"
+                                                                      class="cancel-appointment btn btn-block btn-danger">Cancel
+                            </button>
+                        </div>';
                 }
             }
 

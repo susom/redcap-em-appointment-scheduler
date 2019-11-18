@@ -552,7 +552,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     $start = date('Y-m-d');
                     $end = date('Y-m-d', strtotime('first day of next month'));
                 }
-                $filter = "[start] > '" . $start . "' AND [start] < '" . $end . "' AND " . "[slot_status] != '" . CANCELED . "'";
+
                 $param = array(
                     'project_id' => $this->getProjectId(),
                     'return_format' => 'array',
@@ -1281,6 +1281,8 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             if ($user['design'] === "1") {
                 return true;
             }
+        } elseif (defined('SUPER_USER') && SUPER_USER == "1") {
+            return true;
         }
 
         return false;

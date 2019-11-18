@@ -62,7 +62,7 @@ class Participant
 
     public static function canUserUpdateReservations($sunetId)
     {
-        if ((defined('USERID') && USERID == $sunetId) || $userid == $sunetId || AppointmentScheduler::isUserHasManagePermission()) {
+        if ((defined('USERID') && USERID == $sunetId) || AppointmentScheduler::isUserHasManagePermission()) {
             return true;
         }
         return false;

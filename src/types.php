@@ -81,7 +81,7 @@ require_once 'urls.php';
                                 data-toggle="collapse-<?php echo $slotsEventId ?>"
                                 data-target="#collapse-<?php echo $slotsEventId ?>" aria-expanded="true"
                                 aria-controls="collapse-<?php echo $slotsEventId ?>"
-                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() . '&NOAUTH' ?>"
+                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() . (!defined('USERID') ? '&NOAUTH' : '') ?>"
                                 data-key="<?php echo $slotsEventId ?>"
                                 data-default-view="<?php echo $instance['default_view'] ?>"
                                 data-name="<?php echo $title ?>">
