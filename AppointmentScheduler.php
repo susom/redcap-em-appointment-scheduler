@@ -7,7 +7,6 @@ use REDCap;
 include_once 'emLoggerTrait.php';
 include_once 'Participant.php';
 include_once 'CalendarEmail.php';
-include_once 'Survey.php';
 
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     // Required if your environment does not handle autoloading
