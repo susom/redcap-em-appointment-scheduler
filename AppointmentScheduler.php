@@ -1194,7 +1194,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     return $instance['reservation_event_id'];
                 }
             }
-            throw new \LogicException("No Event is assigned");
+            // throw new \LogicException("No Event is assigned");
         }
     }
 
