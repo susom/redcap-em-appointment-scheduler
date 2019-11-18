@@ -31,7 +31,8 @@
     "src/cancel",
     "src/reschedule",
     "src/participants_list",
-    "src/list"
+    "src/list",
+    "src/types"
   ],
   "links": {
     "project": [
