@@ -1274,7 +1274,9 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public static function isUserHasManagePermission()
     {
-        if (defined('PROJECT_ID')) {
+        if (defined('PROJECT_ID') AND (!defined('NOAUTH') || NOAUTH == false)) {
+
+            //this function return right for main user when hit it with survey respondent!!!!!
             $right = REDCap::getUserRights();
             $user = end($right);
             if ($user['design'] === "1") {
