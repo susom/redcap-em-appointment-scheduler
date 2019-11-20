@@ -69,7 +69,7 @@ if (!isset($module)) {
                         <input type="text" name="mobile" class="form-control" id="mobile"
                                value="<?php echo(isset($_GET[COMPLEMENTARY_MOBILE]) ? filter_var($_GET[COMPLEMENTARY_MOBILE],
                                    FILTER_SANITIZE_NUMBER_INT) : '') ?>"
-                               placeholder="Mobile/Phone Number" required>
+                               placeholder="Mobile/Phone Number">
                     </div>
                     <!--div class="form-check">
                         <input class="form-check-input" name="private" type="checkbox" value="1" id="private">

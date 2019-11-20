@@ -12,7 +12,7 @@ try {
     }
 
     $data = $module->sanitizeInput();
-    if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '' || $data['mobile' . $module->getSuffix()] == '') {
+    if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '') {
         throw new \LogicException('Data cant be missing');
     } else {
 
