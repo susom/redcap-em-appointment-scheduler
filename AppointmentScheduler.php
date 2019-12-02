@@ -519,7 +519,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $temp = array();
         $result = array();
         foreach ($records as $record) {
-            $date = date('Y-m-d', strtotime($record[$eventId]['start']));
+            $date = date('Y-m-d H:i:s', strtotime($record[$eventId]['start']));
             $temp[$date][] = $record;
         }
         ksort($temp);
