@@ -560,7 +560,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 $data = array();
                 $records = REDCap::getData($param);
                 foreach ($records as $record) {
-                    if (strtotime($record[$eventId][$variable]) > strtotime($start) && strtotime($record[$eventId][$variable]) < strtotime($end)) {
+                    if (strtotime($record[$eventId][$variable]) > strtotime($start) && strtotime($record[$eventId][$variable]) < strtotime($end) && $record[$eventId]['slot_status'] != CANCELED) {
                         $data[] = $record;
                     }
                 }
