@@ -361,6 +361,7 @@ jQuery(document).on('click', '.booked-slots', function (e) {
                 jQuery('#calendar-datatable').DataTable(
                     {
                         pageLength: 50,
+                        order: [[6, "asc"], [7, "asc"]],
                         columnDefs: [
                             {"type": "date", "targets": 3}
                         ]
