@@ -6,7 +6,9 @@ namespace Stanford\AppointmentScheduler;
 
 
 try {
-
+    /**
+     * if survey booking with NOAUTH ignore login validation.
+     */
     if (!defined('USERID') && !defined('NOAUTH')) {
         throw new \LogicException('Please login.');
     }
