@@ -7,7 +7,7 @@ namespace Stanford\AppointmentScheduler;
 
 try {
 
-    if (!defined('USERID')) {
+    if (!defined('USERID') && !defined('NOAUTH')) {
         throw new \LogicException('Please login.');
     }
 
