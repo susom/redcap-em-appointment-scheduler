@@ -43,7 +43,7 @@ jQuery(document).on("click", ".survey-type", function () {
             jQuery('.slots-container').html('');
         },
         'success': function (data) {
-            jQuery('#generic-modal').find('.modal-title').html('Book an Appointment');
+            jQuery('#generic-modal').find('.modal-title').html(jQuery("#survey-scheduler-header").val());
             jQuery('#generic-modal').find('.modal-body').html(data);
             $('#generic-modal').modal('show');
 
@@ -70,7 +70,7 @@ jQuery(document).on('click', '.survey-calendar-view', function () {
         'url': url,
         'type': 'GET',
         'success': function (data) {
-            jQuery('#generic-modal').find('.modal-title').html('Book an Appointment');
+            jQuery('#generic-modal').find('.modal-title').html(jQuery("#survey-scheduler-header").val());
             jQuery('#generic-modal').find('.modal-body').html(data);
             $('#generic-modal').modal('show');
             jQuery(".list-view").removeClass('list-view').addClass('survey-type');

@@ -105,6 +105,12 @@
           "type": "descriptive"
         },
         {
+          "key": "survey-scheduler-header",
+          "name": "<b>Header for Survey Scheduler",
+          "required": false,
+          "type": "test"
+        },
+        {
           "key": "instrument_id_for_complementary_appointment",
           "name": "<b>Select Survey Instrument</b></br>Select Survey Instrument to be followed by Option to Book follow up appointment.",
           "required": false,
