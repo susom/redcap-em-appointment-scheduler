@@ -104,12 +104,7 @@
           "name": "<h6 style='text-align:center;color:red'><b>Config for Scheduling Appointment after completing a survey</b></h6>",
           "type": "descriptive"
         },
-        {
-          "key": "survey-scheduler-header",
-          "name": "<b>Header for Survey Scheduler",
-          "required": false,
-          "type": "test"
-        },
+
         {
           "key": "instrument_id_for_complementary_appointment",
           "name": "<b>Select Survey Instrument</b></br>Select Survey Instrument to be followed by Option to Book follow up appointment.",
@@ -117,10 +112,26 @@
           "type": "form-list"
         },
         {
+          "key": "survey-scheduler-header",
+          "name": "<b>Header for Survey Scheduler",
+          "required": false,
+          "type": "text",
+          "branchingLogic": {
+            "field": "instrument_id_for_complementary_appointment",
+            "op": "<>",
+            "value": ""
+          }
+        },
+        {
           "key": "survey_record_id_field",
           "name": "<b>Please select survey instrument field that will be replaced with reservation button and will hold reservation ID after submitting the survey.</b>",
           "required": false,
-          "type": "field-list"
+          "type": "field-list",
+          "branchingLogic": {
+            "field": "instrument_id_for_complementary_appointment",
+            "op": "<>",
+            "value": ""
+          }
         },
         {
           "key": "title",
