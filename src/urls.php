@@ -83,7 +83,8 @@ if (!defined('USERID') || USERID == '[survey respondent]') {
 <input type="hidden" id="user-email" value="<?php echo $user_email ?>" class="hidden"/>
 <input type="hidden" id="complementary-suffix" value="<?php echo $module->getSuffix() ?>" class="hidden"/>
 <input type="hidden" id="survey-scheduler-header"
-       value="<?php echo end($module->getProjectSetting("survey-scheduler-header")) ?>" class="hidden"/>
+       value="<?php echo(isset($_GET['pid']) ? end($module->getProjectSetting("survey-scheduler-header")) : '') ?>"
+       class="hidden"/>
 
 <!-- trigger below instance after loading the page. -->
 <input type="hidden" name="triggered-instance" id="triggered-instance"
