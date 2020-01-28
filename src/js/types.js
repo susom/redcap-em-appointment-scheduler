@@ -204,6 +204,28 @@ jQuery(document).on('click', '.time-slot', function (e) {
         jQuery("#show-notes").hide();
     }
 
+    /**
+     * based on attending option change option to select from.
+     */
+    if (parseInt(jQuery(this).data('data-show-locations')) !== CAMPUS_AND_VIRTUAL) {
+        if (parseInt(jQuery(this).data('data-show-locations')) === CAMPUS_ONLY) {
+            jQuery("#type-online").hide()
+            jQuery("#type-online-text").hide()
+            jQuery("#type-campus").show()
+            jQuery("#type-campus-text").show()
+        } else {
+            jQuery("#type-campus").hide()
+            jQuery("#type-campus-text").hide()
+            jQuery("#type-online").show()
+            jQuery("#type-online-text").show()
+        }
+    } else {
+        jQuery("#type-online").show()
+        jQuery("#type-online-text").show()
+        jQuery("#type-campus").show()
+        jQuery("#type-campus-text").show()
+    }
+
     if (jQuery(this).data('show-locations') == VIRTUAL_ONLY) {
         jQuery("#type-campus").hide();
         jQuery("#type-campus-text").hide();
