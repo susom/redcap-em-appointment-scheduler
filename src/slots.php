@@ -40,7 +40,7 @@ if(isset($_GET['date'])){
                             data-show-attending-options="<?php echo $module->showAttendingOptions(); ?>"
                             data-show-attending-default="<?php echo $module->getDefaultAttendingOption(); ?>"
                             data-show-notes="<?php echo $module->showNotes(); ?>"
-                            data-show-locations="<?php echo(empty($slot['attending_options']) ? CAMPUS_AND_VIRTUAL : $record['attending_options']); ?>"
+                            data-show-locations="<?php echo(empty($slot['attending_options']) ? CAMPUS_AND_VIRTUAL : $slot['attending_options']); ?>"
                             data-start="<?php echo date('Hi', strtotime($slot['start'])) ?>"
                             data-end="<?php echo date('Hi', strtotime($slot['end'])) ?>"
                             data-modal-title="<?php echo date('h:i A',
