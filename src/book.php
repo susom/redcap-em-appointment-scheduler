@@ -39,7 +39,7 @@ try {
         $data[$second] = REDCAP_COMPLETE;
 
         $data['redcap_event_name'] = $module->getUniqueEventName($reservationEventId);
-        if (!isset($_POST['survey_record_id'])) {
+        if (!isset($_POST['survey_record_id']) || (isset($_POST['survey_record_id']) && $_POST['survey_record_id'] == "")) {
             $data[$module->getPrimaryRecordFieldName()] = $module->getNextRecordsId($reservationEventId,
                 $module->getProjectId());
         } else {
