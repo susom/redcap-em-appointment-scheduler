@@ -1157,16 +1157,22 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $response_id = null,
         $repeat_instance = 1
     ) {
-        $this->setInstances();
-        $this->setRecordId($record);
-        $this->setMainSurveyId($instrument);
 
-        //this included for ajax loader
-        echo '<style>';
-        require __DIR__ . '/src/css/types.css';
-        echo '</style>';
+        // check if the instrument is defined as survey instrument in EM
+        $surveyInstruments = end($this->getProjectSetting("instrument_id_for_complementary_appointment"));
+        if ($surveyInstruments == $instrument) {
+            $this->setInstances();
+            $this->setRecordId($record);
+            $this->setMainSurveyId($instrument);
 
-        require __DIR__ . '/src/survey.php';
+            //this included for ajax loader
+            echo '<style>';
+            require __DIR__ . '/src/css/types.css';
+            echo '</style>';
+
+            require __DIR__ . '/src/survey.php';
+        }
+
     }
 
     /**
