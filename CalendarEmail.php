@@ -408,11 +408,30 @@ class CalendarEmail extends Message
 
             $email->Subject = $this->getSubject();
             $email->AddAddress($this->getTo());
-
+            $email->SetFrom($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer());
             if (!$email->Send()) {
                 throw new \LogicException($email->ErrorInfo);
             }
         } catch (\LogicException $e) {
+            $e->getMessage();
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function send(){
+        try{
+            $email = new PHPMailer();
+            $email->Body = $this->getBody();
+            $email->AltBody = $this->getBody();
+
+            $email->Subject = $this->getSubject();
+            $email->AddAddress($this->getTo());
+            $email->SetFrom($this->getCalendarOrganizerEmail(), $this->getCalendarOrganizer());
+            if (!$email->Send()) {
+                throw new \LogicException($email->ErrorInfo);
+            }
+        }catch (\LogicException $e) {
             $e->getMessage();
         } catch (\Exception $e) {
             $e->getMessage();

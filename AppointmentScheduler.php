@@ -831,20 +831,22 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $participants = $this->participant->getSlotActualReservedSpots($slotId, $eventId, $this->getProjectId());
         foreach ($participants as $participant) {
             $result = end($participant);
+            $this->emailClient->setCalendarOrganizerEmail(($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL));
+            $this->emailClient->setCalendarOrganizer(($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME));
             $this->emailClient->setTo($result['email']);
             $this->emailClient->setFrom(($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME));
             $this->emailClient->setFromName($result['email']);
             $this->emailClient->setSubject($message['subject']);
             $this->emailClient->setBody($message['body']);
             $this->emailClient->send();
-            $this->forceCancellation($result['record_id'], $eventId);
+            $this->forceCancellation($result[$this->getPrimaryRecordFieldName()], $eventId);
         }
     }
 
     public function forceCancellation($recordId, $eventId)
     {
         $data['participant_status'] = CANCELED;
-        $data['record_id'] = $recordId;
+        $data[$this->getPrimaryRecordFieldName()] = $recordId;
         $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
         $response = \REDCap::saveData('json', json_encode(array($data)));
     }

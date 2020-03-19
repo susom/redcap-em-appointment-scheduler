@@ -30,7 +30,7 @@ try {
 
             $slot = AppointmentScheduler::getSlot($data[$primary], $eventId, $module->getProjectId(),
                 $module->getPrimaryRecordFieldName());
-            $message['subject'] = $message['body'] = 'Your ' . $module->getUniqueEventName($data['event_id']) . ' at' . date('m/d/Y',
+            $message['subject'] = $message['body'] = 'Your reservation at ' . date('m/d/Y',
                     strtotime($slot['start' . $suffix])) . ' at ' . date('H:i',
                     strtotime($slot['start' . $suffix])) . ' to ' . date('H:i',
                     strtotime($slot['end' . $suffix])) . ' has been canceled';
