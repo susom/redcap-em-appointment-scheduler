@@ -1,5 +1,5 @@
 {
-  "name" : "Appointment Scheduler",
+  "name": "COVID Appointment Scheduler",
   "namespace": "Stanford\\CovidAppointmentScheduler",
   "description": "Allow users to Schedule Office Hours or training sessions",
   "authors" : [
