@@ -1,6 +1,8 @@
 <?php
-namespace Stanford\AppointmentScheduler;
-/** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
+
+namespace Stanford\CovidAppointmentScheduler;
+
+/** @var \Stanford\CovidAppointmentScheduler\CovidAppointmentScheduler $module */
 
 if(isset($_GET['date'])){
     /*

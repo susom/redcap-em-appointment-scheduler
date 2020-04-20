@@ -1,6 +1,6 @@
 <?php
 
-namespace Stanford\AppointmentScheduler;
+namespace Stanford\CovidAppointmentScheduler;
 
 use REDCap;
 
@@ -82,15 +82,15 @@ define("DEFAULT_NAME", "REDCap Admin");
 define("LOCATION", "location");
 
 /**
- * Class AppointmentScheduler
- * @package Stanford\AppointmentScheduler
+ * Class CovidAppointmentScheduler
+ * @package Stanford\CovidAppointmentScheduler
  * @property \CalendarEmail $emailClient
  * @property Client $twilioClient
  * @property  array $instances
  * @property int $eventId
  * @property array $eventInstance
  * @property array $calendarParams
- * @property \Stanford\AppointmentScheduler\Participant $participant
+ * @property \Stanford\CovidAppointmentScheduler\Participant $participant
  * @property \Monolog\Logger $logger
  * @property string $suffix
  * @property int $mainSurveyId
@@ -98,7 +98,7 @@ define("LOCATION", "location");
  * @property int $recordId
  * @property \Project $project
  */
-class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
+class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
 
 
@@ -162,7 +162,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
 
     /**
-     * AppointmentScheduler constructor.
+     * CovidAppointmentScheduler constructor.
      */
     public function __construct()
     {
@@ -217,7 +217,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             /**
              * Initiate Email Participant
              */
-            $this->setParticipant(new  \Stanford\AppointmentScheduler\Participant());
+            $this->setParticipant(new  \Stanford\CovidAppointmentScheduler\Participant());
 
             /**
              * Only call this class when event is provided.
@@ -372,7 +372,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
 
     /**
-     * @return \Stanford\AppointmentScheduler\Participant
+     * @return \Stanford\CovidAppointmentScheduler\Participant
      */
     public function getParticipant()
     {
@@ -380,7 +380,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * @param \Stanford\AppointmentScheduler\Participant $participant
+     * @param \Stanford\CovidAppointmentScheduler\Participant $participant
      */
     public function setParticipant($participant)
     {

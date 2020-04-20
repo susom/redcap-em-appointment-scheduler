@@ -1,10 +1,10 @@
 <?php
 
-namespace Stanford\AppointmentScheduler;
+namespace Stanford\CovidAppointmentScheduler;
 
 use REDCap;
 
-/** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
+/** @var \Stanford\CovidAppointmentScheduler\CovidAppointmentScheduler $module */
 
 
 try {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Stanford\AppointmentScheduler;
+namespace Stanford\CovidAppointmentScheduler;
 
 use REDCap;
 
-/** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
+/** @var \Stanford\CovidAppointmentScheduler\CovidAppointmentScheduler $module */
 
 
 try {
@@ -28,7 +28,7 @@ try {
             throw new \LogicException(implode("\n", $response['errors']));
         } else {
 
-            $slot = AppointmentScheduler::getSlot($data[$primary], $eventId, $module->getProjectId(),
+            $slot = CovidAppointmentScheduler::getSlot($data[$primary], $eventId, $module->getProjectId(),
                 $module->getPrimaryRecordFieldName());
             $message['subject'] = $message['body'] = 'Your reservation at ' . date('m/d/Y',
                     strtotime($slot['start' . $suffix])) . ' at ' . date('H:i',

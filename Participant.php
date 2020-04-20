@@ -1,6 +1,6 @@
 <?php
 
-namespace Stanford\AppointmentScheduler;
+namespace Stanford\CovidAppointmentScheduler;
 
 
 class Participant
@@ -62,7 +62,7 @@ class Participant
 
     public static function canUserUpdateReservations($sunetId)
     {
-        if ((defined('USERID') && USERID == $sunetId) || AppointmentScheduler::isUserHasManagePermission()) {
+        if ((defined('USERID') && USERID == $sunetId) || CovidAppointmentScheduler::isUserHasManagePermission()) {
             return true;
         }
         return false;
@@ -171,7 +171,7 @@ class Participant
      */
     public function isThereAvailableSpotsInAppointment($event_id, $record_id, $projectId, $primary)
     {
-        $slot = AppointmentScheduler::getSlot($record_id, $event_id, $projectId, $primary);
+        $slot = CovidAppointmentScheduler::getSlot($record_id, $event_id, $projectId, $primary);
         if ($slot['number_of_participants'] > $this->getSlotActualCountReservedSpots($record_id, $event_id, '',
                 $projectId)) {
             return true;

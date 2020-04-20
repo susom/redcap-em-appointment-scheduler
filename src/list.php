@@ -1,8 +1,8 @@
 <?php
 
-namespace Stanford\AppointmentScheduler;
+namespace Stanford\CovidAppointmentScheduler;
 
-/** @var \Stanford\AppointmentScheduler\AppointmentScheduler $module */
+/** @var \Stanford\CovidAppointmentScheduler\CovidAppointmentScheduler $module */
 
 $suffix = $module->getSuffix();
 $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
