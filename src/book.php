@@ -47,7 +47,14 @@ try {
             $module->getProjectId(), $module->getPrimaryRecordFieldName());
 
         $date = date('Y-m-d', strtotime(preg_replace("([^0-9/])", "", $_POST['calendarDate'])));
-        $module->doesUserHaveSameDateReservation($date, USERID, $module->getSuffix(), $data['event_id'],
+
+        if (defined('USERID')) {
+            $userid = USERID;
+        } else {
+            $userid = $data['employee_id' . $module->getSuffix()];
+        }
+
+        $module->doesUserHaveSameDateReservation($date, $userid, $module->getSuffix(), $data['event_id'],
             $reservationEventId);
         /**
          * let mark it as complete so we can send the survey if needed.

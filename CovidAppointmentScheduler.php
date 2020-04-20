@@ -567,7 +567,7 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
                         $data[] = $record;
                     }
                 }
-                return $data;
+                return $this->sortRecordsByDate($data, $eventId);
             } else {
                 throw new \LogicException('Not event id passed, Aborting!');
             }
