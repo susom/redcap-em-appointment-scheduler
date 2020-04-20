@@ -58,8 +58,8 @@ if (empty($data)) {
         }
 
         $days[$day][$slot['record_id']]['date' . $suffix] = date('Y-m-d', strtotime($slot['start' . $suffix]));
-        $days[$day][$slot['record_id']]['start' . $suffix] = date('H:i', strtotime($slot['start' . $suffix]));
-        $days[$day][$slot['record_id']]['end' . $suffix] = date('H:i', strtotime($slot['end' . $suffix]));
+        $days[$day][$slot['record_id']]['start' . $suffix] = date('h:i A', strtotime($slot['start' . $suffix]));
+        $days[$day][$slot['record_id']]['end' . $suffix] = date('h:i A', strtotime($slot['end' . $suffix]));
         $days[$day][$slot['record_id']]['location' . $suffix] = $module->getLocationLabel($slot['location' . $suffix]);
         $days[$day][$slot['record_id']]['attending_options' . $suffix] = $slot['attending_options' . $suffix];
         $days[$day][$slot['record_id']]['number_of_participants' . $suffix] = $slot['number_of_participants' . $suffix];

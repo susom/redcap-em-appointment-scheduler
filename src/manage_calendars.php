@@ -73,9 +73,9 @@ try {
                                     data-location="<?php echo $slot['location' . $suffix] ?>"
                                     data-date="<?php echo date('m/d/Y',
                                         strtotime($slot['start' . $suffix])) ?>"
-                                    data-start="<?php echo date('H:i',
+                                    data-start="<?php echo date('h:i A',
                                         strtotime($slot['start' . $suffix])) ?>"
-                                    data-end="<?php echo date('H:i', strtotime($slot['end' . $suffix])) ?>"
+                                    data-end="<?php echo date('h:i A', strtotime($slot['end' . $suffix])) ?>"
                                     data-instructor="<?php echo $slot['instructor'] ?>"
                                     class="reschedule-slot"><i class="fas fa-edit"></i>
                             </button>
@@ -83,8 +83,8 @@ try {
                                     data-record-id="<?php echo $slot[$primary] ?>"
                                     data-event-id="<?php echo $slot['event_id'] ?>"
                                     data-modal-title="<?php echo date('m/d/Y',
-                                        strtotime($slot['start' . $suffix])) ?> <?php echo date('H:i',
-                                        strtotime($slot['start' . $suffix])) ?> – <?php echo date('H:i',
+                                        strtotime($slot['start' . $suffix])) ?> <?php echo date('h:i A',
+                                        strtotime($slot['start' . $suffix])) ?> – <?php echo date('h:i A',
                                         strtotime($slot['end' . $suffix])) ?>"
                                     class="participants-list"><i class="fas fa-list"></i>
                             </button>
