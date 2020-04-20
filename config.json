@@ -1,7 +1,7 @@
 {
   "name": "COVID Appointment Scheduler",
   "namespace": "Stanford\\CovidAppointmentScheduler",
-  "description": "Allow users to Schedule Office Hours or training sessions",
+  "description": "Allow users to Schedule COVID-19 testing.",
   "authors" : [
     {
       "name" : "Ihab Zeedia",
