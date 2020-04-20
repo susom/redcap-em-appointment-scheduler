@@ -84,7 +84,7 @@ define("LOCATION", "location");
 /**
  * Class CovidAppointmentScheduler
  * @package Stanford\CovidAppointmentScheduler
- * @property \CalendarEmail $emailClient
+ * @property \CovidCalendarEmail $emailClient
  * @property Client $twilioClient
  * @property  array $instances
  * @property int $eventId
@@ -105,7 +105,7 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     use emLoggerTrait;
 
     /**
-     * @var \CalendarEmail|null
+     * @var \CovidCalendarEmail|null
      */
     private $emailClient = null;
 
@@ -355,7 +355,7 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * @return \CalendarEmail
+     * @return \CovidCalendarEmail
      */
     public function getEmailClient()
     {
@@ -363,11 +363,11 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
-     * @param \CalendarEmail $emailClient
+     * @param \CovidCalendarEmail $emailClient
      */
     public function setEmailClient()
     {
-        $this->emailClient = new \CalendarEmail;
+        $this->emailClient = new \CovidCalendarEmail;
     }
 
 

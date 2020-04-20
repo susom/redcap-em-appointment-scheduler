@@ -22,7 +22,7 @@ require 'vendor/autoload.php';
  * @property PHPMailer $mail
  *
  */
-class CalendarEmail extends Message
+class CovidCalendarEmail extends Message
 {
 
     private $headers;
