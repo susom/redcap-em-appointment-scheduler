@@ -1331,7 +1331,11 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     public function getDefinedLocations()
     {
         try {
-            $project = new \Project($this->getProjectId());
+
+            $projectId = ($_GET['projectid'] != null ? filter_var($_GET['projectid'],
+                FILTER_SANITIZE_NUMBER_INT) : filter_var($_GET['pid'], FILTER_SANITIZE_NUMBER_INT));
+
+            $project = new \Project($projectId);
             $locations = $project->metadata[LOCATION]['element_enum'];
             return parseEnum($locations);
         } catch (\Exception $e) {

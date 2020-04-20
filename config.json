@@ -37,9 +37,9 @@
   "links": {
     "project": [
       {
-        "name": "Appointment Scheduler",
+        "name": "Appointment Scheduler NOAUTH link",
         "icon": "brick",
-        "url": "src/types.php",
+        "url": "src/shortcut.php",
         "show-header-and-footer": false
       }
     ]
