@@ -8,9 +8,9 @@ include_once 'emLoggerTrait.php';
 include_once 'Participant.php';
 include_once 'CalendarEmail.php';
 
-if (file_exists(__DIR__ . '../appointment_scheduler_v9.9.9/vendor/autoload.php')) {
+if (file_exists(__DIR__ . '../vendor/autoload.php')) {
     // Required if your environment does not handle autoloading
-    require __DIR__ . '../appointment_scheduler_v9.9.9/';
+    require __DIR__ . '/vendor/autoload.php';
 }
 
 use Twilio\Rest\Client;
