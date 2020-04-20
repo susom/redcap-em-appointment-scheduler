@@ -6,6 +6,7 @@ namespace Stanford\CovidAppointmentScheduler;
 class Participant
 {
 
+    private $counter;
     /**
      * @param string $email
      * @param string $date
@@ -76,14 +77,20 @@ class Participant
     {
         try {
             //this flag will determine if logged in user booked this slot
-            $userBookThisSlot = false;
-            $counter = 0;
-            $param = array(
-                'project_id' => $projectId,
-                'return_format' => 'array',
-                'events' => $eventId
-            );
-            $records = \REDCap::getData($param);
+            if (!$this->counter) {
+                $userBookThisSlot = false;
+                $counter = 0;
+                $param = array(
+                    'project_id' => $projectId,
+                    'return_format' => 'array',
+                    'events' => $eventId
+                );
+                $records = \REDCap::getData($param);
+
+            } else {
+                $records = $this->counter;
+            }
+
             foreach ($records as $id => $record) {
                 if ($record[$eventId]["slot_id$suffix"] == $slotId && $record[$eventId]["participant_status$suffix"] == RESERVED) {
                     if (self::canUserUpdateReservations($record[$eventId]["employee_id"])) {
