@@ -38,6 +38,7 @@ if(isset($_GET['date'])){
                             data-notes-label="<?php echo $module->getNoteLabel(); ?>"
                             data-show-projects="<?php echo $module->showProjectIds(); ?>"
                             data-show-attending-options="<?php echo $module->showAttendingOptions(); ?>"
+                            data-show-location-options="<?php echo $module->showLocationOptions(); ?>"
                             data-show-attending-default="<?php echo $module->getDefaultAttendingOption(); ?>"
                             data-show-notes="<?php echo $module->showNotes(); ?>"
                             data-show-locations="<?php echo(empty($slot['attending_options']) ? CAMPUS_AND_VIRTUAL : $slot['attending_options']); ?>"

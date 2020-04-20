@@ -48,7 +48,7 @@ try {
                         }
                         ?>
                         <tr>
-                            <td><?php echo $record['sunet_id'] ?></td>
+                            <td><?php echo $record['employee_id'] ?></td>
                             <td><?php echo $record['name'] ?></td>
                             <td><?php echo $record['email'] ?></td>
                             <td><?php echo $record['mobile'] ?></td>

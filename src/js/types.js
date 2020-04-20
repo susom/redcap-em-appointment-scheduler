@@ -187,6 +187,16 @@ jQuery(document).on('click', '.time-slot', function (e) {
         }
     }
 
+
+    /**
+     * do we need to location options section based on config.json
+     */
+    if (jQuery(this).data('show-location-options') == "1") {
+        jQuery("#show-locations").show();
+    } else {
+        jQuery("#show-locations").hide();
+    }
+
     /**
      * do we need to show notes and projects section based on config.json
      */
@@ -275,6 +285,9 @@ jQuery(document).on('click', '#submit-booking-form', function (e) {
     record.email = jQuery("#email").val();
     record.name = jQuery("#name").val();
     record.mobile = jQuery("#mobile").val();
+    record.employee_id = jQuery("#employee_id").val();
+    record.department = jQuery("#department").val();
+    record.supervisor_name = jQuery("#supervisor_name").val();
     record.notes = jQuery("#notes").val();
     record.private = jQuery("#private").val();
     record.type = jQuery("input[name='type']:checked").val();

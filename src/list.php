@@ -60,7 +60,7 @@ if (empty($data)) {
         $days[$day][$slot['record_id']]['date' . $suffix] = date('Y-m-d', strtotime($slot['start' . $suffix]));
         $days[$day][$slot['record_id']]['start' . $suffix] = date('H:i', strtotime($slot['start' . $suffix]));
         $days[$day][$slot['record_id']]['end' . $suffix] = date('H:i', strtotime($slot['end' . $suffix]));
-        $days[$day][$slot['record_id']]['location' . $suffix] = $slot['location' . $suffix];
+        $days[$day][$slot['record_id']]['location' . $suffix] = $module->getLocationLabel($slot['location' . $suffix]);
         $days[$day][$slot['record_id']]['attending_options' . $suffix] = $slot['attending_options' . $suffix];
         $days[$day][$slot['record_id']]['number_of_participants' . $suffix] = $slot['number_of_participants' . $suffix];
 
@@ -164,6 +164,7 @@ if (empty($data)) {
                                         data-notes-label="<?php echo $module->getNoteLabel(); ?>"
                                         data-show-projects="<?php echo $module->showProjectIds(); ?>"
                                         data-show-attending-options="<?php echo $module->showAttendingOptions(); ?>"
+                                        data-show-location-options="<?php echo $module->showLocationOptions(); ?>"
                                         data-show-attending-default="<?php echo $module->getDefaultAttendingOption(); ?>"
                                         data-show-locations="<?php echo(empty($record['attending_options' . $suffix]) ? CAMPUS_AND_VIRTUAL : $record['attending_options' . $suffix]); ?>"
                                         data-show-notes="<?php echo $module->showNotes(); ?>"

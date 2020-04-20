@@ -86,7 +86,7 @@ class Participant
             $records = \REDCap::getData($param);
             foreach ($records as $id => $record) {
                 if ($record[$eventId]["slot_id$suffix"] == $slotId && $record[$eventId]["participant_status$suffix"] == RESERVED) {
-                    if (self::canUserUpdateReservations($record[$eventId]["sunet_id"])) {
+                    if (self::canUserUpdateReservations($record[$eventId]["employee_id"])) {
                         //capture record id for cancellation
                         $record[$eventId]['record_id'] = $id;
                         $userBookThisSlot[] = $record[$eventId];
@@ -192,9 +192,9 @@ class Participant
     {
         try {
             if (is_null($status)) {
-                $filter = "[sunet_id$suffix] = '" . $sunetID . "'";
+                $filter = "[employee_id$suffix] = '" . $sunetID . "'";
             } else {
-                $filter = "[sunet_id$suffix] = '" . $sunetID . "' AND [participant_status$suffix] = $status";
+                $filter = "[employee_id$suffix] = '" . $sunetID . "' AND [participant_status$suffix] = $status";
             }
             $param = array(
                 'project_id' => $projectId,

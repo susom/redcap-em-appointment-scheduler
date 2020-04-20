@@ -100,6 +100,12 @@
           "type": "event-list"
         },
         {
+          "key": "participant_identifier",
+          "name": "<b>Please select the field where the user identifier will be saved.(not implemented yet)</b>",
+          "required": false,
+          "type": "field-list"
+        },
+        {
           "key": "survey_section",
           "name": "<h6 style='text-align:center;color:red'><b>Config for Scheduling Appointment after completing a survey</b></h6>",
           "type": "descriptive"
@@ -150,6 +156,22 @@
           "name": "<b>Integrate REDCap calendar</b> Show REDCap calendar records in Appointment scheduler. ",
           "required": false,
           "type": "checkbox"
+        },
+        {
+          "key": "show_location_options",
+          "name": "<b>Display Location Options</b>",
+          "required": false,
+          "type": "dropdown",
+          "choices": [
+            {
+              "name": "Yes",
+              "value": "1"
+            },
+            {
+              "name": "No",
+              "value": "0"
+            }
+          ]
         },
         {
           "key": "show_attending_options",

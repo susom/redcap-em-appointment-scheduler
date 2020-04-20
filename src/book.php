@@ -14,13 +14,15 @@ try {
     }
 
     $data = $module->sanitizeInput();
-    if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '') {
+    if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '' || $_POST['employee_id'] == '') {
         throw new \LogicException('Data cant be missing');
     } else {
 
 
         $data['participant_status' . $module->getSuffix()] = RESERVED;
-        $data['sunet_id' . $module->getSuffix()] = USERID;
+        $data['employee_id' . $module->getSuffix()] = filter_var($_POST['employee_id'], FILTER_SANITIZE_STRING);
+        $data['department' . $module->getSuffix()] = filter_var($_POST['department'], FILTER_SANITIZE_STRING);
+        $data['supervisor_name' . $module->getSuffix()] = filter_var($_POST['supervisor_name'], FILTER_SANITIZE_STRING);
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
         $slot = $module::getSlot(filter_var($_POST['record_id'], FILTER_SANITIZE_STRING), $data['event_id'],
             $module->getProjectId(), $module->getPrimaryRecordFieldName());
@@ -37,6 +39,9 @@ try {
         $second = array_slice($completed, 1, 1);  // array("status" => 1)
 
         $data[$second] = REDCAP_COMPLETE;
+
+        // the location is defined in the slot.
+        $data['participant_location' . $module->getSuffix()] = $slot['location'];
 
         $data['redcap_event_name'] = $module->getUniqueEventName($reservationEventId);
         if (!isset($_POST['survey_record_id']) || (isset($_POST['survey_record_id']) && $_POST['survey_record_id'] == "")) {

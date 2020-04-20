@@ -49,6 +49,18 @@ if (!isset($module)) {
                 <form id="booking-form">
                     <input type="hidden" name="record-id" id="record-id"/>
                     <div class="form-group">
+                        <label for="employee_id">Employee ID</label>
+                        <input type="text" name="employee_id" class="form-control" id="employee_id"
+                               placeholder="Enter Your Employee ID"
+                               value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" name="department" class="form-control" id="department"
+                               placeholder="Enter Your Department"
+                               value="" required>
+                    </div>
+                    <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
                                value="<?php echo(isset($_GET[COMPLEMENTARY_NAME]) ? filter_var($_GET[COMPLEMENTARY_NAME],
@@ -71,12 +83,33 @@ if (!isset($module)) {
                                    FILTER_SANITIZE_NUMBER_INT) : '') ?>"
                                placeholder="Mobile/Phone Number">
                     </div>
+                    <div class="form-group">
+                        <label for="supervisor_name">Supervisor Name</label>
+                        <input type="text" name="supervisor_name" class="form-control" id="supervisor_name"
+                               placeholder="Enter Your Supervisor Name"
+                               value="" required>
+                    </div>
                     <!--div class="form-check">
                         <input class="form-check-input" name="private" type="checkbox" value="1" id="private">
                         <label class="form-check-label" for="private">
                             Private (wont show up in calendar for other users)
                         </label>
                     </div-->
+                    <!--                    <div class="form-group" id="show-locations">-->
+                    <!--                        <label for="location_id">Locations</label>-->
+                    <!--                        <select name="location_id" id="location_id" class="form-control">-->
+                    <!--                            <option value="" selected>No Locations Available</option>-->
+                    <!--                            --><?php
+                    //                            $locations = $module->getDefinedLocations();
+                    //                            foreach ($locations as $key => $location){
+                    //                                ?>
+                    <!--                                <option value="--><?php //echo $key ?><!--">-->
+                    <?php //echo $location ?><!--</option>-->
+                    <!--                                --><?php
+                    //                            }
+                    //                            ?>
+                    <!--                        </select>-->
+                    <!--                    </div>-->
                     <div class="form-group" id="attending-options">
                         <label for="private">How do you plan to attend the appointment?</label>
                         <div class="form-check">

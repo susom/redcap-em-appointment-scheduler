@@ -78,6 +78,9 @@ define("RESERVATION_SLOT_FIELD", "slot_id");
 define("DEFAULT_EMAIL", "redcap-scheduler@stanford.edu");
 define("DEFAULT_NAME", "REDCap Admin");
 
+
+define("LOCATION", "location");
+
 /**
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
@@ -1108,6 +1111,16 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
     /**
+     * @return boolean
+     */
+    public function showLocationOptions()
+    {
+        $instance = $this->identifyCurrentInstance($this->getEventId());
+        return $instance['show_location_options'];
+    }
+
+
+    /**
      * @return int
      */
     public function getDefaultAttendingOption()
@@ -1313,6 +1326,23 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function getDefinedLocations()
+    {
+        try {
+            $project = new \Project($this->getProjectId());
+            $locations = $project->metadata[LOCATION]['element_enum'];
+            return parseEnum($locations);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function getLocationLabel($id)
+    {
+        $locations = $this->getDefinedLocations();
+        return $locations[$id];
     }
 
 
