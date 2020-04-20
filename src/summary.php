@@ -39,8 +39,8 @@ foreach ($data as $slot) {
          * no need to show more than three available slots
          */
         if ($days[$day]['available'] <= 3) {
-            $days[$day]['availableText'] .= 'REDCap Appt ' . date('H:i',
-                    strtotime($slot['start'])) . ' - ' . date('H:i', strtotime($slot['end'])) . ' ';
+            $days[$day]['availableText'] .= 'REDCap Appt ' . date('H:i A',
+                    strtotime($slot['start'])) . ' - ' . date('H:i A', strtotime($slot['end'])) . ' ';
         }
     } else {
         $days[$day]['booked']++;

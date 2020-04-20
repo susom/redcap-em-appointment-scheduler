@@ -567,7 +567,7 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
                         $data[] = $record;
                     }
                 }
-                return $this->sortRecordsByDate($data, $eventId);
+                return $data;
             } else {
                 throw new \LogicException('Not event id passed, Aborting!');
             }
@@ -666,16 +666,16 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $this->calendarParams['calendarStartTime'] = preg_replace("([^0-9/])", "", $_POST['calendarStartTime']);
         $this->calendarParams['calendarEndTime'] = preg_replace("([^0-9/])", "", $_POST['calendarEndTime']);
         $this->calendarParams['calendarParticipants'] = array($user['name'] => $user['email']);
-        $this->calendarParams['calendarSubject'] = '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
-                strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
-                strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
+        $this->calendarParams['calendarSubject'] = '--CONFIRMATION-- Your appointment is scheduled at ' . date('m/d/Y',
+                strtotime($this->calendarParams['calendarDate'])) . ' between ' . date('h:i A',
+                strtotime($this->calendarParams['calendarStartTime'])) . ' and ' . date('h:i A',
                 strtotime($this->calendarParams['calendarEndTime']));
         $this->sendEmail($user['email'],
             ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL),
             ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME),
-            '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
-                strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
-                strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
+            '--CONFIRMATION-- Your appointment is scheduled at ' . date('m/d/Y',
+                strtotime($this->calendarParams['calendarDate'])) . ' between ' . date('h:i A',
+                strtotime($this->calendarParams['calendarStartTime'])) . ' and ' . date('h:i A',
                 strtotime($this->calendarParams['calendarEndTime'])),
             $instance['calendar_body'],
             true
@@ -686,8 +686,8 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL),
                 ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME),
                 '--CONFIRMATION-- ' . $user['email'] . ' scheduled an appointment at ' . date('m/d/Y',
-                    strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
-                    strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
+                    strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i A',
+                    strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i A',
                     strtotime($this->calendarParams['calendarEndTime'])),
                 $instance['calendar_body'],
                 true

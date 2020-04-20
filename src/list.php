@@ -142,18 +142,18 @@ if (empty($data)) {
         $dayName = array_pop($day);
         ?>
         <div class="border row ">
-            <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
-                        strtotime($dayName['date' . $suffix])) . '.)' ?></div>
-            <div class=" col-lg-9">
+            <div class=" col-lg-12">
                 <?php
                 foreach ($days[$key] as $record_id => $record) {
                     ?>
                     <div class="row border">
-                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location' . $suffix] ?></div>
-                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo date('h:i A',
+                        <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
+                                    strtotime($dayName['date' . $suffix])) . '.)' ?></div>
+                        <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo $record['location' . $suffix] ?></div>
+                        <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo date('h:i A',
                                 strtotime($record['start' . $suffix])) ?> – <?php echo date('h:i A',
                                 strtotime($record['end' . $suffix])) ?></div>
-                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php
+                        <div class="p-3 mb-2 col-lg-3 text-dark"><?php
                             if ($record['booked' . $suffix]) {
                                 echo $record['notes' . $suffix];
                             } else {

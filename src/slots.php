@@ -48,7 +48,7 @@ if(isset($_GET['date'])){
                             data-end="<?php echo date('Hi', strtotime($slot['end'])) ?>"
                             data-modal-title="<?php echo date('h:i A',
                                 strtotime($slot['start'])) ?> – <?php echo date('h:i A', strtotime($slot['end'])) ?>"
-                            class="time-slot btn btn-block <?php echo $slot['booked'] ? 'disabled btn-secondary' : 'btn-success' ?>"><?php echo $typeText . '<br>' . date('h:i A',
+                            class="time-slot btn btn-block <?php echo $slot['booked'] ? 'disabled btn-secondary' : 'btn-success' ?>"><?php echo $module->getLocationLabel($slot['location']) . '(Slots left: ' . (int)($slot['number_of_participants'] - $counter['counter']) . ')<br>' . date('h:i A',
                                 strtotime($slot['start'])) ?> – <?php echo date('h:i A',
                             strtotime($slot['end'])) ?></button>
                     <?php

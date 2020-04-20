@@ -49,19 +49,7 @@ if (!isset($module)) {
                 <form id="booking-form">
                     <input type="hidden" name="record-id" id="record-id"/>
                     <div class="form-group">
-                        <label for="employee_id">Employee ID</label>
-                        <input type="text" name="employee_id" class="form-control" id="employee_id"
-                               placeholder="Enter Your Employee ID"
-                               value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="department">Department</label>
-                        <input type="text" name="department" class="form-control" id="department"
-                               placeholder="Enter Your Department"
-                               value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Name</label>
+                        <label for="name">Full Name</label>
                         <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
                                value="<?php echo(isset($_GET[COMPLEMENTARY_NAME]) ? filter_var($_GET[COMPLEMENTARY_NAME],
                                    FILTER_SANITIZE_STRING) : '') ?>" required>
@@ -76,6 +64,19 @@ if (!isset($module)) {
                             else.
                         </small>
                     </div>
+                    <div class="form-group">
+                        <label for="employee_id">Employee ID</label>
+                        <input type="text" name="employee_id" class="form-control" id="employee_id"
+                               placeholder="Enter Your Employee ID"
+                               value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" name="department" class="form-control" id="department"
+                               placeholder="Enter Your Department"
+                               value="" required>
+                    </div>
+
                     <div class="form-group">
                         <label for="mobile">Mobile</label>
                         <input type="text" name="mobile" class="form-control" id="mobile"

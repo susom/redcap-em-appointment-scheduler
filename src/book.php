@@ -15,7 +15,26 @@ try {
 
     $data = $module->sanitizeInput();
     if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '' || $_POST['employee_id'] == '') {
-        throw new \LogicException('Data cant be missing');
+        $error = '';
+        if ($_POST['employee_id'] == '') {
+            $error = 'Employee ID is missing';
+        }
+        if ($data['name' . $module->getSuffix()] == '') {
+            if ($error != '') {
+                $error = ', Full Name is missing';
+            } else {
+                $error = 'Full Name is missing';
+            }
+
+        }
+        if ($data['email' . $module->getSuffix()] == '') {
+            if ($error != '') {
+                $error = ', Email Name is missing';
+            } else {
+                $error = 'Email Name is missing';
+            }
+        }
+        throw new \LogicException($error);
     } else {
 
 

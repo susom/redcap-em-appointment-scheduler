@@ -20,12 +20,18 @@ require_once 'urls.php';
 <link rel="stylesheet" href="<?php echo $module->getUrl('src/css/types.css') ?>">
     <div class="container">
         <nav class="navbar navbar-expand-sm bg-light navbar-light">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Logged in
-                        as: <?php echo(defined('USERID') ? USERID : ' NOT LOGGED IN') ?></a>
-                </li>
-            </ul>
+            <?php
+            if (defined('USERID')) {
+                ?>
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Logged in
+                            as: <?php echo(defined('USERID') ? USERID : ' NOT LOGGED IN') ?></a>
+                    </li>
+                </ul>
+                <?php
+            }
+            ?>
             <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
                 <?php
                 if (defined('USERID')) {
