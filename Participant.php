@@ -86,7 +86,7 @@ class Participant
                     'events' => $eventId
                 );
                 $records = \REDCap::getData($param);
-
+                $this->counter = $records;
             } else {
                 $records = $this->counter;
             }

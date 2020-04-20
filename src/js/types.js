@@ -36,14 +36,20 @@ jQuery(document).on('click', '.type', function (e) {
             jQuery('.slots-container').html('');
         },
         'success': function (data) {
-            if (!jQuery("#" + key + "-calendar").is(":visible")) {
-                jQuery(".collapse").removeClass('show');
-                jQuery("#" + key + "-calendar").html(data).collapse();
-                jQuery("#collapse-" + key).addClass('show');
-                jQuery("#" + key + "-calendar").addClass('show');
-            } else {
-                jQuery("#" + key + "-calendar").html(data);
-            }
+            jQuery("#" + key + "-calendar-view").hide();
+            jQuery("#" + key + "-list-view").show();
+            jQuery("#" + key + "-calendar").collapse();
+            $('#list-result').DataTable({
+                dom: 'Bfrtip',
+                data: data.data,
+                pageLength: 50,
+                "bDestroy": true,
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+            jQuery("#collapse-" + key).addClass('show');
+            jQuery("#" + key + "-calendar").addClass('show');
 
             currentView = $elem;
         },
@@ -70,7 +76,9 @@ jQuery(document).on('click', '.calendar-view', function (e) {
         'url': url,
         'type': 'GET',
         'success': function (data) {
-            jQuery("#" + key + "-calendar").html(data);
+            jQuery("#" + key + "-list-view").hide();
+            jQuery("#" + key + "-calendar-view").show();
+            jQuery("#" + key + "-calendar-view").html(data);
             currentView = $(this);
             setTimeout(function () {
                 $("#event-id").val(key)

@@ -9,6 +9,7 @@ use REDCap;
 
 $url = $module->getUrl('src/list.php', false, true, true);
 $instances = $module->getInstances();
+$calendar = $module->getUrl('src/calendar.php', true, true);
 ?>
 
 
@@ -99,6 +100,32 @@ require_once 'urls.php';
                 <div id="collapse-<?php echo $slotsEventId ?>" class="collapse" aria-labelledby="headingOne"
                      data-parent="#accordionExample">
                     <div class="card-body" id="<?php echo $slotsEventId ?>-calendar">
+                        <div id="<?php echo $slotsEventId ?>-list-view">
+                            <div class="row">
+                                <div class="col-12 text-right">
+                                    <a class="btn btn-danger calendar-view" data-key="<?php echo $slotsEventId ?>"
+                                       href="javascript:;"
+                                       data-url="<?php echo $calendar . '&event_id=' . $slotsEventId ?>" role="button">Calendar
+                                        View</a>
+                                </div>
+                            </div>
+                            <hr>
+                            <table id="list-result" class="display table table-striped table-bordered"
+                                   cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                    <th>Time(PDT)</th>
+                                    <th>Available Slots</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div id="<?php echo $slotsEventId ?>-calendar-view">
+
+                        </div>
                     </div>
                 </div>
             </div>
