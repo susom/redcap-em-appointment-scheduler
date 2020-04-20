@@ -7,6 +7,7 @@ namespace Stanford\CovidAppointmentScheduler;
 use REDCap;
 
 
-$url = $module->getUrl('src/type.php', true, true, true);
+$url = $module->getUrl('src/types.php', true, true, true);
+$url = str_replace('pid', 'projectid', $url);
 ?>
 <a href="<?php echo $url ?>">Appointment Scheuler NOAUTH Page</a>
