@@ -20,6 +20,14 @@ if (!empty($data)) {
     foreach ($data as $record_id => $slot) {
         $slot = array_pop($slot);
 
+        $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
+            $reservationEventId, $suffix, $module->getProjectId());
+
+        $available = (int)($slot['number_of_participants' . $suffix] - $counter['counter']);;
+
+        if ($available == 0) {
+            continue;
+        }
         /**
          * group by day
          */
@@ -31,14 +39,13 @@ if (!empty($data)) {
         if (!isset($slot['record_id'])) {
             $slot['record_id'] = array_pop(array_reverse($slot));
         }
-        $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
-            $reservationEventId, $suffix, $module->getProjectId());
+
         $row = array();
         $row[] = date('Y-m-d', strtotime($slot['start' . $suffix]));
         $row[] = $module->getLocationLabel($slot['location' . $suffix]);;
         $row[] = date('h:i A', strtotime($slot['start' . $suffix])) . ' - ' . date('h:i A',
                 strtotime($slot['end' . $suffix]));;
-        $row[] = (int)($slot['number_of_participants' . $suffix] - $counter['counter']);;
+        $row[] = $available;;
         $row[] = '<button type="button"
                                         data-record-id="' . $record_id . '"
                                         data-event-id="' . $eventId . '"
