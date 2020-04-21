@@ -72,11 +72,11 @@ if (!empty($data)) {
         }
 
         $row = array();
-        $row[] = date('Y-m-d', strtotime($slot['start' . $suffix]));
+        $row[] = date('m/d/Y', strtotime($slot['start' . $suffix]));
         $row[] = $module->getLocationLabel($slot['location' . $suffix]);;
         $row[] = date('h:i A', strtotime($slot['start' . $suffix])) . ' - ' . date('h:i A',
                 strtotime($slot['end' . $suffix]));;
-        $row[] = $available;;
+        $row[] = '<h5 class="text-center">' . $available . '</h5>';;
         $row[] = $bookButton . $cancelButton;;
 
         $result['data'][] = $row;
