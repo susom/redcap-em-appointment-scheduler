@@ -41,13 +41,17 @@ if (!empty($data)) {
         if ($available == 0) {
             continue;
         }
-        $row = array();
-        $row[] = date('Y-m-d', strtotime($slot['start' . $suffix]));
-        $row[] = $module->getLocationLabel($slot['location' . $suffix]);;
-        $row[] = date('h:i A', strtotime($slot['start' . $suffix])) . ' - ' . date('h:i A',
-                strtotime($slot['end' . $suffix]));;
-        $row[] = $available;;
-        $row[] = '<button type="button"
+
+        $cancelButton = '';
+        if ($counter['userBookThisSlot']) {
+            $reservation = end($counter['userBookThisSlot']);
+            $cancelButton = '<button type="button"
+                                                                      data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-event-id="' . $reservationEventId . '"
+                                                                      class="cancel-appointment btn btn-block btn-danger">Cancel
+                            </button>';
+        } else {
+            $bookButton = '<button type="button"
                                         data-record-id="' . $slot['record_id'] . '"
                                         data-event-id="' . $eventId . '"
                                         data-notes-label="' . $module->getNoteLabel() . '"
@@ -61,10 +65,19 @@ if (!empty($data)) {
                                         data-start="' . date('Hi', strtotime($slot['start' . $suffix])) . '"
                                         data-end="' . date('Hi', strtotime($slot['end' . $suffix])) . '"
                                         data-modal-title="' . date('M/d/Y',
-                strtotime($slot['start' . $suffix])) . ' ' . date('h:i A',
-                strtotime($slot['start' . $suffix])) . ' - ' . date('h:i A', strtotime($slot['end' . $suffix])) . '"
+                    strtotime($slot['start' . $suffix])) . ' ' . date('h:i A',
+                    strtotime($slot['start' . $suffix])) . ' - ' . date('h:i A', strtotime($slot['end' . $suffix])) . '"
                                         class="time-slot btn btn-block btn-success">Book
-                                </button>';;
+                                </button>';
+        }
+
+        $row = array();
+        $row[] = date('Y-m-d', strtotime($slot['start' . $suffix]));
+        $row[] = $module->getLocationLabel($slot['location' . $suffix]);;
+        $row[] = date('h:i A', strtotime($slot['start' . $suffix])) . ' - ' . date('h:i A',
+                strtotime($slot['end' . $suffix]));;
+        $row[] = $available;;
+        $row[] = $bookButton . $cancelButton;;
 
         $result['data'][] = $row;
     }
