@@ -4,7 +4,7 @@ $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $url = $module->getUrl('src/list.php', true, true);
 $instance = $module->getEventInstance();
 ?>
-<link rel="stylesheet" href="<?php echo $module->getUrl('src/css/calendar.css') ?>">
+<link rel="stylesheet" href="<?php echo $module->getUrl('src/css/calendar.css', true, true) ?>">
 
 <div class="container">
     <div class="row p-3 mb-2">
@@ -28,4 +28,4 @@ $instance = $module->getEventInstance();
 <input type="hidden" name="selected-time" id="selected-time"/>
 
 <!-- LOAD JS -->
-<script src="<?php echo $module->getUrl('src/js/calendar.js') ?>"></script>
+<script src="<?php echo $module->getUrl('src/js/calendar.js', true, true) ?>"></script>

@@ -18,7 +18,7 @@ $calendar = $module->getUrl('src/calendar.php', true, true);
 //JS and CSS with inputs URLs
 require_once 'urls.php';
 ?>
-<link rel="stylesheet" href="<?php echo $module->getUrl('src/css/types.css') ?>">
+<link rel="stylesheet" href="<?php echo $module->getUrl('src/css/types.css', true, true) ?>">
     <div class="container">
         <nav class="navbar navbar-expand-sm bg-light navbar-light">
             <?php
@@ -137,7 +137,7 @@ require_once 'urls.php';
     </div>
 
     <!-- LOAD JS -->
-    <script src="<?php echo $module->getUrl('src/js/types.js') ?>"></script>
+<script src="<?php echo $module->getUrl('src/js/types.js', true, true) ?>"></script>
 
     <!-- LOAD MODALS -->
     <?php
