@@ -6,6 +6,8 @@ namespace Stanford\CovidAppointmentScheduler;
 
 
 $event_id = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
+$reservationEventId = $module->getReservationEventIdViaSlotEventId($event_id);
+
 if (isset($_GET['month']) && isset($_GET['year'])) {
     $month = filter_var($_GET['month'], FILTER_SANITIZE_NUMBER_INT);
     $year = filter_var($_GET['year'], FILTER_SANITIZE_NUMBER_INT);
@@ -25,26 +27,19 @@ $days = array();
 //process scheduler calendar
 foreach ($data as $slot) {
     $slot = array_pop($slot);
+
+    $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
+        $reservationEventId, '', $module->getProjectId());
     /**
      * group by day
      */
     $day = (int)date('d', strtotime($slot['start']));
 
-    /**
-     * if we have available slots on that day
-     */
-    if ($slot['booked'] == '') {
-        $days[$day]['available']++;
-        /**
-         * no need to show more than three available slots
-         */
-        if ($days[$day]['available'] <= 3) {
-            $days[$day]['availableText'] .= 'REDCap Appt ' . date('h:i A',
-                    strtotime($slot['start'])) . ' - ' . date('h:i A', strtotime($slot['end'])) . ' ';
-        }
-    } else {
-        $days[$day]['booked']++;
-    }
+    $days[$day]['available'] += (int)($slot['number_of_participants'] - $counter['counter']);
+
+    $days[$day]['booked'] += (int)($counter['counter']);
+
+    $days[$day]['availableText'] = 'Available slots: ' . $days[$day]['available'] . ' Booked Slots: ' . $days[$day]['booked'] . ' ';
 
     /**
      *
