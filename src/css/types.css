@@ -11,7 +11,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    background: rgba(255, 255, 255, 0.8) url('../images/progress.gif') 50% 50% no-repeat;
+    background: rgba(255, 255, 255, 0.8) url('https://redcap.stanford.edu/api/?type=module&prefix=covid_appointment_scheduler&page=src/images/progress.gif') 50% 50% no-repeat;
     z-index: 10000;
 }
 
