@@ -54,8 +54,8 @@ try {
             $userid = $data['employee_id' . $module->getSuffix()];
         }
 
-        $module->doesUserHaveSameDateReservation($date, $userid, $module->getSuffix(), $data['event_id'],
-            $reservationEventId);
+//        $module->doesUserHaveSameDateReservation($date, $userid, $module->getSuffix(), $data['event_id'],
+//            $reservationEventId);
         /**
          * let mark it as complete so we can send the survey if needed.
          * Complete status has different naming convention based on the instrument name. so you need to get instrument name and append _complete to it.

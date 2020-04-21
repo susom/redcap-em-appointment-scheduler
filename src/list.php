@@ -9,7 +9,7 @@ $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $data = $module->getMonthSlots($eventId);
 $url = $module->getUrl('src/calendar.php', true, true);
 $instance = $module->getEventInstance();
-
+$instance = $module->getEventInstance();
 $result = array();
 $result['data'] = array();
 if (!empty($data)) {
@@ -19,9 +19,6 @@ if (!empty($data)) {
      */
     foreach ($data as $record_id => $slot) {
         $slot = array_pop($slot);
-
-        $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
-            $reservationEventId, $suffix, $module->getProjectId());
 
         $available = (int)($slot['number_of_participants' . $suffix] - $counter['counter']);;
 
@@ -40,6 +37,10 @@ if (!empty($data)) {
             $slot['record_id'] = array_pop(array_reverse($slot));
         }
 
+
+        $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
+            $reservationEventId, $suffix, $module->getProjectId());
+
         $row = array();
         $row[] = date('Y-m-d', strtotime($slot['start' . $suffix]));
         $row[] = $module->getLocationLabel($slot['location' . $suffix]);;
@@ -47,7 +48,7 @@ if (!empty($data)) {
                 strtotime($slot['end' . $suffix]));;
         $row[] = $available;;
         $row[] = '<button type="button"
-                                        data-record-id="' . $record_id . '"
+                                        data-record-id="' . $slot['record_id'] . '"
                                         data-event-id="' . $eventId . '"
                                         data-notes-label="' . $module->getNoteLabel() . '"
                                         data-show-projects="' . $module->showProjectIds() . '"
