@@ -108,5 +108,5 @@ try {
 }
 ?>
 <!-- LOAD JS -->
-<script src="<?php echo $module->getUrl('src/js/manage_calendar.js') ?>"></script>
+<script src="<?php echo $module->getUrl('src/js/manage_calendar.js', true, true) ?>"></script>
 

@@ -28,8 +28,8 @@ try {
            value="<?php echo $url . '&event_id=' . $module->getSlotsEventId() . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() ?>"
            id="survey-scheduler-url">
     <!-- LOAD JS -->
-    <script src="<?php echo $module->getUrl('src/js/survey.js') ?>"></script>
-    <script src="<?php echo $module->getUrl('src/js/types.js') ?>"></script>
+    <script src="<?php echo $module->getUrl('src/js/survey.js', true, true) ?>"></script>
+    <script src="<?php echo $module->getUrl('src/js/types.js', true, true) ?>"></script>
     <?php
 } catch (\LogicException $e) {
     echo $e->getMessage();
