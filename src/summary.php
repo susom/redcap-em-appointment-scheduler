@@ -28,6 +28,13 @@ $days = array();
 foreach ($data as $slot) {
     $slot = array_pop($slot);
 
+    /**
+     * if the record id has different name just use whatever is provided.
+     */
+    if (!isset($slot['record_id'])) {
+        $slot['record_id'] = array_pop(array_reverse($slot));
+    }
+
     $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
         $reservationEventId, '', $module->getProjectId());
     /**
