@@ -2,6 +2,8 @@
 
 namespace Stanford\CovidAppointmentScheduler;
 
+use Sabre\DAV\Exception;
+
 /** @var \Stanford\CovidAppointmentScheduler\CovidAppointmentScheduler $module */
 
 
@@ -46,7 +48,15 @@ try {
         $slot = $module::getSlot(filter_var($_POST['record_id'], FILTER_SANITIZE_STRING), $data['event_id'],
             $module->getProjectId(), $module->getPrimaryRecordFieldName());
 
-        $date = date('Y-m-d', strtotime(preg_replace("([^0-9/])", "", $_POST['calendarDate'])));
+
+        // check if any slot is available
+        $counter = $module->getParticipant()->getSlotActualCountReservedSpots(filter_var($_POST['record_id'],
+            FILTER_SANITIZE_STRING),
+            $reservationEventId, '', $module->getProjectId());
+
+        if ((int)($slot['number_of_participants'] - $counter['counter']) <= 0) {
+            throw new Exception("All time slots are booked please try different time");
+        }
 
         if (defined('USERID')) {
             $userid = USERID;
@@ -54,8 +64,8 @@ try {
             $userid = $data['employee_id' . $module->getSuffix()];
         }
 
-        $module->doesUserHaveSameDateReservation($date, $userid, $module->getSuffix(), $data['event_id'],
-            $reservationEventId);
+//        $module->doesUserHaveSameDateReservation($date, $userid, $module->getSuffix(), $data['event_id'],
+//            $reservationEventId);
         /**
          * let mark it as complete so we can send the survey if needed.
          * Complete status has different naming convention based on the instrument name. so you need to get instrument name and append _complete to it.
@@ -92,6 +102,8 @@ try {
                 'id' => array_pop($response['ids']),
                 'email' => $data['email']
             ));
+        } else {
+            throw new Exception(implode(",", $response['errors']));
         }
     }
 } catch (\LogicException $e) {

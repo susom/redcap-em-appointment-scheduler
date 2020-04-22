@@ -46,7 +46,7 @@ foreach ($data as $slot) {
 
     $days[$day]['booked'] += (int)($counter['counter']);
 
-    $days[$day]['availableText'] = 'Available slots: ' . $days[$day]['available'] . ' Booked Slots: ' . $days[$day]['booked'] . ' ';
+    $days[$day]['availableText'] = 'Available slots: ' . $days[$day]['available'];
 
     /**
      *

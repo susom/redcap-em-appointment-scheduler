@@ -24,7 +24,7 @@ if(isset($_GET['date'])){
             /**
              * get appointment type
              */
-            $typeText = $module->getTypeText($slot['type']);
+            $typeText = $module->getLocationLabel($slot['location']);
             $counter = $module->getParticipant()->getSlotActualCountReservedSpots($recordId,
                 $reservationEventId, '', $module->getProjectId());
             ?>
