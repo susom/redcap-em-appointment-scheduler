@@ -695,7 +695,9 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
         if ($user['mobile'] && $this->getTwilioClient()) {
             $message = array(
-                'from' => '+' . $instance['phone_number_country_code'] . $instance['twilio_sender_number'],
+                'from' => '+' . $this->getProjectSetting('phone_number_country_code',
+                        $this->getProjectId()) . $this->getProjectSetting('twilio_sender_number',
+                        $this->getProjectId()),
                 'body' => '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
                         strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i A',
                         strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i A',
