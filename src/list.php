@@ -25,6 +25,14 @@ if (!empty($data)) {
          */
         $day = date('d', strtotime($slot['start' . $suffix]));
 
+
+        /**
+         * skip past slots.
+         */
+        if (time() > strtotime($slot['start' . $suffix])) {
+            continue;
+        }
+
         /**
          * if the record id has different name just use whatever is provided.
          */

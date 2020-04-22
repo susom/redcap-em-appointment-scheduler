@@ -22,6 +22,12 @@ if(isset($_GET['date'])){
             $slot = array_pop(array_reverse($record));
 
             /**
+             * skip past slots.
+             */
+            if (time() > strtotime($slot['start'])) {
+                continue;
+            }
+            /**
              * get appointment type
              */
             $typeText = $module->getLocationLabel($slot['location']);
