@@ -483,7 +483,9 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     'return_format' => 'array',
                     'events' => $event_id
                 );
-                return REDCap::getData($param);
+                $data = REDCap::getData($param);
+                $x = $this->sortRecordsByDate($data, $event_id);
+                return $x;
             } else {
                 throw new \LogicException('Not a valid date, Aborting!');
             }
@@ -521,16 +523,19 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     {
         $temp = array();
         $result = array();
-        foreach ($records as $record) {
+        foreach ($records as $id => $record) {
             $date = date('Y-m-d H:i:s', strtotime($record[$eventId]['start']));
-            $temp[$date][] = $record;
+            $temp[$date][$id] = $record;
         }
         ksort($temp);
         foreach ($temp as $timestamp) {
             if (empty($result)) {
                 $result = $timestamp;
             } else {
-                $result = array_merge($result, $timestamp);
+                // use loop to preserve the key
+                foreach ($timestamp as $key => $item) {
+                    $result[$key] = $item;
+                }
             }
         }
         return $result;
