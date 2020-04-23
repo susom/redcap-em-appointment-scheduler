@@ -44,6 +44,7 @@ jQuery(document).on('click', '.type', function (e) {
                 data: data.data,
                 pageLength: 50,
                 "bDestroy": true,
+                "aaSorting": [[0, "asc"]],
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
@@ -389,17 +390,21 @@ jQuery(document).on('click', '.booked-slots', function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
     var url = jQuery("#manage-booked-slots-url").val();
-    if (email != '') {
+    if (true) {
         jQuery.ajax({
             url: url,
             type: 'GET',
             data: {event_id: jQuery(this).data('event-id')},
             datatype: 'json',
             success: function (data) {
-                jQuery('#generic-modal').find('.modal-title').html('Manage Booked Slots');
-                jQuery('#generic-modal').find('.modal-body').html(data);
-                jQuery('#generic-modal').modal('show');
-                jQuery('#generic-modal').modal('show');
+                if (jQuery('#generic-modal').length) {
+                    jQuery('#generic-modal').find('.modal-title').html('Manage Instructors Calendar');
+                    jQuery('#generic-modal').find('.modal-body').html(data);
+                    jQuery('#generic-modal').modal('show');
+                    jQuery('#generic-modal').modal('show');
+                } else {
+                    jQuery('#booked-container').html(data);
+                }
 
                 jQuery('#calendar-datatable').DataTable(
                     {
@@ -423,6 +428,42 @@ jQuery(document).on('click', '.booked-slots', function (e) {
     }
 });
 
+/**
+ * Get Instance description
+ */
+jQuery(document).on('click', '.instance-description', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var url = jQuery("#manage-instance-description").val();
+    if (true) {
+        jQuery.ajax({
+            url: url,
+            type: 'GET',
+            data: {event_id: jQuery(this).data('event-id')},
+            datatype: 'json',
+            success: function (data) {
+                if (jQuery('#generic-modal').length) {
+                    jQuery('#generic-modal').find('.modal-title').html('Manage Instance Description');
+                    jQuery('#generic-modal').find('.modal-body').html(data);
+                    jQuery('#generic-modal').modal('show');
+                    jQuery('#generic-modal').modal('show');
+                } else {
+                    jQuery('#instance-description-container').html(data);
+                }
+            },
+            error: function (request, error) {
+                alert("Request: " + JSON.stringify(request));
+            }
+        });
+    } else {
+        /**
+         * user not logged in refresh to force sign in
+         */
+        location.reload();
+    }
+});
+
 
 /**
  * Get Manage Calendar modal to let instructors manage all calendars
@@ -432,20 +473,26 @@ jQuery(document).on('click', '.manage-calendars', function (e) {
     e.preventDefault();
     e.stopImmediatePropagation();
     var url = jQuery("#manage-calendar-url").val();
-    if (email != '') {
+    if (true) {
         jQuery.ajax({
             url: url,
             type: 'GET',
             datatype: 'json',
             success: function (data) {
-                jQuery('#generic-modal').find('.modal-title').html('Manage Instructors Calendar');
-                jQuery('#generic-modal').find('.modal-body').html(data);
-                jQuery('#generic-modal').modal('show');
-                jQuery('#generic-modal').modal('show');
+                if (jQuery('#generic-modal').length) {
+                    jQuery('#generic-modal').find('.modal-title').html('Manage Instructors Calendar');
+                    jQuery('#generic-modal').find('.modal-body').html(data);
+                    jQuery('#generic-modal').modal('show');
+                    jQuery('#generic-modal').modal('show');
+                } else {
+                    jQuery('#manager-container').html(data);
+                }
+
 
                 jQuery('#calendar-datatable').DataTable(
                     {
                         pageLength: 50,
+                        "aaSorting": [[3, "asc"], [4, "asc"]],
                         columnDefs: [
                             {"type": "date", "targets": 3}
                         ]

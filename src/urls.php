@@ -60,6 +60,10 @@ if (!defined('USERID') || USERID == '[survey respondent]') {
        value="<?php echo $module->getUrl('src/booked_slots.php', false,
                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() . $noAuth ?>"
        class="hidden"/>
+<input type="hidden" id="manage-instance-description"
+       value="<?php echo $module->getUrl('src/manage_description.php', false,
+               true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&pid=' . $module->getProjectId() . $noAuth ?>"
+       class="hidden"/>
 <input type="hidden" id="cancel-appointment-url"
        value="<?php echo $module->getUrl('src/cancel.php', false,
                true) . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() . $noAuth ?>"

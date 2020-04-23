@@ -203,8 +203,16 @@ if (!isset($module)) {
                     </div>
                     <div class="form-group">
                         <label for="location">Location</label>
-                        <input type="text" name="location" class="form-control" id="location"
-                               placeholder="Appointment Location" required>
+                        <select class="form-control" name="location" id="location" required>
+                            <option>select location</option>
+                            <?php
+                            foreach ($module->getDefinedLocations() as $key => $location) {
+                                ?>
+                                <option value="<?php echo $key ?>"><?php echo $location ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="notes">Notes</label>

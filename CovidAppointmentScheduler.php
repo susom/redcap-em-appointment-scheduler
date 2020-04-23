@@ -393,6 +393,9 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public function getEventInstance()
     {
+        if (!$this->eventInstance) {
+            $this->setEventInstance($this->getFirstEventId($this->getProjectId()));
+        }
         return $this->eventInstance;
     }
 

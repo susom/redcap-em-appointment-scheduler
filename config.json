@@ -41,6 +41,12 @@
         "icon": "brick",
         "url": "src/shortcut.php",
         "show-header-and-footer": false
+      },
+      {
+        "name": "Manager Page",
+        "icon": "brick",
+        "url": "src/manager.php",
+        "show-header-and-footer": false
       }
     ]
   },

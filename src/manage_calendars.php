@@ -22,7 +22,7 @@ try {
         ?>
         <div class="container">
 
-
+            <div class="row"><h3>Manage Time Slots</h3></div>
             <table id="calendar-datatable" class="display">
                 <thead>
                 <tr>
@@ -44,7 +44,7 @@ try {
                         <td><?php echo $slot[$primary] ?></td>
                         <td><?php echo $slot['instructor'] ?></td>
                         <td>
-                            <?php echo $slot['location' . $suffix] ?></td>
+                            <?php echo $module->getLocationLabel($slot['location' . $suffix]) ?></td>
                         <td>
                             <?php echo date('m/d/Y',
                                 strtotime($slot['start' . $suffix])) ?>
@@ -70,7 +70,7 @@ try {
                             <button type="button"
                                     data-record-id="<?php echo $slot[$primary] ?>"
                                     data-event-id="<?php echo $slot['event_id'] ?>"
-                                    data-location="<?php echo $module->getLocationLabel($slot['location' . $suffix]) ?>"
+                                    data-location="<?php echo $slot['location' . $suffix] ?>"
                                     data-date="<?php echo date('m/d/Y',
                                         strtotime($slot['start' . $suffix])) ?>"
                                     data-start="<?php echo date('h:i A',
