@@ -13,10 +13,8 @@ try {
         throw new \LogicException('You cant be here');
     }
 
-    $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
 
-
-    $module->setProjectSetting('instance_description', $description, $module->getProjectId());
+    $module->setProjectSetting('instance_description', $_POST['description'], $module->getProjectId());
 
     echo json_encode(array('status' => 'ok', 'message' => 'Instance Description Updated Successfully!'));
 
