@@ -129,11 +129,11 @@ require_once 'urls.php';
                         <input type="text" name="end" class="form-control" id="end" placeholder="Office Hours End Time"
                                required>
                     </div>
-                    <div class="form-group">
-                        <label for="instructor">Instructor (Please type SUNet ID)</label>
-                        <input type="text" name="instructor" class="form-control" id="instructor"
-                               placeholder="Instructor SUNet ID" required>
-                    </div>
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label for="instructor">Instructor (Please type SUNet ID)</label>-->
+                    <!--                        <input type="text" name="instructor" class="form-control" id="instructor"-->
+                    <!--                               placeholder="Instructor SUNet ID" required>-->
+                    <!--                    </div>-->
                     <div class="form-group">
                         <label for="location">Location</label>
                         <select class="form-control" name="location" id="location" required>
