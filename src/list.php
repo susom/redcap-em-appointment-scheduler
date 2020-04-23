@@ -22,11 +22,10 @@ if (!empty($data)) {
          */
         $day = date('d', strtotime($slot['start' . $suffix]));
 
-
         /**
          * skip past slots.
          */
-        if (time() > strtotime($slot['start' . $suffix])) {
+        if ($module->isSlotInPast($slot, $suffix)) {
             continue;
         }
 

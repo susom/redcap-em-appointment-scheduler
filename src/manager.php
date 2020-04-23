@@ -165,6 +165,34 @@ require_once 'urls.php';
     </div>
 </div>
 <!-- END Booking Modal -->
+
+<!-- Generic Modal -->
+
+<div class="modal " id="generic-manager-modal">
+    <div class="modal-dialog mw-100 w-75">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Heading</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Modal body..
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END Time Slots Modal -->
+
 <!-- LOAD JS -->
 <script src="<?php echo $module->getUrl('src/js/types.js', true, true) ?>"></script>
 <script src="<?php echo $module->getUrl('src/js/manager.js', true, true) ?>"></script>

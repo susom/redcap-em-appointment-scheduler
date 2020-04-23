@@ -39,6 +39,12 @@ try {
                 $pointer = 1;
                 $primary = $module->getPrimaryRecordFieldName();
                 foreach ($data as $slot) {
+                    /**
+                     * skip past slots.
+                     */
+                    if ($module->isSlotInPast($slot, $suffix)) {
+                        continue;
+                    }
                     ?>
                     <tr>
                         <td><?php echo $slot[$primary] ?></td>

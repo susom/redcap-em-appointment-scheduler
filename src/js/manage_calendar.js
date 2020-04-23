@@ -119,9 +119,18 @@ jQuery(document).on('click', '.participants-list', function (e) {
         data: slot,
         datatype: 'json',
         success: function (response) {
-            jQuery('#generic-modal').find('.modal-title').html('Participants list for ' + title);
-            jQuery('#generic-modal').find('.modal-body').html(response);
-            jQuery('#generic-modal').modal('show');
+            if (jQuery('#generic-modal').length) {
+                jQuery('#generic-modal').find('.modal-title').html('Participants list for ' + title);
+                jQuery('#generic-modal').find('.modal-body').html(response);
+                jQuery('#generic-modal').modal('show');
+            } else {
+                jQuery('#generic-manager-modal').find('.modal-title').html('Participants list for ' + title);
+                jQuery('#generic-manager-modal').find('.modal-body').html(response);
+                jQuery('#generic-manager-modal').modal('show');
+            }
+
+
+
 
             jQuery('#participants-datatable').DataTable();
         },

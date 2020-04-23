@@ -1383,4 +1383,15 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     {
         return $_SESSION['APPOINTMENT_SCHEDULER_IS_SUPER_USER'];
     }
+
+    public function isSlotInPast($slot, $suffix)
+    {
+        /**
+         * skip past slots.
+         */
+        if (time() > strtotime($slot['start' . $suffix])) {
+            return true;
+        }
+        return false;
+    }
 }

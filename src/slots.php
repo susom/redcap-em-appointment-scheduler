@@ -24,7 +24,7 @@ if(isset($_GET['date'])){
             /**
              * skip past slots.
              */
-            if (time() > strtotime($slot['start'])) {
+            if ($module->isSlotInPast($slot, '')) {
                 continue;
             }
             /**
