@@ -14,7 +14,7 @@ try {
     }
 
 
-    $module->setProjectSetting('instance_description', $_POST['description'], $module->getProjectId());
+    $module->setProjectSetting('instance_description', array($_POST['description']), $module->getProjectId());
 
     echo json_encode(array('status' => 'ok', 'message' => 'Instance Description Updated Successfully!'));
 
