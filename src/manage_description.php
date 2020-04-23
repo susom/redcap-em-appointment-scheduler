@@ -22,12 +22,14 @@ try {
         <div class="container">
             <form>
                 <div class="form-group">
-                    <textarea class="form-control" id="instance_description" rows="3" name="instance_description"><?php
+                    <textarea class="form-control" id="instance-description" rows="3" name="instance_description"><?php
                         echo $instance['instance_description']
                         ?></textarea>
                 </div>
 
-                <button class="btn btn-primary mb-2" type="submit">Update</button>
+                <button id="submit-instance-description" data-event-id="<?php echo $module->getEventInstance() ?>"
+                        class="btn btn-primary mb-2" type="submit">Update
+                </button>
             </form>
         </div>
         <?php

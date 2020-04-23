@@ -163,3 +163,36 @@ jQuery(document).on('click', '.participants-no-show', function (e) {
         });
     }
 });
+
+
+/**
+ * No Show appointment
+ */
+jQuery(document).on('click', '#submit-instance-description', function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var description = jQuery("#instance-description").val();
+    var event_id = jQuery(this).data('event-id');
+    var url = jQuery('#instance-description-update-url').val();
+
+    if (confirm("Are you sure you want to update Instance Description")) {
+
+        /**
+         * Get Manage modal to let user manage their saved appointments
+         */
+        jQuery.ajax({
+            url: url,
+            type: 'POST',
+            data: {description: description, event_id: event_id},
+            datatype: 'json',
+            success: function (data) {
+                data = JSON.parse(data);
+                alert(data.message);
+            },
+            error: function (request, error) {
+                alert("Request: " + JSON.stringify(request));
+            }
+        });
+    }
+});
