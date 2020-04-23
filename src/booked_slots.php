@@ -65,6 +65,7 @@ try {
                                     <option>CHANGE STATUS</option>
                                     <?php
                                     foreach ($module->getParticipantStatus() as $key => $status) {
+                                        // list all statuses from reservation instrument.
                                         ?>
                                         <option value="<?php echo $key ?>" <?php echo($record['participant_status'] == $key ? 'selected' : '') ?>><?php echo $status ?></option>
                                         <?php
