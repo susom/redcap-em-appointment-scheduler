@@ -28,7 +28,7 @@ try {
                 <th>Email</th>
                 <th>Mobile</th>
                 <th>Notes</th>
-                <th>No Show</th>
+                <th>Status</th>
             </tr>
             </thead>
             <tbody>
@@ -48,11 +48,24 @@ try {
                     <td><?php
                     if ($participant['participant_status' . $suffix] == RESERVED) {
                         ?>
-                        <button type="button"
-                                data-participant-id="<?php echo $participantId ?>"
+                        <!--                        <button type="button"-->
+                        <!--                                data-participant-id="--><?php //echo $participantId ?><!--"-->
+                        <!--                                data-event-id="--><?php //echo $reservationEventId ?><!--"-->
+                        <!--                                class="participants-no-show">No Show-->
+                        <!--                        </button>-->
+                        <select data-participant-id="<?php echo $participantId ?>"
                                 data-event-id="<?php echo $reservationEventId ?>"
-                                class="participants-no-show">No Show
-                        </button>
+                                class="participants-no-show">
+                            <option>CHANGE STATUS</option>
+                            <?php
+                            foreach ($module->getParticipantStatus() as $key => $status) {
+                                // list all statuses from reservation instrument. update comment.
+                                ?>
+                                <option value="<?php echo $key ?>" <?php echo($participant['participant_status'] == $key ? 'selected' : '') ?>><?php echo $status ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
                         <?php
                     } elseif ($participant['participant_status' . $suffix] == CANCELED) {
                         ?>

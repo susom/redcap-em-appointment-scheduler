@@ -33,7 +33,7 @@ try {
                     <th>Date</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                    <th>Actions</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
