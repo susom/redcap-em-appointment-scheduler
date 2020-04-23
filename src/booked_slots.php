@@ -24,12 +24,12 @@ try {
             <table id="calendar-datatable" class="display">
                 <thead>
                 <tr>
-                    <th>SUNetID</th>
+                    <th>EmployeeID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
                     <th>Notes</th>
-                    <th>Project</th>
+                    <!--                    <th>Project</th>-->
                     <th>Date</th>
                     <th>Start Time</th>
                     <th>End Time</th>
@@ -53,7 +53,8 @@ try {
                             <td><?php echo $record['email'] ?></td>
                             <td><?php echo $record['mobile'] ?></td>
                             <td><?php echo $record['notes'] ?></td>
-                            <td><?php echo $module::getProjectName($record['project_id']) ?></td>
+                            <!--                            <td>-->
+                            <?php //echo $module::getProjectName($record['project_id']) ?><!--</td>-->
                             <td><?php echo date('m/d/Y', strtotime($slot['start'])) ?></td>
                             <td><?php echo date('H:i', strtotime($slot['start'])) ?></td>
                             <td><?php echo date('H:i', strtotime($slot['end'])) ?></td>
