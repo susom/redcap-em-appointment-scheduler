@@ -10,6 +10,8 @@ use REDCap;
 $url = $module->getUrl('src/list.php', false, true, true);
 $instances = $module->getInstances();
 $calendar = $module->getUrl('src/calendar.php', true, true);
+
+$managerURL = $module->getUrl('src/manager.php', false, false, true) . '&projectid=' . $module->getProjectId();
 ?>
 
 
@@ -45,14 +47,9 @@ require_once 'urls.php';
                         if ($module::isUserHasManagePermission()) {
                             ?>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Manage Calendar
+                                <a class="nav-link " href="<?php echo $managerURL ?>" id="navbarDropdown">
+                                    Go to Manager Page
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="manage-calendars nav-link" href="#">Manage Time Slots</a>
-                                    <a class="booked-slots nav-link" href="#">Manage Booked Slots</a>
-                                </div>
                             </li>
                             <?php
                         }
