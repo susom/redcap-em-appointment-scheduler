@@ -12,9 +12,7 @@ try {
         throw new \LogicException("You are allowed to access this page");
     }
 
-    $url = $module->getUrl('src/list.php', false, true, true);
-    $instances = $module->getInstances();
-    $calendar = $module->getUrl('src/calendar.php', true, true);
+    $url = $module->getUrl('src/types.php', false, true, true) . '&projectid=' . $module->getProjectId();
 } catch (\LogicException $e) {
     echo $e->getMessage();
 }
@@ -88,6 +86,9 @@ require_once 'urls.php';
         <li class="nav-item">
             <a class="nav-link" id="description-tab" data-toggle="tab" href="#description" role="tab"
                aria-controls="description" aria-selected="false">Manage Description</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo $url ?>">Go to Calendar</a>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">

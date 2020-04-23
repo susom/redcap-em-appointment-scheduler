@@ -59,11 +59,18 @@ try {
                             <td><?php echo date('H:i', strtotime($slot['start'])) ?></td>
                             <td><?php echo date('H:i', strtotime($slot['end'])) ?></td>
                             <td>
-                                <button type="button"
-                                        data-participant-id="<?php echo $id ?>"
+                                <select data-participant-id="<?php echo $id ?>"
                                         data-event-id="<?php echo $eventId ?>"
-                                        class="participants-no-show">No Show
-                                </button>
+                                        class="participants-no-show">
+                                    <option>CHANGE STATUS</option>
+                                    <?php
+                                    foreach ($module->getParticipantStatus() as $key => $status) {
+                                        ?>
+                                        <option value="<?php echo $key ?>" <?php echo($record['participant_status'] == $key ? 'selected' : '') ?>><?php echo $status ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
                             </td>
                         </tr>
                         <?php

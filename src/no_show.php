@@ -14,6 +14,8 @@ try {
     }
     $primaryField = \REDCap::getRecordIdField();
     $data[$primaryField] = filter_var($_GET[$primaryField], FILTER_SANITIZE_NUMBER_INT);
+    $data['participant_status'] = filter_var($_GET['participant_status'], FILTER_SANITIZE_NUMBER_INT);
+
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
     if ($data[$primaryField] == '') {
         throw new \LogicException('Participation ID is missing');
@@ -22,7 +24,6 @@ try {
         throw new \LogicException('Event ID is missing');
     } else {
 
-        $data['participant_status'] = NO_SHOW;
         $data['redcap_event_name'] = \REDCap::getEventNames(true, true, $eventId);
         $response = \REDCap::saveData('json', json_encode(array($data)));
 
