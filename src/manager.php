@@ -26,25 +26,45 @@ try {
 require_once 'urls.php';
 ?>
 <link rel="stylesheet" href="<?php echo $module->getUrl('src/css/types.css', true, true) ?>">
-<div class="container">
+<div id="brandbar">
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a href="http://www.stanford.edu"><img
+                            src="https://www-media.stanford.edu/su-identity/images/brandbar-stanford-logo@2x.png"
+                            alt="Stanford University" width="152" height="23"></a>
+            </div>
+            <div class="col-9">
+                <nav class="navbar-expand-sm navbar-dark">
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+                        <?php
+                        if (defined('USERID')) {
+                            ?>
+                            <ul class="navbar-nav">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#">Logged in
+                                        as: <?php echo(defined('USERID') ? USERID : ' NOT LOGGED IN') ?></a>
+                                </li>
+                            </ul>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- below code need to be hidden to trigger jquery click -->
+<div class="container" style="display: none">
     <nav class="navbar navbar-expand-sm bg-light navbar-light">
-        <?php
-        if (defined('USERID')) {
-            ?>
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Logged in
-                        as: <?php echo(defined('USERID') ? USERID : ' NOT LOGGED IN') ?></a>
-                </li>
-            </ul>
-            <?php
-        }
-        ?>
+
         <div class="collapse navbar-collapse justify-content-end hidden" id="navbarCollapse">
             <?php
             if (defined('USERID')) {
                 ?>
-                <ul class="navbar-nav" style="display: none">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="manage nav-link" href="#">Manage my Appointments</a>
                     </li>
@@ -92,13 +112,13 @@ require_once 'urls.php';
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="manage" role="tabpanel" aria-labelledby="manage-tab">
+        <div class="tab-pane fade show active card card-body" id="manage" role="tabpanel" aria-labelledby="manage-tab">
             <div id="manager-container"></div>
         </div>
-        <div class="tab-pane fade" id="booked" role="tabpanel" aria-labelledby="booked-tab">
+        <div class="tab-pane fade card card-body" id="booked" role="tabpanel" aria-labelledby="booked-tab">
             <div id="booked-container"></div>
         </div>
-        <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+        <div class="tab-pane fade card card-body" id="description" role="tabpanel" aria-labelledby="description-tab">
             <div id="instance-description-container"></div>
         </div>
     </div>

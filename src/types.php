@@ -20,33 +20,26 @@ $managerURL = $module->getUrl('src/manager.php', false, false, true) . '&project
 //JS and CSS with inputs URLs
 require_once 'urls.php';
 ?>
+<link rel="stylesheet" href="<?php echo $module->getUrl('src/css/types.css', true, true) ?>">
 <div id="brandbar">
     <div class="container">
         <div class="row">
-            <div class="col-6">
+            <div class="col-3">
                 <a href="http://www.stanford.edu"><img
                             src="https://www-media.stanford.edu/su-identity/images/brandbar-stanford-logo@2x.png"
                             alt="Stanford University" width="152" height="23"></a>
             </div>
-            <div class="col-6">
-                <nav class="navbar navbar-expand-sm navbar-dark">
-                    <?php
-                    if (defined('USERID')) {
-                        ?>
-                        <ul class="navbar-nav">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Logged in
-                                    as: <?php echo(defined('USERID') ? USERID : ' NOT LOGGED IN') ?></a>
-                            </li>
-                        </ul>
-                        <?php
-                    }
-                    ?>
+            <div class="col-9">
+                <nav class="navbar-expand-sm navbar-dark">
                     <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
                         <?php
                         if (defined('USERID')) {
                             ?>
                             <ul class="navbar-nav">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#">Logged in
+                                        as: <?php echo(defined('USERID') ? USERID : ' NOT LOGGED IN') ?></a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="manage nav-link" href="#">Manage my Appointments</a>
                                 </li>
@@ -71,11 +64,6 @@ require_once 'urls.php';
         </div>
     </div>
 </div>
-<link rel="stylesheet" href="<?php echo $module->getUrl('src/css/types.css', true, true) ?>">
-<div class="container">
-
-</div>
-
 <div class="container">
     <?php
     foreach ($instances as $instance) {
