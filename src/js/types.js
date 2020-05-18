@@ -406,7 +406,7 @@ jQuery(document).on('click', '.booked-slots', function (e) {
                     jQuery('#booked-container').html(data);
                 }
 
-                jQuery('#calendar-datatable').DataTable(
+                jQuery('#booked-slots').DataTable(
                     {
                         pageLength: 50,
                         order: [[6, "asc"], [7, "asc"]],
@@ -489,7 +489,7 @@ jQuery(document).on('click', '.manage-calendars', function (e) {
                 }
 
 
-                jQuery('#calendar-datatable').DataTable(
+                jQuery('#manage-calendars').DataTable(
                     {
                         pageLength: 50,
                         "aaSorting": [[3, "asc"], [4, "asc"]],

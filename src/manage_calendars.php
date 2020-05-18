@@ -23,7 +23,7 @@ try {
         <div class="container">
 
             <div class="row"><h3>Manage Time Slots</h3></div>
-            <table id="calendar-datatable" class="display">
+            <table id="manage-calendars" class="display">
                 <thead>
                 <tr>
                     <th>#</th>

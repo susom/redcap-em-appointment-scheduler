@@ -21,7 +21,7 @@ try {
     if ($records) {
         ?>
         <div class="container">
-            <table id="calendar-datatable" class="display">
+            <table id="booked-slots" class="display">
                 <thead>
                 <tr>
                     <th>EmployeeID</th>
