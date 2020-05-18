@@ -37,7 +37,7 @@
   "links": {
     "project": [
       {
-        "name": "Appointment Scheduler NOAUTH link",
+        "name": "Public Scheduler Landing Page",
         "icon": "brick",
         "url": "src/shortcut.php",
         "show-header-and-footer": false
@@ -61,7 +61,7 @@
   "project-settings": [
     {
       "key": "description",
-      "name": "<h6 style='text-align:center;color:red'><b>Organize project fields into an easy-to-read table</b></h6>This tool allows users to format data from your project into an easy-to-read table structure. Summarize uses the configuration specified below to determine which fields to include and how to display the data. HTML is generated for each record and each configuration and the html is stored in a project field that is specified in the configuration. The html can then be piped to a descriptive field to be displayed on a project form or can be used to pipe project information into emails or surveys.<br><br>The data that can be used in a Summarize table is confined to project fields in the same event.  If you would like to display project fields across events or fields from another project, please use the Data Table External Module instead.",
+      "name": "<h6 style='text-align:center;color:red'><b>Appointment Scheduler</b></h6>This tool will allow users to book pre-defined time slots for different purposes. Office Hours/ Health tests/ Survey Followup.",
       "type": "descriptive"
     },
     {
