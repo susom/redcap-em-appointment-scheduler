@@ -9,7 +9,7 @@ use REDCap;
 
 $url = $module->getUrl('src/list.php', false, true, true);
 $instances = $module->getInstances();
-$calendar = $module->getUrl('src/calendar.php', true, true);
+$calendar = $module->getUrl('src/calendar.php', true, true) . '&projectid=' . $module->getProjectId();
 
 $managerURL = $module->getUrl('src/manager.php', false, false, true) . '&projectid=' . $module->getProjectId();
 ?>
