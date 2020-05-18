@@ -562,7 +562,8 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     $end = date('Y-m-t', strtotime($start));
                 } else {
                     $start = date('Y-m-d');
-                    $end = date('Y-m-d', strtotime('first day of next month'));
+                    # change logic to get the next 30 days instead o just the end of this month.
+                    $end = date('Y-m-d', strtotime('+30 days'));
                 }
 
                 $param = array(
