@@ -82,18 +82,25 @@ require_once 'urls.php';
                        value="<?php echo $reservationEventId ?>"
                        class="hidden"/>
                 <div class="card-header" id="headingOne">
-                    <h2 class="mb-0">
-                        <button class="type btn btn-link collapsed" type="button"
-                                data-toggle="collapse-<?php echo $slotsEventId ?>"
-                                data-target="#collapse-<?php echo $slotsEventId ?>" aria-expanded="true"
-                                aria-controls="collapse-<?php echo $slotsEventId ?>"
-                                data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() . (!defined('USERID') ? '&NOAUTH' : '') ?>"
-                                data-key="<?php echo $slotsEventId ?>"
-                                data-default-view="<?php echo $instance['default_view'] ?>"
-                                data-name="<?php echo $title ?>">
-                            <?php echo $title ?>
-                        </button>
-                    </h2>
+                        <div class="float-left">
+                            <button class="type btn btn-link collapsed" type="button"
+                                    data-toggle="collapse-<?php echo $slotsEventId ?>"
+                                    data-target="#collapse-<?php echo $slotsEventId ?>" aria-expanded="true"
+                                    aria-controls="collapse-<?php echo $slotsEventId ?>"
+                                    data-url="<?php echo $url . '&event_id=' . $slotsEventId . '&' . COMPLEMENTARY_SUFFIX . '=' . $module->getSuffix() . '&' . PROJECTID . '=' . $module->getProjectId() . (!defined('USERID') ? '&NOAUTH' : '') ?>"
+                                    data-key="<?php echo $slotsEventId ?>"
+                                    data-default-view="<?php echo $instance['default_view'] ?>"
+                                    data-name="<?php echo $title ?>">
+                                <h4><?php echo $title ?></h4>
+                            </button>
+                        </div>
+                        <div class="float-right">
+                            <a class="btn btn-danger calendar-view" data-key="<?php echo $slotsEventId ?>"
+                                href="javascript:;"
+                                data-url="<?php echo $calendar . '&event_id=' . $slotsEventId ?>" role="button">
+                                Calendar View
+                            </a>
+                        </div>
                 </div>
 
                 <div id="collapse-<?php echo $slotsEventId ?>" class="collapse" aria-labelledby="headingOne"
@@ -101,17 +108,17 @@ require_once 'urls.php';
                     <div class="card-body" id="<?php echo $slotsEventId ?>-calendar">
                         <div id="<?php echo $slotsEventId ?>-list-view">
                             <div class="row">
-                                <div class="col-10">
+                                <div class="col-12">
                                     <?php
                                     echo $instance['instance_description']
                                     ?>
                                 </div>
-                                <div class="col-2 text-right">
-                                    <a class="btn btn-danger calendar-view" data-key="<?php echo $slotsEventId ?>"
-                                       href="javascript:;"
-                                       data-url="<?php echo $calendar . '&event_id=' . $slotsEventId ?>" role="button">Calendar
-                                        View</a>
-                                </div>
+<!--                                <div class="col-2 text-right">-->
+<!--                                    <a class="btn btn-danger calendar-view" data-key="--><?php //echo $slotsEventId ?><!--"-->
+<!--                                       href="javascript:;"-->
+<!--                                       data-url="--><?php //echo $calendar . '&event_id=' . $slotsEventId ?><!--" role="button">Calendar-->
+<!--                                        View</a>-->
+<!--                                </div>-->
                             </div>
                             <hr>
                             <table id="list-result" class="display table table-striped table-bordered"
