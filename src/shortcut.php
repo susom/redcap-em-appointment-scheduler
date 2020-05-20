@@ -7,8 +7,8 @@ namespace Stanford\CovidAppointmentScheduler;
 use REDCap;
 
 
-$url = $module->getUrl('src/types.php', true, true, true);
+$url = $module->getUrl('src/types.php', false, true, true);
 $url = str_replace('pid', 'projectid', $url);
 ?>
-<h3>Public URL to access the Appointment Scheduler.</h3>
+<h3>Authenticated Appointment Scheduler Page</h3>
 <a href="<?php echo $url ?>"><?php echo $url ?></a>
