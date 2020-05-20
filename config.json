@@ -37,7 +37,7 @@
   "links": {
     "project": [
       {
-        "name": "Public Scheduler Landing Page",
+        "name": "Scheduler Landing Page",
         "icon": "brick",
         "url": "src/shortcut.php",
         "show-header-and-footer": false
