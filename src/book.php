@@ -16,11 +16,12 @@ try {
     }
 
     $data = $module->sanitizeInput();
-    if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '' || $_POST['employee_id'] == '') {
+    //   if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '' || $_POST['employee_id'] == '') {
+    if ($data['email' . $module->getSuffix()] == '' || $data['name' . $module->getSuffix()] == '') {
         $error = '';
-        if ($_POST['employee_id'] == '') {
-            $error = 'Employee ID is missing';
-        }
+//        if ($_POST['employee_id'] == '') {
+//            $error = 'Employee ID is missing';
+//        }
         if ($data['name' . $module->getSuffix()] == '') {
             if ($error != '') {
                 $error = ', Full Name is missing';
@@ -41,7 +42,12 @@ try {
 
 
         $data['participant_status' . $module->getSuffix()] = RESERVED;
-        $data['employee_id' . $module->getSuffix()] = filter_var($_POST['employee_id'], FILTER_SANITIZE_STRING);
+        if (!isset($_POST['employee_id'])) {
+            $data['employee_id' . $module->getSuffix()] = USERID;
+        } else {
+            $data['employee_id' . $module->getSuffix()] = filter_var($_POST['employee_id'], FILTER_SANITIZE_STRING);
+        }
+
         $data['department' . $module->getSuffix()] = filter_var($_POST['department'], FILTER_SANITIZE_STRING);
         $data['supervisor_name' . $module->getSuffix()] = filter_var($_POST['supervisor_name'], FILTER_SANITIZE_STRING);
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);

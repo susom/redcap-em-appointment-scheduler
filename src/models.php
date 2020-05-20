@@ -64,12 +64,12 @@ if (!isset($module)) {
                             else.
                         </small>
                     </div>
-                    <div class="form-group">
-                        <label for="employee_id">Employee ID</label>
-                        <input type="text" name="employee_id" class="form-control" id="employee_id"
-                               placeholder="Enter Your Employee ID"
-                               value="" required>
-                    </div>
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label for="employee_id">Employee ID</label>-->
+                    <!--                        <input type="text" name="employee_id" class="form-control" id="employee_id"-->
+                    <!--                               placeholder="Enter Your Employee ID"-->
+                    <!--                               value="" required>-->
+                    <!--                    </div>-->
                     <div class="form-group">
                         <label for="department">Department</label>
                         <input type="text" name="department" class="form-control" id="department"
