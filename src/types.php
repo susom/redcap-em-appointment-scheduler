@@ -101,12 +101,12 @@ require_once 'urls.php';
                     <div class="card-body" id="<?php echo $slotsEventId ?>-calendar">
                         <div id="<?php echo $slotsEventId ?>-list-view">
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-10">
                                     <?php
                                     echo $instance['instance_description']
                                     ?>
                                 </div>
-                                <div class="col-4 text-right">
+                                <div class="col-2 text-right">
                                     <a class="btn btn-danger calendar-view" data-key="<?php echo $slotsEventId ?>"
                                        href="javascript:;"
                                        data-url="<?php echo $calendar . '&event_id=' . $slotsEventId ?>" role="button">Calendar
