@@ -684,10 +684,10 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $this->sendEmail($user['email'],
             ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL),
             ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME),
-            '--CONFIRMATION-- Your appointment is scheduled at ' . date('m/d/Y',
-                strtotime($this->calendarParams['calendarDate'])) . ' between ' . date('h:i A',
-                strtotime($this->calendarParams['calendarStartTime'])) . ' and ' . date('h:i A',
-                strtotime($this->calendarParams['calendarEndTime'])),
+            '--APPT CONFIRMATION-- Please arrive' .
+            ' on ' . date('m/d/Y', strtotime($this->calendarParams['calendarDate'])) .
+            ' between ' . date('h:i A', strtotime($this->calendarParams['calendarStartTime'])) .
+            ' and ' . date('h:i A', strtotime($this->calendarParams['calendarEndTime'])),
             $instance['calendar_body'],
             true
         );
@@ -696,7 +696,7 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
             $this->sendEmail($user['instructor'] . '@stanford.edu',
                 ($instance['sender_email'] != '' ? $instance['sender_email'] : DEFAULT_EMAIL),
                 ($instance['sender_name'] != '' ? $instance['sender_name'] : DEFAULT_NAME),
-                '--CONFIRMATION-- ' . $user['email'] . ' scheduled an appointment at ' . date('m/d/Y',
+                '--APPT CONFIRMATION-- ' . $user['email'] . ' scheduled an appointment at ' . date('m/d/Y',
                     strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i A',
                     strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i A',
                     strtotime($this->calendarParams['calendarEndTime'])),
@@ -709,10 +709,10 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 'from' => '+' . $this->getProjectSetting('phone_number_country_code',
                         $this->getProjectId()) . $this->getProjectSetting('twilio_sender_number',
                         $this->getProjectId()),
-                'body' => '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
-                        strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i A',
-                        strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i A',
-                        strtotime($this->calendarParams['calendarEndTime']))
+                'body' => "-- APPT CONFIRMATION --\nPlease arrive on " .
+                    date('m/d/Y', strtotime($this->calendarParams['calendarDate'])) .
+                    ' at ' . date('h:i A', strtotime($this->calendarParams['calendarStartTime']))
+                    //. ' to ' . date('h:i A', strtotime($this->calendarParams['calendarEndTime']))
             );
             return $this->sendTextMessage($user, $message);
         }
