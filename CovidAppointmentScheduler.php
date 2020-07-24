@@ -1312,7 +1312,7 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
             //this function return right for main user when hit it with survey respondent!!!!!
             $right = REDCap::getUserRights();
-            $user = end($right);
+            $user = $right[USERID];
             if ($user['design'] === "1") {
                 return true;
             }
