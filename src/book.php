@@ -48,8 +48,8 @@ try {
             $data['employee_id' . $module->getSuffix()] = filter_var($_POST['employee_id'], FILTER_SANITIZE_STRING);
         }
 
-        $data['department' . $module->getSuffix()] = filter_var($_POST['department'], FILTER_SANITIZE_STRING);
-        $data['supervisor_name' . $module->getSuffix()] = filter_var($_POST['supervisor_name'], FILTER_SANITIZE_STRING);
+        #$data['department' . $module->getSuffix()] = filter_var($_POST['department'], FILTER_SANITIZE_STRING);
+        #$data['supervisor_name' . $module->getSuffix()] = filter_var($_POST['supervisor_name'], FILTER_SANITIZE_STRING);
         $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
         $slot = $module::getSlot(filter_var($_POST['record_id'], FILTER_SANITIZE_STRING), $data['event_id'],
             $module->getProjectId(), $module->getPrimaryRecordFieldName());
@@ -95,6 +95,7 @@ try {
         }
 
         $response = \REDCap::saveData($module->getProjectId(), 'json', json_encode(array($data)));
+        $module->emLog($response);
         if (empty($response['errors'])) {
 
             //if slot has instructor identified then send email to the instructor
@@ -109,7 +110,11 @@ try {
                 'email' => $data['email']
             ));
         } else {
-            throw new Exception(implode(",", $response['errors']));
+            if (is_array($response['errors'])) {
+                throw new \Exception(implode(",", $response['errors']));
+            } else {
+                throw new \Exception($response['errors']);
+            }
         }
     }
 } catch (\LogicException $e) {

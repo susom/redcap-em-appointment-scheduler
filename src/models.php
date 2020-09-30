@@ -70,12 +70,12 @@ if (!isset($module)) {
                     <!--                               placeholder="Enter Your Employee ID"-->
                     <!--                               value="" required>-->
                     <!--                    </div>-->
-                    <div class="form-group">
-                        <label for="department">Department</label>
-                        <input type="text" name="department" class="form-control" id="department"
-                               placeholder="Enter Your Department"
-                               value="" required>
-                    </div>
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label for="department">Department</label>-->
+                    <!--                        <input type="text" name="department" class="form-control" id="department"-->
+                    <!--                               placeholder="Enter Your Department"-->
+                    <!--                               value="" required>-->
+                    <!--                    </div>-->
 
                     <div class="form-group">
                         <label for="mobile">Mobile</label>
@@ -84,12 +84,12 @@ if (!isset($module)) {
                                    FILTER_SANITIZE_NUMBER_INT) : '') ?>"
                                placeholder="Mobile/Phone Number">
                     </div>
-                    <div class="form-group">
-                        <label for="supervisor_name">Supervisor Name</label>
-                        <input type="text" name="supervisor_name" class="form-control" id="supervisor_name"
-                               placeholder="Enter Your Supervisor Name"
-                               value="" required>
-                    </div>
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label for="supervisor_name">Supervisor Name</label>-->
+                    <!--                        <input type="text" name="supervisor_name" class="form-control" id="supervisor_name"-->
+                    <!--                               placeholder="Enter Your Supervisor Name"-->
+                    <!--                               value="" required>-->
+                    <!--                    </div>-->
                     <!--div class="form-check">
                         <input class="form-check-input" name="private" type="checkbox" value="1" id="private">
                         <label class="form-check-label" for="private">
