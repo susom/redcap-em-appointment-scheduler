@@ -61,6 +61,13 @@ try {
                 'id' => array_pop($response['ids']),
                 'email' => $data['email']
             ));
+        } else {
+            if (is_array($response['errors'])) {
+                throw new \Exception(implode(",", $response['errors']));
+            } else {
+                throw new \Exception($response['errors']);
+            }
+
         }
     }
 } catch (\LogicException $e) {

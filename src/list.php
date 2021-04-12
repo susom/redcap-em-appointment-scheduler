@@ -146,10 +146,12 @@ if (empty($data)) {
                         strtotime($dayName['date' . $suffix])) . '.)' ?></div>
             <div class=" col-lg-9">
                 <?php
+                $locations = $module->getProject()->metadata['location']['element_enum'];
+                $locations = parseEnum($locations);
                 foreach ($days[$key] as $record_id => $record) {
                     ?>
                     <div class="row border">
-                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $record['location' . $suffix] ?></div>
+                        <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo $locations[$record['location' . $suffix]] ?></div>
                         <div class="p-3 mb-2 col-lg-4 text-dark"><?php echo date('h:i A',
                                 strtotime($record['start' . $suffix])) ?> – <?php echo date('h:i A',
                                 strtotime($record['end' . $suffix])) ?></div>
