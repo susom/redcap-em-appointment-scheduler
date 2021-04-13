@@ -63,9 +63,9 @@ define('REDCAP_COMPLETE', 2);
 /**
  * Complementary Constants (if you change in config.json you MUST update below constants accordingly)
  */
-define('COMPLEMENTARY_EMAIL', 'complementary_email');
-define('COMPLEMENTARY_NAME', 'complementary_name');
-define('COMPLEMENTARY_MOBILE', 'complementary_mobile');
+define('COMPLEMENTARY_EMAIL', 'email');
+define('COMPLEMENTARY_NAME', 'name');
+define('COMPLEMENTARY_MOBILE', 'mobile');
 define('COMPLEMENTARY_NOTES', 'complementary_notes');
 define('COMPLEMENTARY_PROJECT_ID', 'complementary_project_id');
 
