@@ -32,7 +32,8 @@
     "src/reschedule",
     "src/participants_list",
     "src/list",
-    "src/types"
+    "src/types",
+    "src/survey"
   ],
   "links": {
     "project": [
