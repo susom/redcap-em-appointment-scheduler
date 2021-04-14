@@ -11,10 +11,13 @@ $url = $module->getUrl('src/calendar.php', true, true);
 $instance = $module->getEventInstance();
 ?>
     <style>
-        .col-sm-12, .col-xs-12 {
-            background-color: #000000;
-            color: #FFFFFF !important;
+        @media (max-width: 768px) {
+            .col-sm-12, .col-xs-12 {
+                background-color: #000000;
+                color: #FFFFFF !important;
+            }
         }
+
     </style>
 
     <div class="row p-3 mb-2">
