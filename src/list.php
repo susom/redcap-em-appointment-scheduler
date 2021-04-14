@@ -9,6 +9,7 @@ $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
 $data = $module->getMonthSlots($eventId);
 $url = $module->getUrl('src/calendar.php', true, true);
 $instance = $module->getEventInstance();
+// test comment
 ?>
     <style>
         @media (max-width: 550px) {
