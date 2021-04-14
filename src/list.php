@@ -10,7 +10,12 @@ $data = $module->getMonthSlots($eventId);
 $url = $module->getUrl('src/calendar.php', true, true);
 $instance = $module->getEventInstance();
 ?>
-
+    <style>
+        .col-sm-12, .col-xs-12 {
+            background-color: #000000;
+            color: #FFFFFF !important;
+        }
+    </style>
 
     <div class="row p-3 mb-2">
         <div class="col-8">
@@ -22,7 +27,7 @@ $instance = $module->getEventInstance();
                 View</a>
         </div>
     </div>
-    <div class="row ">
+    <div class="row d-none d-sm-block d-lg-flex  d-md-flex ">
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Date (mm/dd/yyyy)</div>
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Location</div>
         <div class="p-3 mb-2 col-lg-3 text-light bg-dark">Time (PDT)</div>
@@ -129,7 +134,7 @@ if (empty($data)) {
                         </div>';
                 }
             } else {
-                $days[$day][$slot['record_id']]['notes' . $suffix] = 'Full <br>';
+                $days[$day][$slot['record_id']]['notes' . $suffix] = '<div class="alert alert-warning">Fully Booked!</div> <br>';
             }
 
         }
@@ -141,9 +146,10 @@ if (empty($data)) {
     foreach ($days as $key => $day) {
         $dayName = array_pop($day);
         ?>
-        <div class="border row ">
-            <div class="p-3 mb-2 col-lg-3 text-dark"><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
-                        strtotime($dayName['date' . $suffix])) . '.)' ?></div>
+        <div class=" row ">
+            <div class="p-3 mb-2 col-lg-3 col-sm-12 col-xs-12 text-dark border">
+                <strong><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
+                            strtotime($dayName['date' . $suffix])) . '.)' ?></strong></div>
             <div class=" col-lg-9">
                 <?php
                 $locations = $module->getProject()->metadata['location']['element_enum'];
