@@ -92,7 +92,7 @@ function completeSurveyReservation(response) {
     jQuery("#reserved-email").val(response.email);
     jQuery("#survey-controller").text("Reservation Completed");
     jQuery("#survey-controller").removeClass("survey-type survey-calendar-view");
-    jQuery("#survey-controller").addClass("manage");
+    //jQuery("#survey-controller").addClass("manage");
 }
 
 $(document).on({
