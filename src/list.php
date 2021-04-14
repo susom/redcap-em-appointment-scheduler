@@ -11,7 +11,7 @@ $url = $module->getUrl('src/calendar.php', true, true);
 $instance = $module->getEventInstance();
 ?>
     <style>
-        @media (max-width: 768px) {
+        @media (max-width: 550px) {
             .col-sm-12, .col-xs-12 {
                 background-color: #000000;
                 color: #FFFFFF !important;
