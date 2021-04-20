@@ -95,6 +95,8 @@ jQuery(document).on('click', '.cancel-appointment', function (e) {
         var record_id_field = jQuery(this).data('record-id-field');
         var event_id = jQuery(this).data('event-id');
         var url = jQuery('#cancel-appointment-url').val();
+        var source = jQuery(this).data('appt-source');
+        var field = jQuery(this).data('survey-field');
         /**
          * Get Manage modal to let user manage their saved appointments
          */
@@ -105,7 +107,15 @@ jQuery(document).on('click', '.cancel-appointment', function (e) {
             success: function (data) {
                 data = JSON.parse(data);
                 alert(data.message);
-                jQuery('.manage').trigger('click');
+                // special use case to cancel survey. we need to clear input.
+                if (source != undefined && source == 'survey') {
+
+                    console.log(field)
+                    jQuery("input[name=" + field + "]").val('')
+                    loadScheduleAppointment();
+                } else {
+                    jQuery('.manage').trigger('click');
+                }
             },
             error: function (request, error) {
                 alert("Request: " + JSON.stringify(request));

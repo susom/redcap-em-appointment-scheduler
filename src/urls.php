@@ -85,7 +85,10 @@ if (!defined('USERID') || USERID == '[survey respondent]') {
 <input type="hidden" id="survey-scheduler-header"
        value="<?php echo(isset($_GET['pid']) ? end($module->getProjectSetting("survey-scheduler-header")) : '') ?>"
        class="hidden"/>
-
+<input type="hidden" value="<?php echo $module->getReservationEventId() ?>" name="reservation-events-id"
+       id="survey-reservation-event-id">
+<input type="hidden" value="<?php echo $module->getPrimaryRecordFieldName(); ?>" name="record-id-field"
+       id="record-id-field">
 <!-- trigger below instance after loading the page. -->
 <input type="hidden" name="triggered-instance" id="triggered-instance"
        value="<?php echo(isset($_GET['trigger']) ? filter_var($_GET['trigger'],

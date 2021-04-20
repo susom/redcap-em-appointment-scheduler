@@ -5,21 +5,7 @@ const reserved_event_id = "reserved_event_id";
  * trigger function to load instance
  */
 $(document).ready(function () {
-    var survey_record_id_field = jQuery("#survey-record-id-field").val();
-    if (jQuery("input[name=" + survey_record_id_field + "]").length) {
-        var $elem = jQuery("input[name=" + survey_record_id_field + "]").parent();
-        jQuery("input[name=" + survey_record_id_field + "]").attr('type', 'hidden');
-        if (jQuery("input[name=" + survey_record_id_field + "]").val() == '') {
-            var url = jQuery("#survey-scheduler-url").val();
-            var key = jQuery("#slots-events-id").val();
-            var surveyRecordId = jQuery("#survey-record-id").val();
-            $elem.append('<div data-url="' + url + '" id="survey-controller" data-survey-record-id="' + surveyRecordId + '" data-key="' + key + '" class="survey-type btn btn-block btn-info">Schedule Appointment</div>')
-            //append this to show loader when ajax is fired
-            $elem.append('<div class="loader"><!-- Place at bottom of page --></div>')
-        } else {
-            $elem.append('<div class="btn btn-block btn-info">Reservation Completed</div>')
-        }
-    }
+    loadScheduleAppointment();
 });
 /**
  * list view in modal
@@ -87,13 +73,38 @@ jQuery(document).on('click', '.survey-calendar-view', function () {
     });
 });
 
+function loadScheduleAppointment() {
+    var survey_record_id_field = jQuery("#survey-record-id-field").val();
+    jQuery(".survey-btn ").remove();
+    if (jQuery("input[name=" + survey_record_id_field + "]").length) {
+        var $elem = jQuery("input[name=" + survey_record_id_field + "]").parent();
+        jQuery("input[name=" + survey_record_id_field + "]").attr('type', 'hidden');
+        if (jQuery("input[name=" + survey_record_id_field + "]").val() == '') {
+            var url = jQuery("#survey-scheduler-url").val();
+            var key = jQuery("#slots-events-id").val();
+            var surveyRecordId = jQuery("#survey-record-id").val();
+            $elem.append('<div data-url="' + url + '" id="survey-controller" data-survey-record-id="' + surveyRecordId + '" data-key="' + key + '" class="survey-btn survey-type btn btn-block btn-info">Schedule Appointment</div>')
+            //append this to show loader when ajax is fired
+            $elem.append('<div class="loader"><!-- Place at bottom of page --></div>')
+        } else {
+            $elem.append('<div data-survey-field="' + survey_record_id_field + '" data-appt-source="survey" data-survey-record-id="' + jQuery("input[name=" + survey_record_id_field + "]").val() + '" data-event-id="' + jQuery("#survey-reservation-event-id").val() + '"  data-record-id-field="' + jQuery("#record-id-field").val() + '" class="survey-btn  cancel-appointment btn btn-block btn-danger">Cancel Booked Reservation</div>')
+        }
+    }
+}
 
 function completeSurveyReservation(response) {
     var survey_record_id_field = jQuery("#survey-record-id-field").val();
     jQuery("input[name=" + survey_record_id_field + "]").val(response.id);
     jQuery("#reserved-email").val(response.email);
-    jQuery("#survey-controller").text("Reservation Completed");
-    jQuery("#survey-controller").removeClass("survey-type survey-calendar-view");
+    jQuery("#survey-controller").text("Cancel Booked Reservation");
+    jQuery("#survey-controller").addClass("survey-btn  cancel-appointment btn-danger");
+    jQuery("#survey-controller").removeClass("survey-type survey-calendar-view btn-info");
+    jQuery("#survey-controller").attr("data-survey-field", survey_record_id_field);
+    jQuery("#survey-controller").attr("data-appt-source", 'survey');
+    jQuery("#survey-controller").attr("data-survey-record-id", response.id);
+    jQuery("#survey-controller").attr("data-event-id", jQuery("#survey-reservation-event-id").val());
+    jQuery("#survey-controller").attr("data-record-id-field", jQuery("#record-id-field").val());
+
     //jQuery("#survey-controller").addClass("manage");
 }
 
