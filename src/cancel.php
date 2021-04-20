@@ -7,10 +7,10 @@ namespace Stanford\AppointmentScheduler;
 
 try {
     $primary = $module->getPrimaryRecordFieldName();
-    $data[$primary] = $_GET[$primary];
+    $data[$primary] = filter_var($_GET[$primary], FILTER_SANITIZE_STRING);
     $eventId = filter_var($_GET['event_id'], FILTER_SANITIZE_NUMBER_INT);
     if ($data[$primary] == '') {
-        throw new \LogicException('Participation ID is missing');
+        throw new \LogicException('Record ID is missing');
     } else {
 
         $data['participant_status' . $module->getSuffix()] = CANCELED;

@@ -91,6 +91,7 @@ if (empty($data)) {
                         $days[$day][$slot['record_id']]['admin' . $suffix] .= '<div class="alert alert-primary" role="alert">
                             ' . $reservation['name'] . '<button type="button"
                                                                       data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-record-id-field="' . $module->getPrimaryRecordFieldName() . '"
                                                                       data-event-id="' . $reservationEventId . '"
                                                                       class="cancel-appointment btn btn-block btn-danger">Cancel
                             </button>
@@ -102,6 +103,7 @@ if (empty($data)) {
                     $days[$day][$slot['record_id']]['admin' . $suffix] = '<div class="alert alert-primary" role="alert">
                             ' . $reservation['name'] . '<button type="button"
                                                                       data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-record-id-field="' . $module->getPrimaryRecordFieldName() . '"
                                                                       data-event-id="' . $reservationEventId . '"
                                                                       class="cancel-appointment btn btn-block btn-danger">Cancel
                             </button>
@@ -132,6 +134,7 @@ if (empty($data)) {
                     $days[$day][$slot['record_id']]['notes' . $suffix] = '<div class="alert alert-primary" role="alert">
                             ' . $reservation['name'] . '<button type="button"
                                                                       data-participation-id="' . $reservation[$module->getPrimaryRecordFieldName()] . '"
+                                                                      data-record-id-field="' . $module->getPrimaryRecordFieldName() . '"
                                                                       data-event-id="' . $reservationEventId . '"
                                                                       class="cancel-appointment btn btn-block btn-danger">Cancel
                             </button>

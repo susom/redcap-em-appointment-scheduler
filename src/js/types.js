@@ -92,13 +92,14 @@ jQuery(document).on('click', '.cancel-appointment', function (e) {
     e.stopImmediatePropagation();
     if (confirm("Are you sure you want to cancel this appointment?")) {
         var participation_id = jQuery(this).data('participation-id');
+        var record_id_field = jQuery(this).data('record-id-field');
         var event_id = jQuery(this).data('event-id');
         var url = jQuery('#cancel-appointment-url').val();
         /**
          * Get Manage modal to let user manage their saved appointments
          */
         jQuery.ajax({
-            url: url + '&participations_id=' + participation_id + '&event_id=' + event_id,
+            url: url + '&' + record_id_field + '=' + participation_id + '&event_id=' + event_id,
             type: 'GET',
             datatype: 'json',
             success: function (data) {
