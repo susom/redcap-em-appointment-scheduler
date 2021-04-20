@@ -7,15 +7,17 @@ const reserved_event_id = "reserved_event_id";
 $(document).ready(function () {
     var survey_record_id_field = jQuery("#survey-record-id-field").val();
     if (jQuery("input[name=" + survey_record_id_field + "]").length) {
+        var $elem = jQuery("input[name=" + survey_record_id_field + "]").parent();
+        jQuery("input[name=" + survey_record_id_field + "]").attr('type', 'hidden');
         if (jQuery("input[name=" + survey_record_id_field + "]").val() == '') {
-            var $elem = jQuery("input[name=" + survey_record_id_field + "]").parent();
-            jQuery("input[name=" + survey_record_id_field + "]").attr('type', 'hidden');
             var url = jQuery("#survey-scheduler-url").val();
             var key = jQuery("#slots-events-id").val();
             var surveyRecordId = jQuery("#survey-record-id").val();
             $elem.append('<div data-url="' + url + '" id="survey-controller" data-survey-record-id="' + surveyRecordId + '" data-key="' + key + '" class="survey-type btn btn-block btn-info">Schedule Appointment</div>')
             //append this to show loader when ajax is fired
             $elem.append('<div class="loader"><!-- Place at bottom of page --></div>')
+        } else {
+            $elem.append('<div class="btn btn-block btn-info">Reservation Completed</div>')
         }
     }
 });
