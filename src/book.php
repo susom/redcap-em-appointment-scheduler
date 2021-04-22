@@ -27,6 +27,14 @@ try {
         $slot = $module::getSlot(filter_var($_POST['record_id'], FILTER_SANITIZE_STRING), $data['event_id'],
             $module->getProjectId(), $module->getPrimaryRecordFieldName());
 
+        // check if any slot is available
+        $counter = $module->getParticipant()->getSlotActualCountReservedSpots(filter_var($_POST['record_id'],
+            FILTER_SANITIZE_STRING),
+            $reservationEventId, '', $module->getProjectId());
+        if ((int)($slot['number_of_participants'] - $counter['counter']) <= 0) {
+            throw new \Exception("All time slots are booked please try different time");
+        }
+
         $date = date('Y-m-d', strtotime(preg_replace("([^0-9/])", "", $_POST['calendarDate'])));
         // no need if user not signed in.
         if (defined('USERID') && USERID != '[survey respondent]') {

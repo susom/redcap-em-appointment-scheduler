@@ -321,7 +321,8 @@ jQuery(document).on('click', '#submit-booking-form', function (e) {
             }
         },
         error: function (request, error) {
-            alert("Request: " + JSON.stringify(request));
+            var re = JSON.parse(request.responseText)
+            alert(re.message);
         }
     });
 });
