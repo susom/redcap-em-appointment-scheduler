@@ -549,7 +549,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     $end = date('Y-m-t', strtotime($start));
                 } else {
                     $start = date('Y-m-d');
-                    $end = date('Y-m-d', strtotime('first day of next month'));
+                    $end = date('Y-m-d', strtotime('+30 days'));
                 }
 
                 $param = array(
@@ -1219,7 +1219,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     strtotime($date)) . "'";
         } else {
             $filter = "event_date BETWEEN '" . date('Y-m-d') . "' AND " . " '" . date('Y-m-d',
-                    strtotime('first day of next month')) . "'";
+                    strtotime('+30 days')) . "'";
         }
         $sql = sprintf("SELECT * from redcap_events_calendar WHERE project_id = $pid AND $filter");
 
