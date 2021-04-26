@@ -92,6 +92,12 @@ jQuery(document).on('click', '.cancel-appointment', function (e) {
     e.stopImmediatePropagation();
     if (confirm("Are you sure you want to cancel this appointment?")) {
         var participation_id = jQuery(this).data('participation-id');
+
+        // for surveys get a different data attribute.
+        if (participation_id === undefined) {
+            participation_id = jQuery(this).data('survey-record-id')
+        }
+
         var record_id_field = jQuery(this).data('record-id-field');
         var event_id = jQuery(this).data('event-id');
         var url = jQuery('#cancel-appointment-url').val();
