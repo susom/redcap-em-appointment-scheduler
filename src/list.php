@@ -155,7 +155,7 @@ if (empty($data)) {
         ?>
         <div class=" row ">
             <div class="p-3 mb-2 col-lg-3 col-sm-12 col-xs-12 text-dark border">
-                <strong><?php echo date('m') . '/' . $key . '/' . date('Y') . ' (' . date('D',
+                <strong><?php echo date('m', strtotime($dayName['date'])) . '/' . $key . '/' . date('Y') . ' (' . date('D',
                             strtotime($dayName['date' . $suffix])) . '.)' ?></strong></div>
             <div class=" col-lg-9">
                 <?php
