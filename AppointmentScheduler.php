@@ -549,6 +549,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                     $end = date('Y-m-t', strtotime($start));
                 } else {
                     $start = date('Y-m-d');
+                    // next 30 days
                     $end = date('Y-m-d', strtotime('+30 days'));
                 }
 
