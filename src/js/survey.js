@@ -20,7 +20,7 @@ jQuery(document).on("click", ".survey-type", function () {
      */
     record.event_id = jQuery('#' + key + "-reservation-event-id").val();
     record.survey_record_id = jQuery(this).data('survey-record-id');
-    ;
+    record.reservation_event_id = jQuery('#' + key + "-reservation-event-id").val();
     jQuery.ajax({
         'url': url + "&event_id=" + jQuery("#slots-events-id").val(),
         'type': 'GET',

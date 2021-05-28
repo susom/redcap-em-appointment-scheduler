@@ -23,7 +23,13 @@ try {
         if (defined('USERID') && USERID != '[survey respondent]') {
             $data['sunet_id' . $module->getSuffix()] = USERID;
         }
-        $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
+
+        // this use case surveys in different arms that needs scheduler.
+        if (!isset($_POST['reservation_event_id']) || $_POST['reservation_event_id'] == '') {
+            $reservationEventId = $module->getReservationEventIdViaSlotEventId($data['event_id']);
+        } else {
+            $reservationEventId = filter_var($_POST['reservation_event_id'], FILTER_SANITIZE_NUMBER_INT);
+        }
         $slot = $module::getSlot(filter_var($_POST['record_id'], FILTER_SANITIZE_STRING), $data['event_id'],
             $module->getProjectId(), $module->getPrimaryRecordFieldName());
 

@@ -94,6 +94,7 @@ define("DEFAULT_NAME", "REDCap Admin");
  * @property int $projectId
  * @property int $recordId
  * @property \Project $project
+ * @property string $surveyField
  */
 class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 {
@@ -158,6 +159,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     private $project;
 
 
+    private $surveyField;
     /**
      * AppointmentScheduler constructor.
      */
@@ -1159,15 +1161,19 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $survey_hash,
         $response_id = null,
         $repeat_instance = 1
-    ) {
+    )
+    {
 
         // check if the instrument is defined as survey instrument in EM
-        $surveyInstruments = end($this->getProjectSetting("instrument_id_for_complementary_appointment"));
-        if ($surveyInstruments == $instrument) {
+        $surveyInstruments = $this->getProjectSetting("instrument_id_for_complementary_appointment");
+
+        if (in_array($instrument, $surveyInstruments)) {
             $this->setInstances();
             $this->setRecordId($record);
             $this->setMainSurveyId($instrument);
-
+            $index = array_search($instrument, $surveyInstruments);
+            $fields = $this->getProjectSetting("survey_record_id_field");
+            $this->setSurveyField($fields[$index]);
             //this included for ajax loader
             echo '<style>';
             require __DIR__ . '/src/css/types.css';
@@ -1340,4 +1346,22 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     {
         return $_SESSION['APPOINTMENT_SCHEDULER_IS_SUPER_USER'];
     }
+
+    /**
+     * @return string
+     */
+    public function getSurveyField(): string
+    {
+        return $this->surveyField;
+    }
+
+    /**
+     * @param string $surveyField
+     */
+    public function setSurveyField(string $surveyField): void
+    {
+        $this->surveyField = $surveyField;
+    }
+
+
 }
