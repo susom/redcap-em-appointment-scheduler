@@ -98,7 +98,7 @@ jQuery(document).on('click', '.cancel-appointment', function (e) {
             participation_id = jQuery(this).data('survey-record-id')
         }
 
-        var record_id_field = jQuery(this).data('record-id-field');
+        var record_id_field = jQuery("#record-id-field").val();
         var event_id = jQuery(this).data('event-id');
         var url = jQuery('#cancel-appointment-url').val();
         var source = jQuery(this).data('appt-source');
