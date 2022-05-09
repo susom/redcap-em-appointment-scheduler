@@ -419,8 +419,9 @@ class CalendarEmail extends Message
         }
     }
 
-    public function send(){
-        try{
+    public function send($removeDisplayName = false, $recipientIsSurveyParticipant = null, $enforceProtectedEmail = false, $emailCategory = null, $lang_id = null)
+    {
+        try {
             $email = new PHPMailer();
             $email->Body = $this->getBody();
             $email->AltBody = $this->getBody();
