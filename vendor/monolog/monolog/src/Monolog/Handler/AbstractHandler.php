@@ -33,8 +33,8 @@ abstract class AbstractHandler implements HandlerInterface, ResettableInterface
     protected $processors = array();
 
     /**
-     * @param int $level The minimum logging level at which this handler will be triggered
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param int|string $level  The minimum logging level at which this handler will be triggered
+     * @param bool       $bubble Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct($level = Logger::DEBUG, $bubble = true)
     {
@@ -75,8 +75,7 @@ abstract class AbstractHandler implements HandlerInterface, ResettableInterface
     public function pushProcessor($callback)
     {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . var_export($callback,
-                    true) . ' given');
+            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), '.var_export($callback, true).' given');
         }
         array_unshift($this->processors, $callback);
 
@@ -120,7 +119,7 @@ abstract class AbstractHandler implements HandlerInterface, ResettableInterface
     /**
      * Sets minimum logging level at which this handler will be triggered.
      *
-     * @param int|string $level Level or level name
+     * @param  int|string $level Level or level name
      * @return self
      */
     public function setLevel($level)
@@ -143,7 +142,7 @@ abstract class AbstractHandler implements HandlerInterface, ResettableInterface
     /**
      * Sets the bubbling behavior.
      *
-     * @param bool $bubble true means that this handler allows bubbling.
+     * @param  bool $bubble true means that this handler allows bubbling.
      *                      false means that bubbling is not permitted.
      * @return self
      */

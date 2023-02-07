@@ -31,8 +31,8 @@ class ZendMonitorHandler extends AbstractProcessingHandler
     /**
      * Construct
      *
-     * @param int $level
-     * @param bool $bubble
+     * @param  int                       $level
+     * @param  bool                      $bubble
      * @throws MissingExtensionException
      */
     public function __construct($level = Logger::DEBUG, $bubble = true)
@@ -44,13 +44,13 @@ class ZendMonitorHandler extends AbstractProcessingHandler
         }
         //zend monitor constants are not defined if zend monitor is not enabled.
         $this->levelMap = array(
-            Logger::DEBUG => \ZEND_MONITOR_EVENT_SEVERITY_INFO,
-            Logger::INFO => \ZEND_MONITOR_EVENT_SEVERITY_INFO,
-            Logger::NOTICE => \ZEND_MONITOR_EVENT_SEVERITY_INFO,
-            Logger::WARNING => \ZEND_MONITOR_EVENT_SEVERITY_WARNING,
-            Logger::ERROR => \ZEND_MONITOR_EVENT_SEVERITY_ERROR,
-            Logger::CRITICAL => \ZEND_MONITOR_EVENT_SEVERITY_ERROR,
-            Logger::ALERT => \ZEND_MONITOR_EVENT_SEVERITY_ERROR,
+            Logger::DEBUG     => \ZEND_MONITOR_EVENT_SEVERITY_INFO,
+            Logger::INFO      => \ZEND_MONITOR_EVENT_SEVERITY_INFO,
+            Logger::NOTICE    => \ZEND_MONITOR_EVENT_SEVERITY_INFO,
+            Logger::WARNING   => \ZEND_MONITOR_EVENT_SEVERITY_WARNING,
+            Logger::ERROR     => \ZEND_MONITOR_EVENT_SEVERITY_ERROR,
+            Logger::CRITICAL  => \ZEND_MONITOR_EVENT_SEVERITY_ERROR,
+            Logger::ALERT     => \ZEND_MONITOR_EVENT_SEVERITY_ERROR,
             Logger::EMERGENCY => \ZEND_MONITOR_EVENT_SEVERITY_ERROR,
         );
         parent::__construct($level, $bubble);

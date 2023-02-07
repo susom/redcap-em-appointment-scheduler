@@ -31,17 +31,13 @@ class LineFormatter extends NormalizerFormatter
     protected $includeStacktraces;
 
     /**
-     * @param string $format The format of the message
-     * @param string $dateFormat The format of the timestamp: one supported by DateTime::format
-     * @param bool $allowInlineLineBreaks Whether to allow inline line breaks in log entries
-     * @param bool $ignoreEmptyContextAndExtra
+     * @param string $format                     The format of the message
+     * @param string $dateFormat                 The format of the timestamp: one supported by DateTime::format
+     * @param bool   $allowInlineLineBreaks      Whether to allow inline line breaks in log entries
+     * @param bool   $ignoreEmptyContextAndExtra
      */
-    public function __construct(
-        $format = null,
-        $dateFormat = null,
-        $allowInlineLineBreaks = false,
-        $ignoreEmptyContextAndExtra = false
-    ) {
+    public function __construct($format = null, $dateFormat = null, $allowInlineLineBreaks = false, $ignoreEmptyContextAndExtra = false)
+    {
         $this->format = $format ?: static::SIMPLE_FORMAT;
         $this->allowInlineLineBreaks = $allowInlineLineBreaks;
         $this->ignoreEmptyContextAndExtra = $ignoreEmptyContextAndExtra;
@@ -76,16 +72,16 @@ class LineFormatter extends NormalizerFormatter
         $output = $this->format;
 
         foreach ($vars['extra'] as $var => $val) {
-            if (false !== strpos($output, '%extra.' . $var . '%')) {
-                $output = str_replace('%extra.' . $var . '%', $this->stringify($val), $output);
+            if (false !== strpos($output, '%extra.'.$var.'%')) {
+                $output = str_replace('%extra.'.$var.'%', $this->stringify($val), $output);
                 unset($vars['extra'][$var]);
             }
         }
 
 
         foreach ($vars['context'] as $var => $val) {
-            if (false !== strpos($output, '%context.' . $var . '%')) {
-                $output = str_replace('%context.' . $var . '%', $this->stringify($val), $output);
+            if (false !== strpos($output, '%context.'.$var.'%')) {
+                $output = str_replace('%context.'.$var.'%', $this->stringify($val), $output);
                 unset($vars['context'][$var]);
             }
         }
@@ -103,8 +99,8 @@ class LineFormatter extends NormalizerFormatter
         }
 
         foreach ($vars as $var => $val) {
-            if (false !== strpos($output, '%' . $var . '%')) {
-                $output = str_replace('%' . $var . '%', $this->stringify($val), $output);
+            if (false !== strpos($output, '%'.$var.'%')) {
+                $output = str_replace('%'.$var.'%', $this->stringify($val), $output);
             }
         }
 
@@ -135,19 +131,19 @@ class LineFormatter extends NormalizerFormatter
     {
         // TODO 2.0 only check for Throwable
         if (!$e instanceof \Exception && !$e instanceof \Throwable) {
-            throw new \InvalidArgumentException('Exception/Throwable expected, got ' . gettype($e) . ' / ' . Utils::getClass($e));
+            throw new \InvalidArgumentException('Exception/Throwable expected, got '.gettype($e).' / '.Utils::getClass($e));
         }
 
         $previousText = '';
         if ($previous = $e->getPrevious()) {
             do {
-                $previousText .= ', ' . Utils::getClass($previous) . '(code: ' . $previous->getCode() . '): ' . $previous->getMessage() . ' at ' . $previous->getFile() . ':' . $previous->getLine();
+                $previousText .= ', '.Utils::getClass($previous).'(code: '.$previous->getCode().'): '.$previous->getMessage().' at '.$previous->getFile().':'.$previous->getLine();
             } while ($previous = $previous->getPrevious());
         }
 
-        $str = '[object] (' . Utils::getClass($e) . '(code: ' . $e->getCode() . '): ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine() . $previousText . ')';
+        $str = '[object] ('.Utils::getClass($e).'(code: '.$e->getCode().'): '.$e->getMessage().' at '.$e->getFile().':'.$e->getLine().$previousText.')';
         if ($this->includeStacktraces) {
-            $str .= "\n[stacktrace]\n" . $e->getTraceAsString() . "\n";
+            $str .= "\n[stacktrace]\n".$e->getTraceAsString()."\n";
         }
 
         return $str;
@@ -160,7 +156,7 @@ class LineFormatter extends NormalizerFormatter
         }
 
         if (is_scalar($data)) {
-            return (string)$data;
+            return (string) $data;
         }
 
         if (version_compare(PHP_VERSION, '5.4.0', '>=')) {

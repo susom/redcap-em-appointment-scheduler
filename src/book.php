@@ -80,7 +80,10 @@ try {
         $completed = preg_grep('/_complete$/', $labels);
         $second = array_slice($completed, 1, 1);  // array("status" => 1)
 
-        $data[$second] = REDCAP_COMPLETE;
+        if($second && !is_array($second)){
+            $data[$second] = REDCAP_COMPLETE;
+        }
+
 
         // the location is defined in the slot.
         $data['participant_location' . $module->getSuffix()] = $slot['location'];

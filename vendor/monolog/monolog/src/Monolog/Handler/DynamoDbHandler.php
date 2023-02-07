@@ -49,9 +49,9 @@ class DynamoDbHandler extends AbstractProcessingHandler
 
     /**
      * @param DynamoDbClient $client
-     * @param string $table
-     * @param int $level
-     * @param bool $bubble
+     * @param string         $table
+     * @param int            $level
+     * @param bool           $bubble
      */
     public function __construct(DynamoDbClient $client, $table, $level = Logger::DEBUG, $bubble = true)
     {
@@ -77,6 +77,7 @@ class DynamoDbHandler extends AbstractProcessingHandler
         if ($this->version === 3) {
             $formatted = $this->marshaler->marshalItem($filtered);
         } else {
+            /** @phpstan-ignore-next-line */
             $formatted = $this->client->formatAttributes($filtered);
         }
 
@@ -87,7 +88,7 @@ class DynamoDbHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param array $record
+     * @param  array $record
      * @return array
      */
     protected function filterEmptyFields(array $record)

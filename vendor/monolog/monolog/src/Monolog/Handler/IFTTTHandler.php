@@ -33,8 +33,8 @@ class IFTTTHandler extends AbstractProcessingHandler
     /**
      * @param string $eventName The name of the IFTTT Maker event that should be triggered
      * @param string $secretKey A valid IFTTT secret key
-     * @param int $level The minimum logging level at which this handler will be triggered
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param int    $level     The minimum logging level at which this handler will be triggered
+     * @param bool   $bubble    Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct($eventName, $secretKey, $level = Logger::ERROR, $bubble = true)
     {
@@ -57,8 +57,7 @@ class IFTTTHandler extends AbstractProcessingHandler
         $postString = Utils::jsonEncode($postData);
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,
-            "https://maker.ifttt.com/trigger/" . $this->eventName . "/with/key/" . $this->secretKey);
+        curl_setopt($ch, CURLOPT_URL, "https://maker.ifttt.com/trigger/" . $this->eventName . "/with/key/" . $this->secretKey);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);

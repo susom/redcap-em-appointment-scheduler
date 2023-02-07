@@ -45,7 +45,7 @@ class IntrospectionProcessor implements ProcessorInterface
     }
 
     /**
-     * @param array $record
+     * @param  array $record
      * @return array
      */
     public function __invoke(array $record)
@@ -91,10 +91,10 @@ class IntrospectionProcessor implements ProcessorInterface
         $record['extra'] = array_merge(
             $record['extra'],
             array(
-                'file' => isset($trace[$i - 1]['file']) ? $trace[$i - 1]['file'] : null,
-                'line' => isset($trace[$i - 1]['line']) ? $trace[$i - 1]['line'] : null,
-                'class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : null,
-                'function' => isset($trace[$i]['function']) ? $trace[$i]['function'] : null,
+                'file'      => isset($trace[$i - 1]['file']) ? $trace[$i - 1]['file'] : null,
+                'line'      => isset($trace[$i - 1]['line']) ? $trace[$i - 1]['line'] : null,
+                'class'     => isset($trace[$i]['class']) ? $trace[$i]['class'] : null,
+                'function'  => isset($trace[$i]['function']) ? $trace[$i]['function'] : null,
             )
         );
 

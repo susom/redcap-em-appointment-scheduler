@@ -52,7 +52,7 @@ class NewRelicHandler extends AbstractProcessingHandler
      * {@inheritDoc}
      *
      * @param string $appName
-     * @param bool $explodeArrays
+     * @param bool   $explodeArrays
      * @param string $transactionName
      */
     public function __construct(
@@ -64,7 +64,7 @@ class NewRelicHandler extends AbstractProcessingHandler
     ) {
         parent::__construct($level, $bubble);
 
-        $this->appName = $appName;
+        $this->appName       = $appName;
         $this->explodeArrays = $explodeArrays;
         $this->transactionName = $transactionName;
     }
@@ -133,7 +133,7 @@ class NewRelicHandler extends AbstractProcessingHandler
      * Returns the appname where this log should be sent. Each log can override the default appname, set in this
      * handler's constructor, by providing the appname in it's context.
      *
-     * @param array $context
+     * @param  array       $context
      * @return null|string
      */
     protected function getAppName(array $context)
@@ -184,7 +184,7 @@ class NewRelicHandler extends AbstractProcessingHandler
 
     /**
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     protected function setNewRelicParameter($key, $value)
     {

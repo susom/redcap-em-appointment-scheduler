@@ -56,8 +56,8 @@ class FirePHPHandler extends AbstractProcessingHandler
     /**
      * Base header creation function used by init headers & record headers
      *
-     * @param array $meta Wildfire Plugin, Protocol & Structure Indexes
-     * @param string $message Log message
+     * @param  array  $meta    Wildfire Plugin, Protocol & Structure Indexes
+     * @param  string $message Log message
      * @return array  Complete header string ready for the client as key and message as value
      */
     protected function createHeader(array $meta, $message)
@@ -70,9 +70,9 @@ class FirePHPHandler extends AbstractProcessingHandler
     /**
      * Creates message header from record
      *
-     * @param array $record
-     * @return string
      * @see createHeader()
+     * @param  array  $record
+     * @return array
      */
     protected function createRecordHeader(array $record)
     {
@@ -95,9 +95,9 @@ class FirePHPHandler extends AbstractProcessingHandler
     /**
      * Wildfire initialization headers to enable message parsing
      *
-     * @return array
-     * @see sendHeader()
      * @see createHeader()
+     * @see sendHeader()
+     * @return array
      */
     protected function getInitHeaders()
     {
@@ -125,9 +125,9 @@ class FirePHPHandler extends AbstractProcessingHandler
     /**
      * Creates & sends header for a record, ensuring init headers have been sent prior
      *
-     * @param array $record
-     * @see sendInitHeaders()
      * @see sendHeader()
+     * @see sendInitHeaders()
+     * @param array $record
      */
     protected function write(array $record)
     {
@@ -175,7 +175,7 @@ class FirePHPHandler extends AbstractProcessingHandler
     public function __get($property)
     {
         if ('sendHeaders' !== $property) {
-            throw new \InvalidArgumentException('Undefined property ' . $property);
+            throw new \InvalidArgumentException('Undefined property '.$property);
         }
 
         return static::$sendHeaders;
@@ -187,7 +187,7 @@ class FirePHPHandler extends AbstractProcessingHandler
     public function __set($property, $value)
     {
         if ('sendHeaders' !== $property) {
-            throw new \InvalidArgumentException('Undefined property ' . $property);
+            throw new \InvalidArgumentException('Undefined property '.$property);
         }
 
         static::$sendHeaders = $value;

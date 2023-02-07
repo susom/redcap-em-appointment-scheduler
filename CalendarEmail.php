@@ -286,7 +286,7 @@ class CovidCalendarEmail extends Message
                 $participants.= "ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN".$name.";X-NUM-GUESTS=0:MAILTO:".$e."\r\n";
             }*/
             // create a new calendar
-            $vcalendar = Vcalendar::factory([Vcalendar::UNIQUE_ID => mt_rand(),])
+            $vcalendar = Vcalendar::factory([Vcalendar::UNIQUE_ID => (string)(mt_rand()),])
 
                 // with calendaring info
                 ->setMethod(Vcalendar::REQUEST)
@@ -419,7 +419,7 @@ class CovidCalendarEmail extends Message
         }
     }
 
-    public function send(){
+    public function send($removeDisplayName = false, $recipientIsSurveyParticipant = null, $enforceProtectedEmail = false, $emailCategory = null, $lang_id = null){
         try{
             $email = new PHPMailer();
             $email->Body = $this->getBody();

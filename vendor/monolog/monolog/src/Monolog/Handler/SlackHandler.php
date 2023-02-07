@@ -37,30 +37,20 @@ class SlackHandler extends SocketHandler
     private $slackRecord;
 
     /**
-     * @param string $token Slack API token
-     * @param string $channel Slack channel (encoded ID or name)
-     * @param string|null $username Name of a bot
-     * @param bool $useAttachment Whether the message should be added to Slack as attachment (plain text otherwise)
-     * @param string|null $iconEmoji The emoji name to use (or null)
-     * @param int $level The minimum logging level at which this handler will be triggered
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
-     * @param bool $useShortAttachment Whether the the context/extra messages added to Slack as attachments are in a short style
-     * @param bool $includeContextAndExtra Whether the attachment should include context and extra data
-     * @param array $excludeFields Dot separated list of fields to exclude from slack message. E.g. ['context.field1', 'extra.field2']
+     * @param  string                    $token                  Slack API token
+     * @param  string                    $channel                Slack channel (encoded ID or name)
+     * @param  string|null               $username               Name of a bot
+     * @param  bool                      $useAttachment          Whether the message should be added to Slack as attachment (plain text otherwise)
+     * @param  string|null               $iconEmoji              The emoji name to use (or null)
+     * @param  int                       $level                  The minimum logging level at which this handler will be triggered
+     * @param  bool                      $bubble                 Whether the messages that are handled can bubble up the stack or not
+     * @param  bool                      $useShortAttachment     Whether the the context/extra messages added to Slack as attachments are in a short style
+     * @param  bool                      $includeContextAndExtra Whether the attachment should include context and extra data
+     * @param  array                     $excludeFields          Dot separated list of fields to exclude from slack message. E.g. ['context.field1', 'extra.field2']
      * @throws MissingExtensionException If no OpenSSL PHP extension configured
      */
-    public function __construct(
-        $token,
-        $channel,
-        $username = null,
-        $useAttachment = true,
-        $iconEmoji = null,
-        $level = Logger::CRITICAL,
-        $bubble = true,
-        $useShortAttachment = false,
-        $includeContextAndExtra = false,
-        array $excludeFields = array()
-    ) {
+    public function __construct($token, $channel, $username = null, $useAttachment = true, $iconEmoji = null, $level = Logger::CRITICAL, $bubble = true, $useShortAttachment = false, $includeContextAndExtra = false, array $excludeFields = array())
+    {
         if (!extension_loaded('openssl')) {
             throw new MissingExtensionException('The OpenSSL PHP extension is required to use the SlackHandler');
         }
@@ -94,7 +84,7 @@ class SlackHandler extends SocketHandler
     /**
      * {@inheritdoc}
      *
-     * @param array $record
+     * @param  array  $record
      * @return string
      */
     protected function generateDataStream($record)
@@ -107,7 +97,7 @@ class SlackHandler extends SocketHandler
     /**
      * Builds the body of API call
      *
-     * @param array $record
+     * @param  array  $record
      * @return string
      */
     private function buildContent($record)
@@ -120,7 +110,7 @@ class SlackHandler extends SocketHandler
     /**
      * Prepares content data
      *
-     * @param array $record
+     * @param  array $record
      * @return array
      */
     protected function prepareContentData($record)
@@ -138,7 +128,7 @@ class SlackHandler extends SocketHandler
     /**
      * Builds the header of the API Call
      *
-     * @param string $content
+     * @param  string $content
      * @return string
      */
     private function buildHeader($content)
@@ -182,7 +172,7 @@ class SlackHandler extends SocketHandler
      * Returned a Slack message attachment color associated with
      * provided level.
      *
-     * @param int $level
+     * @param  int    $level
      * @return string
      * @deprecated Use underlying SlackRecord instead
      */
@@ -199,7 +189,7 @@ class SlackHandler extends SocketHandler
     /**
      * Stringifies an array of key/value pairs to be used in attachment fields
      *
-     * @param array $fields
+     * @param  array  $fields
      * @return string
      * @deprecated Use underlying SlackRecord instead
      */

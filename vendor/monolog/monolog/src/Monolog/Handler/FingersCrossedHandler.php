@@ -40,21 +40,15 @@ class FingersCrossedHandler extends AbstractHandler
     protected $passthruLevel;
 
     /**
-     * @param callable|HandlerInterface $handler Handler or factory callable($record|null, $fingersCrossedHandler).
+     * @param callable|HandlerInterface       $handler            Handler or factory callable($record|null, $fingersCrossedHandler).
      * @param int|ActivationStrategyInterface $activationStrategy Strategy which determines when this handler takes action
-     * @param int $bufferSize How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
-     * @param bool $stopBuffering Whether the handler should stop buffering after being triggered (default true)
-     * @param int $passthruLevel Minimum level to always flush to handler on close, even if strategy not triggered
+     * @param int                             $bufferSize         How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
+     * @param bool                            $bubble             Whether the messages that are handled can bubble up the stack or not
+     * @param bool                            $stopBuffering      Whether the handler should stop buffering after being triggered (default true)
+     * @param int                             $passthruLevel      Minimum level to always flush to handler on close, even if strategy not triggered
      */
-    public function __construct(
-        $handler,
-        $activationStrategy = null,
-        $bufferSize = 0,
-        $bubble = true,
-        $stopBuffering = true,
-        $passthruLevel = null
-    ) {
+    public function __construct($handler, $activationStrategy = null, $bufferSize = 0, $bubble = true, $stopBuffering = true, $passthruLevel = null)
+    {
         if (null === $activationStrategy) {
             $activationStrategy = new ErrorLevelActivationStrategy(Logger::WARNING);
         }
@@ -75,7 +69,7 @@ class FingersCrossedHandler extends AbstractHandler
         }
 
         if (!$this->handler instanceof HandlerInterface && !is_callable($this->handler)) {
-            throw new \RuntimeException("The given handler (" . json_encode($this->handler) . ") is not a callable nor a Monolog\Handler\HandlerInterface object");
+            throw new \RuntimeException("The given handler (".json_encode($this->handler).") is not a callable nor a Monolog\Handler\HandlerInterface object");
         }
     }
 

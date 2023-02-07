@@ -20,18 +20,47 @@ class Utils
     {
         $class = \get_class($object);
 
-        return 'c' === $class[0] && 0 === strpos($class,
-            "class@anonymous\0") ? get_parent_class($class) . '@anonymous' : $class;
+        return 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class).'@anonymous' : $class;
+    }
+
+    /**
+     * Makes sure if a relative path is passed in it is turned into an absolute path
+     *
+     * @param string $streamUrl stream URL or path without protocol
+     *
+     * @return string
+     */
+    public static function canonicalizePath($streamUrl)
+    {
+        $prefix = '';
+        if ('file://' === substr($streamUrl, 0, 7)) {
+            $streamUrl = substr($streamUrl, 7);
+            $prefix = 'file://';
+        }
+
+        // other type of stream, not supported
+        if (false !== strpos($streamUrl, '://')) {
+            return $streamUrl;
+        }
+
+        // already absolute
+        if (substr($streamUrl, 0, 1) === '/' || substr($streamUrl, 1, 1) === ':' || substr($streamUrl, 0, 2) === '\\\\') {
+            return $prefix.$streamUrl;
+        }
+
+        $streamUrl = getcwd() . '/' . $streamUrl;
+
+        return $prefix.$streamUrl;
     }
 
     /**
      * Return the JSON representation of a value
      *
-     * @param mixed $data
-     * @param int $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-     * @param bool $ignoreErrors whether to ignore encoding errors or to throw on error, when ignored and the encoding fails, "null" is returned which is valid json for null
-     * @return string
+     * @param  mixed             $data
+     * @param  int               $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+     * @param  bool              $ignoreErrors whether to ignore encoding errors or to throw on error, when ignored and the encoding fails, "null" is returned which is valid json for null
      * @throws \RuntimeException if encoding fails and errors are not ignored
+     * @return string
      */
     public static function jsonEncode($data, $encodeFlags = null, $ignoreErrors = false)
     {
@@ -64,11 +93,11 @@ class Utils
      * inital error is not encoding related or the input can't be cleaned then
      * raise a descriptive exception.
      *
-     * @param int $code return code of json_last_error function
-     * @param mixed $data data that was meant to be encoded
-     * @param int $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-     * @return string            JSON encoded data after error correction
+     * @param  int               $code return code of json_last_error function
+     * @param  mixed             $data data that was meant to be encoded
+     * @param  int               $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
      * @throws \RuntimeException if failure can't be corrected
+     * @return string            JSON encoded data after error correction
      */
     public static function handleJsonError($code, $data, $encodeFlags = null)
     {
@@ -100,8 +129,8 @@ class Utils
     /**
      * Throws an exception according to a given code with a customized message
      *
-     * @param int $code return code of json_last_error function
-     * @param mixed $data data that was meant to be encoded
+     * @param  int               $code return code of json_last_error function
+     * @param  mixed             $data data that was meant to be encoded
      * @throws \RuntimeException
      */
     private static function throwEncodeError($code, $data)
@@ -123,7 +152,7 @@ class Utils
                 $msg = 'Unknown error';
         }
 
-        throw new \RuntimeException('JSON encoding failed: ' . $msg . '. Encoding: ' . var_export($data, true));
+        throw new \RuntimeException('JSON encoding failed: '.$msg.'. Encoding: '.var_export($data, true));
     }
 
     /**
@@ -139,7 +168,7 @@ class Utils
      * Function converts the input in place in the passed variable so that it
      * can be used as a callback for array_walk_recursive.
      *
-     * @param mixed &$data Input to check and convert if needed
+     * @param mixed $data Input to check and convert if needed, passed by ref
      * @private
      */
     public static function detectAndCleanUtf8(&$data)
@@ -147,9 +176,7 @@ class Utils
         if (is_string($data) && !preg_match('//u', $data)) {
             $data = preg_replace_callback(
                 '/[\x80-\xFF]+/',
-                function ($m) {
-                    return utf8_encode($m[0]);
-                },
+                function ($m) { return utf8_encode($m[0]); },
                 $data
             );
             $data = str_replace(

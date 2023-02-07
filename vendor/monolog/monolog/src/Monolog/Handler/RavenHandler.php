@@ -28,13 +28,13 @@ class RavenHandler extends AbstractProcessingHandler
      * Translates Monolog log levels to Raven log levels.
      */
     protected $logLevels = array(
-        Logger::DEBUG => Raven_Client::DEBUG,
-        Logger::INFO => Raven_Client::INFO,
-        Logger::NOTICE => Raven_Client::INFO,
-        Logger::WARNING => Raven_Client::WARNING,
-        Logger::ERROR => Raven_Client::ERROR,
-        Logger::CRITICAL => Raven_Client::FATAL,
-        Logger::ALERT => Raven_Client::FATAL,
+        Logger::DEBUG     => Raven_Client::DEBUG,
+        Logger::INFO      => Raven_Client::INFO,
+        Logger::NOTICE    => Raven_Client::INFO,
+        Logger::WARNING   => Raven_Client::WARNING,
+        Logger::ERROR     => Raven_Client::ERROR,
+        Logger::CRITICAL  => Raven_Client::FATAL,
+        Logger::ALERT     => Raven_Client::FATAL,
         Logger::EMERGENCY => Raven_Client::FATAL,
     );
 
@@ -50,19 +50,18 @@ class RavenHandler extends AbstractProcessingHandler
     protected $ravenClient;
 
     /**
-     * @var LineFormatter The formatter to use for the logs generated via handleBatch()
+     * @var FormatterInterface The formatter to use for the logs generated via handleBatch()
      */
     protected $batchFormatter;
 
     /**
      * @param Raven_Client $ravenClient
-     * @param int $level The minimum logging level at which this handler will be triggered
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param int          $level       The minimum logging level at which this handler will be triggered
+     * @param bool         $bubble      Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct(Raven_Client $ravenClient, $level = Logger::DEBUG, $bubble = true)
     {
-        @trigger_error('The Monolog\Handler\RavenHandler class is deprecated. You should rather upgrade to the sentry/sentry 2.x and use Sentry\Monolog\Handler, see https://github.com/getsentry/sentry-php/blob/master/src/Monolog/Handler.php',
-            E_USER_DEPRECATED);
+        @trigger_error('The Monolog\Handler\RavenHandler class is deprecated. You should rather upgrade to the sentry/sentry 2.x and use Sentry\Monolog\Handler, see https://github.com/getsentry/sentry-php/blob/master/src/Monolog/Handler.php', E_USER_DEPRECATED);
 
         parent::__construct($level, $bubble);
 
@@ -87,7 +86,7 @@ class RavenHandler extends AbstractProcessingHandler
 
         // the record with the highest severity is the "main" one
         $record = array_reduce($records, function ($highest, $record) {
-            if ($record['level'] > $highest['level']) {
+            if (null === $highest || $record['level'] > $highest['level']) {
                 return $record;
             }
 
@@ -101,7 +100,7 @@ class RavenHandler extends AbstractProcessingHandler
         }
 
         if ($logs) {
-            $record['context']['logs'] = (string)$this->getBatchFormatter()->formatBatch($logs);
+            $record['context']['logs'] = (string) $this->getBatchFormatter()->formatBatch($logs);
         }
 
         $this->handle($record);

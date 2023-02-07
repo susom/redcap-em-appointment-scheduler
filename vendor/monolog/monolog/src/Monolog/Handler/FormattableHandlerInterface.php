@@ -25,7 +25,7 @@ interface FormattableHandlerInterface
     /**
      * Sets the formatter.
      *
-     * @param FormatterInterface $formatter
+     * @param  FormatterInterface $formatter
      * @return HandlerInterface   self
      */
     public function setFormatter(FormatterInterface $formatter): HandlerInterface;

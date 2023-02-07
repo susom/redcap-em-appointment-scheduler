@@ -255,8 +255,10 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     /**
      * @param int $recordId
      */
-    public function setRecordId($recordId)
+    public function setRecordId()
     {
+        $temp = func_get_args();
+        $recordId = $temp[0];
         $this->recordId = $recordId;
     }
 
@@ -1187,19 +1189,19 @@ class CovidAppointmentScheduler extends \ExternalModules\AbstractExternalModule
     ) {
 
         // check if the instrument is defined as survey instrument in EM
-        $surveyInstruments = end($this->getProjectSetting("instrument_id_for_complementary_appointment"));
-        if ($surveyInstruments == $instrument) {
-            $this->setInstances();
-            $this->setRecordId($record);
-            $this->setMainSurveyId($instrument);
-
-            //this included for ajax loader
-            echo '<style>';
-            require __DIR__ . '/src/css/types.css';
-            echo '</style>';
-
-            require __DIR__ . '/src/survey.php';
-        }
+//        $surveyInstruments = end($this->getProjectSetting("instrument_id_for_complementary_appointment"));
+//        if ($surveyInstruments == $instrument) {
+//            $this->setInstances();
+//            $this->setRecordId($record);
+//            $this->setMainSurveyId($instrument);
+//
+//            //this included for ajax loader
+//            echo '<style>';
+//            require __DIR__ . '/src/css/types.css';
+//            echo '</style>';
+//
+//            require __DIR__ . '/src/survey.php';
+//        }
 
     }
 

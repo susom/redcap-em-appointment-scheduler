@@ -27,14 +27,14 @@ use Monolog\Formatter\GelfMessageFormatter;
 class GelfHandler extends AbstractProcessingHandler
 {
     /**
-     * @var Publisher the publisher object that sends the message to the server
+     * @var Publisher|PublisherInterface|IMessagePublisher the publisher object that sends the message to the server
      */
     protected $publisher;
 
     /**
      * @param PublisherInterface|IMessagePublisher|Publisher $publisher a publisher object
-     * @param int $level The minimum logging level at which this handler will be triggered
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param int                                            $level     The minimum logging level at which this handler will be triggered
+     * @param bool                                           $bubble    Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct($publisher, $level = Logger::DEBUG, $bubble = true)
     {

@@ -84,37 +84,26 @@ class HipChatHandler extends SocketHandler
     private $version;
 
     /**
-     * @param string $token HipChat API Token
-     * @param string $room The room that should be alerted of the message (Id or Name)
-     * @param string $name Name used in the "from" field.
-     * @param bool $notify Trigger a notification in clients or not
-     * @param int $level The minimum logging level at which this handler will be triggered
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
-     * @param bool $useSSL Whether to connect via SSL.
-     * @param string $format The format of the messages (default to text, can be set to html if you have html in the messages)
-     * @param string $host The HipChat server hostname.
+     * @param string $token   HipChat API Token
+     * @param string $room    The room that should be alerted of the message (Id or Name)
+     * @param string $name    Name used in the "from" field.
+     * @param bool   $notify  Trigger a notification in clients or not
+     * @param int    $level   The minimum logging level at which this handler will be triggered
+     * @param bool   $bubble  Whether the messages that are handled can bubble up the stack or not
+     * @param bool   $useSSL  Whether to connect via SSL.
+     * @param string $format  The format of the messages (default to text, can be set to html if you have html in the messages)
+     * @param string $host    The HipChat server hostname.
      * @param string $version The HipChat API version (default HipChatHandler::API_V1)
      */
-    public function __construct(
-        $token,
-        $room,
-        $name = 'Monolog',
-        $notify = false,
-        $level = Logger::CRITICAL,
-        $bubble = true,
-        $useSSL = true,
-        $format = 'text',
-        $host = 'api.hipchat.com',
-        $version = self::API_V1
-    ) {
-        @trigger_error('The Monolog\Handler\HipChatHandler class is deprecated. You should migrate to Slack and the SlackWebhookHandler / SlackbotHandler, see https://www.atlassian.com/partnerships/slack',
-            E_USER_DEPRECATED);
+    public function __construct($token, $room, $name = 'Monolog', $notify = false, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $format = 'text', $host = 'api.hipchat.com', $version = self::API_V1)
+    {
+        @trigger_error('The Monolog\Handler\HipChatHandler class is deprecated. You should migrate to Slack and the SlackWebhookHandler / SlackbotHandler, see https://www.atlassian.com/partnerships/slack', E_USER_DEPRECATED);
 
         if ($version == self::API_V1 && !$this->validateStringLength($name, static::MAXIMUM_NAME_LENGTH)) {
             throw new \InvalidArgumentException('The supplied name is too long. HipChat\'s v1 API supports names up to 15 UTF-8 characters.');
         }
 
-        $connectionString = $useSSL ? 'ssl://' . $host . ':443' : $host . ':80';
+        $connectionString = $useSSL ? 'ssl://'.$host.':443' : $host.':80';
         parent::__construct($connectionString, $level, $bubble);
 
         $this->token = $token;
@@ -129,7 +118,7 @@ class HipChatHandler extends SocketHandler
     /**
      * {@inheritdoc}
      *
-     * @param array $record
+     * @param  array  $record
      * @return string
      */
     protected function generateDataStream($record)
@@ -142,7 +131,7 @@ class HipChatHandler extends SocketHandler
     /**
      * Builds the body of API call
      *
-     * @param array $record
+     * @param  array  $record
      * @return string
      */
     private function buildContent($record)
@@ -158,11 +147,9 @@ class HipChatHandler extends SocketHandler
 
         if (!$this->validateStringLength($dataArray['message'], static::MAXIMUM_MESSAGE_LENGTH)) {
             if (function_exists('mb_substr')) {
-                $dataArray['message'] = mb_substr($dataArray['message'], 0,
-                        static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
+                $dataArray['message'] = mb_substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH).' [truncated]';
             } else {
-                $dataArray['message'] = substr($dataArray['message'], 0,
-                        static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
+                $dataArray['message'] = substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH).' [truncated]';
             }
         }
 
@@ -174,7 +161,7 @@ class HipChatHandler extends SocketHandler
         // append the sender name if it is set
         // always append it if we use the v1 api (it is required in v1)
         if ($this->version == self::API_V1 || $this->name !== null) {
-            $dataArray['from'] = (string)$this->name;
+            $dataArray['from'] = (string) $this->name;
         }
 
         return http_build_query($dataArray);
@@ -183,7 +170,7 @@ class HipChatHandler extends SocketHandler
     /**
      * Builds the header of the API Call
      *
-     * @param string $content
+     * @param  string $content
      * @return string
      */
     private function buildHeader($content)
@@ -207,7 +194,7 @@ class HipChatHandler extends SocketHandler
     /**
      * Assigns a color to each level of log records.
      *
-     * @param int $level
+     * @param  int    $level
      * @return string
      */
     protected function getAlertColor($level)
@@ -283,10 +270,10 @@ class HipChatHandler extends SocketHandler
      * will be the highest level from the given records. Datetime will be taken
      * from the first record.
      *
-     * @param $records
+     * @param array $records
      * @return array
      */
-    private function combineRecords($records)
+    private function combineRecords(array $records)
     {
         $batchRecord = null;
         $batchRecords = array();
@@ -314,10 +301,10 @@ class HipChatHandler extends SocketHandler
             $formattedMessageStr = implode('', $formattedMessages);
 
             $batchRecord = array(
-                'message' => $messageStr,
+                'message'   => $messageStr,
                 'formatted' => $formattedMessageStr,
-                'context' => array(),
-                'extra' => array(),
+                'context'   => array(),
+                'extra'     => array(),
             );
 
             if (!$this->validateStringLength($batchRecord['formatted'], static::MAXIMUM_MESSAGE_LENGTH)) {
@@ -344,9 +331,9 @@ class HipChatHandler extends SocketHandler
             $batchRecord = array_merge(
                 $batchRecord,
                 array(
-                    'level' => $level,
+                    'level'      => $level,
                     'level_name' => $levelName,
-                    'datetime' => $datetime,
+                    'datetime'   => $datetime,
                 )
             );
         }
@@ -365,7 +352,7 @@ class HipChatHandler extends SocketHandler
      * system where `mb_strlen()` is unavailable.
      *
      * @param string $str
-     * @param int $length
+     * @param int    $length
      *
      * @return bool
      */

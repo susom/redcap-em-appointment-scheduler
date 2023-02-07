@@ -2,35 +2,34 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator;
 
 use PHPUnit\Framework\TestCase;
+use Kigkonsult\Icalcreator\Util\StringFactory;
 use Exception;
 
 /**
@@ -38,7 +37,6 @@ use Exception;
  *
  * Testing ALLOWEMPTY = false exceptions
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
  * @since  2.27.14 - 2019-02-27
  */
 class Exception5Test extends TestCase
@@ -50,7 +48,6 @@ class Exception5Test extends TestCase
      */
     public function AllowEmptyTest1Provider()
     {
-
         $dataArr = [];
 
         $dataArr[] = [
@@ -58,32 +55,14 @@ class Exception5Test extends TestCase
             [
                 Vcalendar::VEVENT =>
                     [
-                        Vcalendar::ATTACH,
-                        Vcalendar::ATTENDEE,
-                        Vcalendar::CATEGORIES,
-                        Vcalendar::KLASS,
-                        Vcalendar::COMMENT,
-                        Vcalendar::CONTACT,
-                        Vcalendar::DESCRIPTION,
-                        Vcalendar::DTEND,
-                        Vcalendar::DTSTART,
-                        Vcalendar::DURATION,
-                        Vcalendar::EXDATE,
-                        Vcalendar::EXRULE,
-                        Vcalendar::GEO,
-                        Vcalendar::LOCATION,
-                        Vcalendar::ORGANIZER,
-                        Vcalendar::PRIORITY,
-                        Vcalendar::RECURRENCE_ID,
-                        Vcalendar::RELATED_TO,
-                        Vcalendar::REQUEST_STATUS,
-                        Vcalendar::RESOURCES,
-                        Vcalendar::RRULE,
-                        Vcalendar::RDATE,
-                        Vcalendar::STATUS,
-                        Vcalendar::SUMMARY,
-                        Vcalendar::TRANSP,
-                        Vcalendar::URL,
+                        Vcalendar::ATTACH, Vcalendar::ATTENDEE, Vcalendar::CATEGORIES,
+                        Vcalendar::KLASS, Vcalendar::COMMENT, Vcalendar::CONTACT,
+                        Vcalendar::DESCRIPTION, Vcalendar::DTEND, Vcalendar::DTSTART,
+                        Vcalendar::DURATION, Vcalendar::EXDATE, Vcalendar::EXRULE,
+                        Vcalendar::GEO, Vcalendar::LOCATION, Vcalendar::ORGANIZER,
+                        Vcalendar::PRIORITY, Vcalendar::RECURRENCE_ID, Vcalendar::RELATED_TO,
+                        Vcalendar::REQUEST_STATUS, Vcalendar::RESOURCES, Vcalendar::RRULE, Vcalendar::RDATE,
+                        Vcalendar::STATUS, Vcalendar::SUMMARY, Vcalendar::TRANSP, Vcalendar::URL,
                     ],
             ]
         ];
@@ -92,32 +71,14 @@ class Exception5Test extends TestCase
             12,
             [
                 Vcalendar::VTODO => [
-                    Vcalendar::ATTACH,
-                    Vcalendar::ATTENDEE,
-                    Vcalendar::CATEGORIES,
-                    Vcalendar::KLASS,
-                    Vcalendar::COMMENT,
-                    Vcalendar::COMPLETED,
-                    Vcalendar::CONTACT,
-                    Vcalendar::DESCRIPTION,
-                    Vcalendar::DTSTART,
-                    Vcalendar::DUE,
-                    Vcalendar::DURATION,
-                    Vcalendar::EXDATE,
-                    Vcalendar::EXRULE,
-                    Vcalendar::GEO,
-                    Vcalendar::LOCATION,
-                    Vcalendar::ORGANIZER,
-                    Vcalendar::PRIORITY,
-                    Vcalendar::RECURRENCE_ID,
-                    Vcalendar::RELATED_TO,
-                    Vcalendar::REQUEST_STATUS,
-                    Vcalendar::RESOURCES,
-                    Vcalendar::RRULE,
-                    Vcalendar::RDATE,
-                    Vcalendar::STATUS,
-                    Vcalendar::SUMMARY,
-                    Vcalendar::URL,
+                    Vcalendar::ATTACH, Vcalendar::ATTENDEE, Vcalendar::CATEGORIES,
+                    Vcalendar::KLASS, Vcalendar::COMMENT, Vcalendar::COMPLETED, Vcalendar::CONTACT,
+                    Vcalendar::DESCRIPTION, Vcalendar::DTSTART, Vcalendar::DUE,
+                    Vcalendar::DURATION, Vcalendar::EXDATE, Vcalendar::EXRULE,
+                    Vcalendar::GEO, Vcalendar::LOCATION, Vcalendar::ORGANIZER,
+                    Vcalendar::PRIORITY, Vcalendar::RECURRENCE_ID, Vcalendar::RELATED_TO,
+                    Vcalendar::REQUEST_STATUS, Vcalendar::RESOURCES, Vcalendar::RRULE, Vcalendar::RDATE,
+                    Vcalendar::STATUS, Vcalendar::SUMMARY, Vcalendar::URL,
                 ],
             ],
         ];
@@ -126,25 +87,14 @@ class Exception5Test extends TestCase
             13,
             [
                 Vcalendar::VJOURNAL => [
-                    Vcalendar::ATTACH,
-                    Vcalendar::ATTENDEE,
-                    Vcalendar::CATEGORIES,
-                    Vcalendar::KLASS,
-                    Vcalendar::COMMENT,
-                    Vcalendar::CONTACT,
-                    Vcalendar::DESCRIPTION,
-                    Vcalendar::DTSTART,
-                    Vcalendar::EXDATE,
-                    Vcalendar::EXRULE,
+                    Vcalendar::ATTACH, Vcalendar::ATTENDEE, Vcalendar::CATEGORIES,
+                    Vcalendar::KLASS, Vcalendar::COMMENT, Vcalendar::CONTACT,
+                    Vcalendar::DESCRIPTION, Vcalendar::DTSTART,
+                    Vcalendar::EXDATE, Vcalendar::EXRULE,
                     Vcalendar::ORGANIZER,
-                    Vcalendar::RECURRENCE_ID,
-                    Vcalendar::RELATED_TO,
-                    Vcalendar::REQUEST_STATUS,
-                    Vcalendar::RRULE,
-                    Vcalendar::RDATE,
-                    Vcalendar::STATUS,
-                    Vcalendar::SUMMARY,
-                    Vcalendar::URL,
+                    Vcalendar::RECURRENCE_ID, Vcalendar::RELATED_TO,
+                    Vcalendar::REQUEST_STATUS, Vcalendar::RRULE, Vcalendar::RDATE,
+                    Vcalendar::STATUS, Vcalendar::SUMMARY, Vcalendar::URL,
                 ],
             ],
         ];
@@ -153,15 +103,9 @@ class Exception5Test extends TestCase
             14,
             [
                 Vcalendar::VFREEBUSY => [
-                    Vcalendar::ATTENDEE,
-                    Vcalendar::COMMENT,
-                    Vcalendar::CONTACT,
-                    Vcalendar::DTEND,
-                    Vcalendar::DTSTART,
-                    Vcalendar::DURATION,
-                    Vcalendar::FREEBUSY,
-                    Vcalendar::REQUEST_STATUS,
-                    Vcalendar::URL,
+                    Vcalendar::ATTENDEE, Vcalendar::COMMENT, Vcalendar::CONTACT,
+                    Vcalendar::DTEND, Vcalendar::DTSTART, Vcalendar::DURATION,
+                    Vcalendar::FREEBUSY, Vcalendar::REQUEST_STATUS, Vcalendar::URL,
                 ],
             ]
         ];
@@ -170,8 +114,7 @@ class Exception5Test extends TestCase
             15,
             [
                 Vcalendar::VTIMEZONE => [
-                    Vcalendar::TZID,
-                    Vcalendar::TZURL,
+                    Vcalendar::TZID, Vcalendar::TZURL,
                 ],
             ]
         ];
@@ -184,26 +127,27 @@ class Exception5Test extends TestCase
      *
      * @test
      * @dataProvider AllowEmptyTest1Provider
-     * @param int $case
-     * @param array $compProps
+     * @param int    $case
+     * @param array  $compProps
      */
-    public function AllowEmptyTest1($case, $compProps)
+    public function AllowEmptyTest1( $case, $compProps )
     {
-        $calendar = new Vcalendar([Vcalendar::ALLOWEMPTY => false]);
-        foreach ($compProps as $theComp => $propNames) {
+        $calendar = new Vcalendar( [ Vcalendar::ALLOWEMPTY => false ] );
+        foreach( $compProps as $theComp => $propNames ) {
             $newMethod = 'new' . $theComp;
             $comp = $calendar->{$newMethod}();
-            foreach ($propNames as $propName) {
-                $setMethod = Vcalendar::getSetMethodName($propName);
+            foreach( $propNames as $propName ) {
+                $setMethod = StringFactory::getSetMethodName( $propName );
                 $ok = false;
                 try {
                     $comp->{$setMethod}();
-                } catch (Exception $e) {
+                }
+                catch( Exception $e ) {
                     $ok = true;
                 }
-                $this->assertTrue($ok, sprintf(self::$ERRFMT, __FUNCTION__, $case, $theComp, $propName));
-            }
-        }
+                $this->assertTrue( $ok, sprintf( self::$ERRFMT, __FUNCTION__ , $case, $theComp, $propName ));
+            } // end foreach
+        } // end foreach
     }
 
     /**
@@ -220,17 +164,18 @@ class Exception5Test extends TestCase
             Vcalendar::VFREEBUSY,
             Vcalendar::VTIMEZONE
         ];
-        $calendar = new Vcalendar([Vcalendar::ALLOWEMPTY => false]);
-        foreach ($comps as $x => $theComp) {
+        $calendar = new Vcalendar( [ Vcalendar::ALLOWEMPTY => false ] );
+        foreach( $comps as $x => $theComp ) {
             $newMethod = 'new' . $theComp;
             $ok = false;
             try {
                 $calendar->{$newMethod}()->setXprop();
-            } catch (Exception $e) {
+            }
+            catch( Exception $e ) {
                 $ok = true;
             }
-            $this->assertTrue($ok, sprintf(self::$ERRFMT, __FUNCTION__, $x, $theComp, 'xProp'));
-        }
+            $this->assertTrue( $ok, sprintf( self::$ERRFMT, __FUNCTION__, $x, $theComp, 'xProp' ) );
+        } // end foreach
     }
 
     /**
@@ -242,41 +187,34 @@ class Exception5Test extends TestCase
     {
         $compProps = [
             Vcalendar::VEVENT => [
-                Vcalendar::ACTION,
-                Vcalendar::DESCRIPTION,
-                Vcalendar::TRIGGER,
-                Vcalendar::SUMMARY,
+                Vcalendar::ACTION, Vcalendar::DESCRIPTION, Vcalendar::TRIGGER, Vcalendar::SUMMARY,
                 Vcalendar::ATTENDEE,
-                Vcalendar::DURATION,
-                Vcalendar::REPEAT,
+                Vcalendar::DURATION, Vcalendar::REPEAT,
                 Vcalendar::ATTACH,
             ],
             Vcalendar::VTODO => [
-                Vcalendar::ACTION,
-                Vcalendar::DESCRIPTION,
-                Vcalendar::TRIGGER,
-                Vcalendar::SUMMARY,
+                Vcalendar::ACTION, Vcalendar::DESCRIPTION, Vcalendar::TRIGGER, Vcalendar::SUMMARY,
                 Vcalendar::ATTENDEE,
-                Vcalendar::DURATION,
-                Vcalendar::REPEAT,
+                Vcalendar::DURATION, Vcalendar::REPEAT,
                 Vcalendar::ATTACH,
             ],
         ];
-        $calendar = new Vcalendar([Vcalendar::ALLOWEMPTY => false]);
-        foreach ($compProps as $theComp => $propNames) {
+        $calendar = new Vcalendar( [ Vcalendar::ALLOWEMPTY => false ] );
+        foreach( $compProps as $theComp => $propNames) {
             $newMethod = 'new' . $theComp;
-            $comp = $calendar->{$newMethod}()->newValarm();
-            foreach ($propNames as $x => $propName) {
-                $setMethod = Vcalendar::getSetMethodName($propName);
-                $ok = false;
+            $comp      = $calendar->{$newMethod}()->newValarm();
+            foreach( $propNames as $x => $propName ) {
+                $setMethod = StringFactory::getSetMethodName( $propName );
+                $ok        = false;
                 try {
                     $comp->{$setMethod}();
-                } catch (Exception $e) {
+                }
+                catch( Exception $e ) {
                     $ok = true;
                 }
-                $this->assertTrue($ok, sprintf(self::$ERRFMT, __FUNCTION__, $x, $theComp, $propName));
-            }
-        }
+                $this->assertTrue( $ok, sprintf( self::$ERRFMT, __FUNCTION__, $x, $theComp, $propName ) );
+            } // end foreach
+        } // end foreach
     }
 
     /**
@@ -295,20 +233,20 @@ class Exception5Test extends TestCase
                 Vcalendar::DAYLIGHT
             ],
         ];
-        $calendar = new Vcalendar([Vcalendar::ALLOWEMPTY => false]);
-        foreach ($compProps as $theComp => $compNames) {
+        $calendar = new Vcalendar( [ Vcalendar::ALLOWEMPTY => false ] );
+        foreach( $compProps as $theComp => $compNames ) {
             $newMethod1 = 'new' . $theComp;
-            foreach ($compNames as $x => $subComp) {
+            foreach( $compNames as $x => $subComp ) {
                 $newMethod2 = 'new' . $subComp;
                 $ok = false;
                 try {
                     $calendar->{$newMethod1}()->{$newMethod2}()->setXprop();
-                } catch (Exception $e) {
+                }
+                catch( Exception $e ) {
                     $ok = true;
                 }
-                $this->assertTrue($ok, sprintf(self::$ERRFMT, __FUNCTION__, $x, $theComp, 'xProp'));
-            }
-        }
+                $this->assertTrue( $ok, sprintf( self::$ERRFMT, __FUNCTION__, $x, $theComp, 'xProp' ) );
+            } // end foreach
+        } // end foreach
     }
-
 }

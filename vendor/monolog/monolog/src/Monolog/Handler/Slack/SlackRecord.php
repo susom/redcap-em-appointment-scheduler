@@ -86,16 +86,8 @@ class SlackRecord
      */
     private $normalizerFormatter;
 
-    public function __construct(
-        $channel = null,
-        $username = null,
-        $useAttachment = true,
-        $userIcon = null,
-        $useShortAttachment = false,
-        $includeContextAndExtra = false,
-        array $excludeFields = array(),
-        FormatterInterface $formatter = null
-    ) {
+    public function __construct($channel = null, $username = null, $useAttachment = true, $userIcon = null, $useShortAttachment = false, $includeContextAndExtra = false, array $excludeFields = array(), FormatterInterface $formatter = null)
+    {
         $this->channel = $channel;
         $this->username = $username;
         $this->userIcon = trim($userIcon, ':');
@@ -131,12 +123,12 @@ class SlackRecord
 
         if ($this->useAttachment) {
             $attachment = array(
-                'fallback' => $message,
-                'text' => $message,
-                'color' => $this->getAttachmentColor($record['level']),
-                'fields' => array(),
+                'fallback'  => $message,
+                'text'      => $message,
+                'color'     => $this->getAttachmentColor($record['level']),
+                'fields'    => array(),
                 'mrkdwn_in' => array('fields'),
-                'ts' => $record['datetime']->getTimestamp()
+                'ts'        => $record['datetime']->getTimestamp()
             );
 
             if ($this->useShortAttachment) {
@@ -188,7 +180,7 @@ class SlackRecord
      * Returned a Slack message attachment color associated with
      * provided level.
      *
-     * @param int $level
+     * @param  int    $level
      * @return string
      */
     public function getAttachmentColor($level)
@@ -242,7 +234,7 @@ class SlackRecord
     /**
      * Generates attachment field
      *
-     * @param string $title
+     * @param string       $title
      * @param string|array $value
      *
      * @return array

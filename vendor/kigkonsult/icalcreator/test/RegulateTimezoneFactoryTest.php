@@ -2,32 +2,30 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator\Util;
 
 use DateTimeZone;
@@ -42,7 +40,6 @@ use UnexpectedValueException;
  *
  * @covers \Kigkonsult\Icalcreator\Util\RegulateTimezoneFactory
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
  * @since  2.27.14 - 2019-02-27
  */
 class RegulateTimezoneFactoryTest extends DtBase
@@ -52,11 +49,10 @@ class RegulateTimezoneFactoryTest extends DtBase
      */
     public function TzTest1Provider()
     {
-
         $dataArr = [];
 
         $case = 100;
-        foreach (RegulateTimezoneFactory::$MStimezoneToOffset as $otherTimezone => $offset) {
+        foreach( RegulateTimezoneFactory::$MStimezoneToOffset as $otherTimezone => $offset ) {
             $dataArr[] = [
                 ++$case,
                 $otherTimezone,
@@ -66,8 +62,8 @@ class RegulateTimezoneFactoryTest extends DtBase
 
         $case = 200;
         $timezoneIdentifiers = DateTimeZone::listIdentifiers();
-        foreach ($timezoneIdentifiers as $tix => $timezoneIdentifier) {
-            if (0 != ($tix % 10)) {
+        foreach( $timezoneIdentifiers as $tix => $timezoneIdentifier ) {
+            if( 0 != ( $tix % 10 )) {
                 continue;
             }
             $dataArr[] = [
@@ -87,12 +83,12 @@ class RegulateTimezoneFactoryTest extends DtBase
      *
      * @test
      * @dataProvider TzTest1Provider
-     * @param int $case
+     * @param int    $case
      * @param string $otherTimezone
-     * @param int $hitsAfterProcess
+     * @param int    $hitsAfterProcess
      * @throws Exception
      */
-    public function TzTest1($case, $otherTimezone, $hitsAfterProcess)
+    public function TzTest1( $case, $otherTimezone, $hitsAfterProcess )
     {
         $case += 1000;
         static $CALFMT =
@@ -138,21 +134,21 @@ RDATE;TZID=%1$s;VALUE=PERIOD:20080808T080801/20080808T080802,20080808T080803/PT8
 END:VEVENT
 END:VCALENDAR
 ';
-        $calendar = sprintf($CALFMT, $otherTimezone);
-        $calendar2 = RegulateTimezoneFactory::process($calendar);
+        $calendar  = sprintf( $CALFMT, $otherTimezone );
+        $calendar2 = RegulateTimezoneFactory::process( $calendar );
 
-        if ('UTC' == $otherTimezone) {
+        if( 'UTC' == $otherTimezone ) {
             $hitsAfterProcess = 3;
         }
         $this->assertEquals(
             $hitsAfterProcess,
-            substr_count($calendar2, $otherTimezone),
+            substr_count( $calendar2, $otherTimezone ),
             'error in case #' . $case . ', timezone : ' . $otherTimezone . PHP_EOL . $calendar2
         );
 
         $this->parseCalendarTest(
             $case,
-            Vcalendar::factory()->parse($calendar2)
+            Vcalendar::factory()->parse( $calendar2 )
         );
     }
 
@@ -165,7 +161,7 @@ END:VCALENDAR
     public function TzTest2()
     {
         $calendar =
-            'BEGIN:VCALENDAR
+'BEGIN:VCALENDAR
 METHOD:PUBLISH
 PRODID:Microsoft Exchange Server 2010
 VERSION:2.0
@@ -226,29 +222,28 @@ END:VEVENT
 END:VCALENDAR
 ';
         $tzFactory = RegulateTimezoneFactory::factory();
-        $this->assertFalse($tzFactory->isInputiCalSet());
+        $this->assertFalse( $tzFactory->isInputiCalSet());
 
-        $tzFactory->setInputiCal($calendar);
-        $this->assertTrue($tzFactory->isInputiCalSet());
+        $tzFactory->setInputiCal( $calendar );
+        $this->assertTrue( $tzFactory->isInputiCalSet());
 
-        $this->assertFalse($tzFactory->hasOtherTzPHPtzMap('otherTimezone'));
-        $tzFactory->addOtherTzPhpRelation('otherTimezone', 'Europe/Stockholm');
-        $this->assertTrue($tzFactory->hasOtherTzPHPtzMap('otherTimezone'));
+        $this->assertFalse( $tzFactory->hasOtherTzPHPtzMap( 'otherTimezone' ));
+        $tzFactory->addOtherTzPhpRelation( 'otherTimezone', 'Europe/Stockholm' );
+        $this->assertTrue( $tzFactory->hasOtherTzPHPtzMap( 'otherTimezone' ));
 
-        $calendar2 = $tzFactory->processCalendar($calendar)->getOutputiCal();
+        $calendar2 = $tzFactory->processCalendar( $calendar )->getOutputiCal();
 
         $this->assertFalse(
-            stripos($calendar2, 'W. Europe Standard Time')
+            stripos( $calendar2, 'W. Europe Standard Time' )
         );
         $this->assertFalse(
-            stripos($calendar2, 'Customized Time Zone')
+            stripos( $calendar2, 'Customized Time Zone' )
         );
 
         $this->parseCalendarTest(
             100,
-            Vcalendar::factory()->parse($calendar2)
+            Vcalendar::factory()->parse( $calendar2 )
         );
-
     }
 
     private static $calendar2 =
@@ -273,30 +268,31 @@ END:VCALENDAR
      *
      * @test
      * @dataProvider TzTest1Provider
-     * @param int $case
+     * @param int    $case
      * @param string $otherTimezone
-     * @param int $hitsAfterProcess
+     * @param int    $hitsAfterProcess
      * @throws Exception
      */
-    public function TzTest3($case, $otherTimezone, $hitsAfterProcess)
+    public function TzTest3( $case, $otherTimezone, $hitsAfterProcess )
     {
         $case += 3000;
-        $calendar = sprintf(self::$calendar2, $otherTimezone);
-        $calendar2 = RegulateTimezoneFactory::process($calendar);
+        $calendar = sprintf( self::$calendar2, $otherTimezone );
+        $calendar2 = RegulateTimezoneFactory::process( $calendar );
 
-        if (3200 > $case) {
+        if( 3200 > $case ) {
             $this->assertFalse(
-                strpos($calendar2, $otherTimezone)
+                strpos( $calendar2, $otherTimezone )
             );
-        } else {
+        }
+        else {
             $this->assertTrue(
-                (false !== strpos($calendar2, $otherTimezone))
+                ( false !== strpos( $calendar2, $otherTimezone ))
             );
         }
 
         $this->parseCalendarTest(
             $case,
-            Vcalendar::factory()->parse($calendar2)
+            Vcalendar::factory()->parse( $calendar2 )
         );
     }
 
@@ -308,22 +304,22 @@ END:VCALENDAR
      */
     public function TzTest5()
     {
-        RegulateTimezoneFactory::addMStimezoneToOffset('otherTimezone', 12345);
+        RegulateTimezoneFactory::addMStimezoneToOffset( 'otherTimezone', 12345 );
         $this->assertArrayHasKey(
             'otherTimezone',
             RegulateTimezoneFactory::$MStimezoneToOffset
         );
 
-        RegulateTimezoneFactory::addOtherTzMapToPhpTz('otherTimezone', 'Europe/Stockholm');
+        RegulateTimezoneFactory::addOtherTzMapToPhpTz( 'otherTimezone', 'Europe/Stockholm' );
         $this->assertArrayHasKey(
             'otherTimezone',
             RegulateTimezoneFactory::$otherTzToPhpTz
         );
 
-        $calendar = sprintf(self::$calendar2, 'W. Europe Standard Time');
+        $calendar = sprintf( self::$calendar2, 'W. Europe Standard Time' );
         $otherTzToPhpTz = RegulateTimezoneFactory::$otherTzToPhpTz;
-        $tzFactory = new RegulateTimezoneFactory(self::$calendar2);
-        $tzFactory->addOtherTzPhpRelation('otherTimezone', 'Europe/Stockholm');
+        $tzFactory = new RegulateTimezoneFactory( self::$calendar2 );
+        $tzFactory->addOtherTzPhpRelation( 'otherTimezone', 'Europe/Stockholm' );
         $this->assertEquals(
             $otherTzToPhpTz + ['otherTimezone' => 'Europe/Stockholm'],
             $tzFactory->getOtherTzPhpRelations()
@@ -340,8 +336,8 @@ END:VCALENDAR
     public function TzTest6()
     {
         $calendar2 = RegulateTimezoneFactory::process(
-            sprintf(self::$calendar2, '̈́Europe/Stockholm'),
-            ['otherTimezone' => 'phpTimezone']
+            sprintf( self::$calendar2, '̈́Europe/Stockholm' ),
+            [ 'otherTimezone' => 'phpTimezone' ]
         );
     }
 
@@ -355,7 +351,7 @@ END:VCALENDAR
     public function TzTest7()
     {
         $tzFactory = RegulateTimezoneFactory::factory();
-        $this->assertFalse($tzFactory->isInputiCalSet());
+        $this->assertFalse( $tzFactory->isInputiCalSet());
 
         $tzFactory->processCalendar();
     }
@@ -369,7 +365,6 @@ END:VCALENDAR
      */
     public function TzTest8()
     {
-        $calendar2 = RegulateTimezoneFactory::process('grodan boll');
+        $calendar2 = RegulateTimezoneFactory::process( 'grodan boll' );
     }
-
 }

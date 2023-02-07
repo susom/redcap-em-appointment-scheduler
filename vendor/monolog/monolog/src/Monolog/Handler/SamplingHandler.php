@@ -41,7 +41,7 @@ class SamplingHandler extends AbstractHandler
 
     /**
      * @param callable|HandlerInterface $handler Handler or factory callable($record|null, $samplingHandler).
-     * @param int $factor Sample factor
+     * @param int                       $factor  Sample factor
      */
     public function __construct($handler, $factor)
     {
@@ -50,7 +50,7 @@ class SamplingHandler extends AbstractHandler
         $this->factor = $factor;
 
         if (!$this->handler instanceof HandlerInterface && !is_callable($this->handler)) {
-            throw new \RuntimeException("The given handler (" . json_encode($this->handler) . ") is not a callable nor a Monolog\Handler\HandlerInterface object");
+            throw new \RuntimeException("The given handler (".json_encode($this->handler).") is not a callable nor a Monolog\Handler\HandlerInterface object");
         }
     }
 

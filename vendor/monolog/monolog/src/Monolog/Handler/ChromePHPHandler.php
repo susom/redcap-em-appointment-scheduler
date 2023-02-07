@@ -59,7 +59,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
     protected static $sendHeaders = true;
 
     /**
-     * @param int $level The minimum logging level at which this handler will be triggered
+     * @param int  $level  The minimum logging level at which this handler will be triggered
      * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct($level = Logger::DEBUG, $bubble = true)
@@ -102,9 +102,9 @@ class ChromePHPHandler extends AbstractProcessingHandler
     /**
      * Creates & sends header for a record
      *
-     * @param array $record
-     * @see send()
      * @see sendHeader()
+     * @see send()
+     * @param array $record
      */
     protected function write(array $record)
     {
@@ -192,7 +192,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
     public function __get($property)
     {
         if ('sendHeaders' !== $property) {
-            throw new \InvalidArgumentException('Undefined property ' . $property);
+            throw new \InvalidArgumentException('Undefined property '.$property);
         }
 
         return static::$sendHeaders;
@@ -204,7 +204,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
     public function __set($property, $value)
     {
         if ('sendHeaders' !== $property) {
-            throw new \InvalidArgumentException('Undefined property ' . $property);
+            throw new \InvalidArgumentException('Undefined property '.$property);
         }
 
         static::$sendHeaders = $value;
