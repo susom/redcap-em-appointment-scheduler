@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Czech PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
@@ -15,6 +16,8 @@ $PHPMAILER_LANG['file_open'] = 'Chyba souboru: Nelze otevřít soubor pro čten�
 $PHPMAILER_LANG['from_failed'] = 'Následující adresa odesílatele je nesprávná: ';
 $PHPMAILER_LANG['instantiate'] = 'Nelze vytvořit instanci emailové funkce.';
 $PHPMAILER_LANG['invalid_address'] = 'Neplatná adresa: ';
+$PHPMAILER_LANG['invalid_hostentry'] = 'Záznam hostitele je nesprávný: ';
+$PHPMAILER_LANG['invalid_host'] = 'Hostitel je nesprávný: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer není podporován.';
 $PHPMAILER_LANG['provide_address'] = 'Musíte zadat alespoň jednu emailovou adresu příjemce.';
 $PHPMAILER_LANG['recipients_failed'] = 'Chyba SMTP: Následující adresy příjemců nejsou správně: ';

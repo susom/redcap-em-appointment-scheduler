@@ -95,18 +95,10 @@ class HipChatHandler extends SocketHandler
      * @param string $host The HipChat server hostname.
      * @param string $version The HipChat API version (default HipChatHandler::API_V1)
      */
-    public function __construct(
-        $token,
-        $room,
-        $name = 'Monolog',
-        $notify = false,
-        $level = Logger::CRITICAL,
-        $bubble = true,
-        $useSSL = true,
-        $format = 'text',
-        $host = 'api.hipchat.com',
-        $version = self::API_V1
-    ) {
+    public function __construct($token, $room, $name = 'Monolog', $notify = false, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $format = 'text', $host = 'api.hipchat.com', $version = self::API_V1)
+    {
+        @trigger_error('The Monolog\Handler\HipChatHandler class is deprecated. You should migrate to Slack and the SlackWebhookHandler / SlackbotHandler, see https://www.atlassian.com/partnerships/slack', E_USER_DEPRECATED);
+
         if ($version == self::API_V1 && !$this->validateStringLength($name, static::MAXIMUM_NAME_LENGTH)) {
             throw new \InvalidArgumentException('The supplied name is too long. HipChat\'s v1 API supports names up to 15 UTF-8 characters.');
         }
@@ -155,11 +147,9 @@ class HipChatHandler extends SocketHandler
 
         if (!$this->validateStringLength($dataArray['message'], static::MAXIMUM_MESSAGE_LENGTH)) {
             if (function_exists('mb_substr')) {
-                $dataArray['message'] = mb_substr($dataArray['message'], 0,
-                        static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
+                $dataArray['message'] = mb_substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
             } else {
-                $dataArray['message'] = substr($dataArray['message'], 0,
-                        static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
+                $dataArray['message'] = substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
             }
         }
 
@@ -280,10 +270,10 @@ class HipChatHandler extends SocketHandler
      * will be the highest level from the given records. Datetime will be taken
      * from the first record.
      *
-     * @param $records
+     * @param array $records
      * @return array
      */
-    private function combineRecords($records)
+    private function combineRecords(array $records)
     {
         $batchRecord = null;
         $batchRecords = array();

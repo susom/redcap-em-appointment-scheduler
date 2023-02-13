@@ -127,8 +127,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
             if (stripos($header, 'content-type:') === 0) {
                 // This handler only works with HTML and javascript outputs
                 // text/javascript is obsolete in favour of application/javascript, but still used
-                if (stripos($header, 'application/javascript') !== false || stripos($header,
-                        'text/javascript') !== false) {
+                if (stripos($header, 'application/javascript') !== false || stripos($header, 'text/javascript') !== false) {
                     return 'js';
                 }
                 if (stripos($header, 'text/html') === false) {
@@ -165,22 +164,22 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
 
     private static function handleStyles($formatted)
     {
-        $args = array(static::quote('font-weight: normal'));
+        $args = array();
         $format = '%c' . $formatted;
         preg_match_all('/\[\[(.*?)\]\]\{([^}]*)\}/s', $format, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 
         foreach (array_reverse($matches) as $match) {
-            $args[] = static::quote(static::handleCustomStyles($match[2][0], $match[1][0]));
             $args[] = '"font-weight: normal"';
+            $args[] = static::quote(static::handleCustomStyles($match[2][0], $match[1][0]));
 
             $pos = $match[0][1];
-            $format = substr($format, 0, $pos) . '%c' . $match[1][0] . '%c' . substr($format,
-                    $pos + strlen($match[0][0]));
+            $format = substr($format, 0, $pos) . '%c' . $match[1][0] . '%c' . substr($format, $pos + strlen($match[0][0]));
         }
 
-        array_unshift($args, static::quote($format));
+        $args[] = static::quote('font-weight: normal');
+        $args[] = static::quote($format);
 
-        return $args;
+        return array_reverse($args);
     }
 
     private static function handleCustomStyles($style, $string)
@@ -210,8 +209,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         if (empty($dict)) {
             return $script;
         }
-        $script[] = static::call('log', static::quote('%c%s'), static::quote('font-weight: bold'),
-            static::quote($title));
+        $script[] = static::call('log', static::quote('%c%s'), static::quote('font-weight: bold'), static::quote($title));
         foreach ($dict as $key => $value) {
             $value = json_encode($value);
             if (empty($value)) {

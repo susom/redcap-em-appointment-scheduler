@@ -12,6 +12,7 @@
 namespace Monolog\Handler;
 
 use Monolog\Logger;
+use Monolog\Utils;
 
 /**
  * Stores to any stream resource
@@ -22,6 +23,10 @@ use Monolog\Logger;
  */
 class StreamHandler extends AbstractProcessingHandler
 {
+    /** @private 512KB */
+    const CHUNK_SIZE = 524288;
+
+    /** @var resource|null */
     protected $stream;
     protected $url;
     private $errorMessage;
@@ -39,18 +44,14 @@ class StreamHandler extends AbstractProcessingHandler
      * @throws \Exception                If a missing directory is not buildable
      * @throws \InvalidArgumentException If stream is not a resource or string
      */
-    public function __construct(
-        $stream,
-        $level = Logger::DEBUG,
-        $bubble = true,
-        $filePermission = null,
-        $useLocking = false
-    ) {
+    public function __construct($stream, $level = Logger::DEBUG, $bubble = true, $filePermission = null, $useLocking = false)
+    {
         parent::__construct($level, $bubble);
         if (is_resource($stream)) {
             $this->stream = $stream;
+            $this->streamSetChunkSize();
         } elseif (is_string($stream)) {
-            $this->url = $stream;
+            $this->url = Utils::canonicalizePath($stream);
         } else {
             throw new \InvalidArgumentException('A stream must either be a resource or a string.');
         }
@@ -68,6 +69,7 @@ class StreamHandler extends AbstractProcessingHandler
             fclose($this->stream);
         }
         $this->stream = null;
+        $this->dirCreated = null;
     }
 
     /**
@@ -109,9 +111,10 @@ class StreamHandler extends AbstractProcessingHandler
             restore_error_handler();
             if (!is_resource($this->stream)) {
                 $this->stream = null;
-                throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened: ' . $this->errorMessage,
-                    $this->url));
+
+                throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened in append mode: ' . $this->errorMessage, $this->url));
             }
+            $this->streamSetChunkSize();
         }
 
         if ($this->useLocking) {
@@ -136,6 +139,15 @@ class StreamHandler extends AbstractProcessingHandler
         fwrite($stream, (string)$record['formatted']);
     }
 
+    protected function streamSetChunkSize()
+    {
+        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            return stream_set_chunk_size($this->stream, self::CHUNK_SIZE);
+        }
+
+        return false;
+    }
+
     private function customErrorHandler($code, $msg)
     {
         $this->errorMessage = preg_replace('{^(fopen|mkdir)\(.*?\): }', '', $msg);
@@ -157,7 +169,7 @@ class StreamHandler extends AbstractProcessingHandler
             return dirname(substr($stream, 7));
         }
 
-        return;
+        return null;
     }
 
     private function createDir()
@@ -174,8 +186,7 @@ class StreamHandler extends AbstractProcessingHandler
             $status = mkdir($dir, 0777, true);
             restore_error_handler();
             if (false === $status && !is_dir($dir)) {
-                throw new \UnexpectedValueException(sprintf('There is no existing directory at "%s" and its not buildable: ' . $this->errorMessage,
-                    $dir));
+                throw new \UnexpectedValueException(sprintf('There is no existing directory at "%s" and its not buildable: ' . $this->errorMessage, $dir));
             }
         }
         $this->dirCreated = true;

@@ -33,13 +33,8 @@ class SignalHandler
         $this->logger = $logger;
     }
 
-    public function registerSignalHandler(
-        $signo,
-        $level = LogLevel::CRITICAL,
-        $callPrevious = true,
-        $restartSyscalls = true,
-        $async = true
-    ) {
+    public function registerSignalHandler($signo, $level = LogLevel::CRITICAL, $callPrevious = true, $restartSyscalls = true, $async = true)
+    {
         if (!extension_loaded('pcntl') || !function_exists('pcntl_signal')) {
             return $this;
         }
@@ -101,7 +96,7 @@ class SignalHandler
         if ($this->previousSignalHandler[$signo] === true || $this->previousSignalHandler[$signo] === SIG_DFL) {
             if (extension_loaded('pcntl') && function_exists('pcntl_signal') && function_exists('pcntl_sigprocmask') && function_exists('pcntl_signal_dispatch')
                 && extension_loaded('posix') && function_exists('posix_getpid') && function_exists('posix_kill')) {
-                $restartSyscalls = isset($this->restartSyscalls[$signo]) ? $this->restartSyscalls[$signo] : true;
+                $restartSyscalls = isset($this->signalRestartSyscalls[$signo]) ? $this->signalRestartSyscalls[$signo] : true;
                 pcntl_signal($signo, SIG_DFL, $restartSyscalls);
                 pcntl_sigprocmask(SIG_UNBLOCK, array($signo), $oldset);
                 posix_kill(posix_getpid(), $signo);

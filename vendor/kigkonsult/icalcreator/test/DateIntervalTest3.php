@@ -2,32 +2,30 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator;
 
 use Exception;
@@ -40,7 +38,6 @@ use Kigkonsult\Icalcreator\Util\Util;
 /**
  * class DateIntervalTest3, Testing (PERIOD DateTime-)DateInterval for FREEBUSY
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
  * @since  2.29.05 - 2019-06-20
  */
 class DateIntervalTest3 extends DtBase
@@ -64,7 +61,7 @@ class DateIntervalTest3 extends DtBase
     /**
      * DateInterval123Provider Generator
      *
-     * @param int $inclYearMonth
+     * @param bool $inclYearMonth
      * @return array
      * @throws Exception
      * @static
@@ -73,25 +70,25 @@ class DateIntervalTest3 extends DtBase
     public static function DateIntervalArrayGenerator($inclYearMonth = true)
     {
         $base = [
-            RecurFactory::$LCYEAR => random_int(1, 2),
-            RecurFactory::$LCMONTH => random_int(1, 12),
-            RecurFactory::$LCDAY => random_int(1, 28),
-            RecurFactory::$LCWEEK => random_int(1, 4),
-            RecurFactory::$LCHOUR => random_int(1, 23),
-            RecurFactory::$LCMIN => random_int(1, 59),
-            RecurFactory::$LCSEC => random_int(1, 59)
+            RecurFactory::$LCYEAR => array_rand(array_flip([1, 2])),
+            RecurFactory::$LCMONTH => array_rand(array_flip([1, 12])),
+            RecurFactory::$LCDAY => array_rand(array_flip([1, 28])),
+            RecurFactory::$LCWEEK => array_rand(array_flip([1, 4])),
+            RecurFactory::$LCHOUR => array_rand(array_flip([1, 23])),
+            RecurFactory::$LCMIN => array_rand(array_flip([1, 59])),
+            RecurFactory::$LCSEC => array_rand(array_flip([1, 59]))
         ];
 
         do {
             $random = [];
-            $cnt = random_int(1, 7);
+            $cnt = array_rand(array_flip([1, 7]));
             for ($x = 0; $x < $cnt; $x++) {
                 $random = array_merge(
                     $random,
-                    array_slice($base, random_int(1, 7), 1, true)
+                    array_slice($base, array_rand(array_flip([1, 7])), 1, true)
                 );
             }
-            if (1 == random_int(1, 2)) {
+            if (1 == array_rand([1 => 1, 2 => 2])) {
                 unset($random[RecurFactory::$LCWEEK]);
                 $random = array_filter($random);
             }
@@ -116,7 +113,7 @@ class DateIntervalTest3 extends DtBase
      * Return an iCal formatted string from (internal array) duration
      *
      * @param array $duration , array( year, month, day, week, day, hour, min, sec )
-     * @return string
+     * @return null|string
      * @static
      * @since  2.26.14 - 2019-02-12
      */
@@ -173,7 +170,6 @@ class DateIntervalTest3 extends DtBase
         return $result;
     }
 
-
     /**
      * DateInterval101112Provider DateTime / DateInterval sub-provider, FREEBUSY
      *
@@ -197,7 +193,7 @@ class DateIntervalTest3 extends DtBase
         $baseDateTime = DateTimeFactory::factory('now', Vcalendar::UTC);
         $dateTimeString = DateTimeFactory::dateTime2Str($baseDateTime);
         $outputString = ';' . Vcalendar::FBTYPE . '=' . Vcalendar::BUSY . ':' . $dateTimeString . '/' . $diString;
-        if (1 == random_int(1, 2)) { // DateTime
+        if (1 == array_rand([1 => 1, 2 => 2])) { // DateTime
             return [
                 $cnt . 'DateTime/DateInterval',
                 [   // input
@@ -261,7 +257,7 @@ class DateIntervalTest3 extends DtBase
         $baseDateTime = DateTimeFactory::factory('now', Vcalendar::UTC);
         $dateTimeString = DateTimeFactory::dateTime2Str($baseDateTime);
         $outputString = ';' . Vcalendar::FBTYPE . '=' . Vcalendar::BUSY . ':' . $dateTimeString . '/' . $diString;
-        if (1 == random_int(1, 2)) { // DateTime
+        if (1 == array_rand([1 => 1, 2 => 2])) { // DateTime
             return [
                 $cnt . 'DateTime/diString',
                 [   // input
@@ -358,10 +354,10 @@ class DateIntervalTest3 extends DtBase
             $newMethod = 'new' . $theComp;
             $comp = $c->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 // error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
                 $comp->{$setMethod}(Vcalendar::BUSY, $value);
 
@@ -411,10 +407,10 @@ class DateIntervalTest3 extends DtBase
             $newMethod = 'new' . $theComp;
             $comp = $c->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 // error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
                 $comp->{$setMethod}(Vcalendar::BUSY, [$value]);
 
@@ -437,10 +433,9 @@ class DateIntervalTest3 extends DtBase
                 );
                 $comp->{$setMethod}(Vcalendar::BUSY, $value);
             }
-        }
+        } // end foreach
 
         $this->parseCalendarTest($case, $c, $expectedString);
-
     }
 
     /**
@@ -465,10 +460,10 @@ class DateIntervalTest3 extends DtBase
             $newMethod = 'new' . $theComp;
             $comp = $c->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 // error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
                 $comp->{$setMethod}(Vcalendar::BUSY, [$value, $value]);
 
@@ -480,7 +475,7 @@ class DateIntervalTest3 extends DtBase
                     $getValue,
                     "Error in case #{$case}-31, " . __FUNCTION__ . " <{$theComp}>->{$getMethod}"
                 );
-                $expectedString .= ',' . StringFactory::after_last(':', $expectedString);
+                $expectedString .= ',' . StringFactory::afterLast(':', $expectedString);
                 $this->assertEquals(
                     $propName . $expectedString,
                     str_replace(["\r\n", ' '], null, $comp->{$createMethod}()),
@@ -493,10 +488,8 @@ class DateIntervalTest3 extends DtBase
                 );
                 $comp->{$setMethod}(Vcalendar::BUSY, $value);
             }
-        }
+        } // end foreach
 
         $this->parseCalendarTest($case, $c, $expectedStringOrg);
-
     }
-
 }

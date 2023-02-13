@@ -2,46 +2,43 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator;
 
 use DateTime;
-use DateTimeZone;
 use Exception;
 use Kigkonsult\Icalcreator\Util\DateTimeFactory;
 use Kigkonsult\Icalcreator\Util\DateTimeZoneFactory;
 use Kigkonsult\Icalcreator\Util\ParameterFactory;
+use Kigkonsult\Icalcreator\Util\StringFactory;
 use Kigkonsult\Icalcreator\Util\Util;
 
 /**
  * class DateTzTest, testing VALUE DATETIME for Standard/Daylight (always local time), also empty value, DTSTART
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
  * @since  2.29.2 - 2019-06-28
  */
 class DateTzTest extends DtBase
@@ -70,7 +67,6 @@ class DateTzTest extends DtBase
      */
     public function DATEtz1Provider()
     {
-
         $dataArr = [];
 
         $value = 'Europe/Stockholm';
@@ -128,14 +124,15 @@ class DateTzTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
+    )
+    {
         $c = new Vcalendar();
         $v = $c->newVtimezone();
 
-        $getMethod = Vcalendar::getGetMethodName($propName);
-        $createMethod = Vcalendar::getCreateMethodName($propName);
-        $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-        $setMethod = Vcalendar::getSetMethodName($propName);
+        $getMethod = StringFactory::getGetMethodName($propName);
+        $createMethod = StringFactory::getCreateMethodName($propName);
+        $deleteMethod = StringFactory::getDeleteMethodName($propName);
+        $setMethod = StringFactory::getSetMethodName($propName);
 
         $v->{$setMethod}($value, $params);
         $getValue = $v->{$getMethod}(true);
@@ -157,7 +154,6 @@ class DateTzTest extends DtBase
         $v->{$setMethod}($value, $params);
 
         $this->parseCalendarTest($case, $c, $expectedString);
-
     }
 
     /**
@@ -209,7 +205,7 @@ class DateTzTest extends DtBase
                 Util::$LCparams => $params
             ],
             ParameterFactory::createParams($params) .
-            $this->getDateTimeAsCreateLongString($dateTime, false)
+            $this->getDateTimeAsCreateLongString($dateTime)
         ];
 
         $dateTime = new DateTime(DATEYmd);
@@ -469,7 +465,8 @@ class DateTzTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
+    )
+    {
         static $subCompProp = [
             Vcalendar::STANDARD,
             Vcalendar::DAYLIGHT
@@ -483,10 +480,10 @@ class DateTzTest extends DtBase
             $newMethod = 'new' . $theComp;
             $comp = $v->{$newMethod}();
 
-            $getMethod = Vcalendar::getGetMethodName($propName);
-            $createMethod = Vcalendar::getCreateMethodName($propName);
-            $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-            $setMethod = Vcalendar::getSetMethodName($propName);
+            $getMethod = StringFactory::getGetMethodName($propName);
+            $createMethod = StringFactory::getCreateMethodName($propName);
+            $deleteMethod = StringFactory::getDeleteMethodName($propName);
+            $setMethod = StringFactory::getSetMethodName($propName);
 
             $comp->{$setMethod}($value, $params);
             if (Vcalendar::TZNAME == $propName) {
@@ -514,10 +511,8 @@ class DateTzTest extends DtBase
                 sprintf(self::$ERRFMT, '(after delete) ', $case . '-23', __FUNCTION__, $theComp, $getMethod)
             );
             $comp->{$setMethod}($value, $params);
-        }
+        } // end foreach
 
         $this->parseCalendarTest($case, $c, $expectedString);
-
     }
-
 }

@@ -101,8 +101,7 @@ class SwiftMailerHandler extends MailHandler
     public function __get($name)
     {
         if ($name === 'message') {
-            trigger_error('SwiftMailerHandler->message is deprecated, use ->buildMessage() instead to retrieve the message',
-                E_USER_DEPRECATED);
+            trigger_error('SwiftMailerHandler->message is deprecated, use ->buildMessage() instead to retrieve the message', E_USER_DEPRECATED);
 
             return $this->buildMessage(null, array());
         }

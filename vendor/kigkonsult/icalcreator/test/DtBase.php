@@ -2,40 +2,41 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator;
 
 use DateTime;
+use DateTimeInterface;
 use Exception;
 use Kigkonsult\Icalcreator\Util\DateTimeFactory;
 use Kigkonsult\Icalcreator\Util\DateTimeZoneFactory;
 use Kigkonsult\Icalcreator\Util\IcalXMLFactory;
 use Kigkonsult\Icalcreator\Util\ParameterFactory;
+use Kigkonsult\Icalcreator\Util\RecurFactory;
+use Kigkonsult\Icalcreator\Util\StringFactory;
 use Kigkonsult\Icalcreator\Util\Util;
 use PHPUnit\Framework\TestCase;
 use SimpleXMLElement;
@@ -43,8 +44,7 @@ use SimpleXMLElement;
 /**
  * class DtBase
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since  2.27.14 - 2019-01-24
+ * @since 2.29.18 2020-01-25
  */
 class DtBase extends TestCase
 {
@@ -76,12 +76,12 @@ class DtBase extends TestCase
             $newMethod = 'new' . $theComp;
             $comp = $c->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 if (Vcalendar::LAST_MODIFIED == $propName) {
-                    $c->setLastModified($value, $params);
+                    $c->setLastmodified($value, $params);
                 }
 
 //              error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
@@ -113,7 +113,7 @@ class DtBase extends TestCase
                             $fmt = DateTimeFactory::$Ymd;
                             break;
                         case isset($getValue[Util::$LCparams][Util::$ISLOCALTIME]) :
-                            $fmt = DateTimeFactory::$YMDHIS;
+                            $fmt = DateTimeFactory::$YmdHis;
                             break;
                         default :
                             $fmt = DateTimeFactory::$YMDHISe;
@@ -143,17 +143,16 @@ class DtBase extends TestCase
                     );
                 }
                 $comp->{$setMethod}($value, $params);
-            }
-        }
+            } // end foreach
+        } // end foreach
 
         $this->parseCalendarTest($case, $c, $expectedString, $theComp, $propName);
-
     }
 
     /**
      * The test method 1b, single EXDATE + RDATE, case prefix '-1bx'
      *
-     * @param int $case
+     * @param int|string $case
      * @param array $compsProps
      * @param mixed $value
      * @param mixed $params
@@ -174,10 +173,10 @@ class DtBase extends TestCase
             $newMethod = 'new' . $theComp;
             $comp = $c->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 //              error_log( __FUNCTION__ . ' #' . $case . '-1b1' . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
 
                 $comp->{$setMethod}($value, $params);
@@ -198,7 +197,7 @@ class DtBase extends TestCase
                             $fmt = DateTimeFactory::$Ymd;
                             break;
                         case isset($getValue[Util::$LCparams][Util::$ISLOCALTIME]) :
-                            $fmt = DateTimeFactory::$YMDHIS;
+                            $fmt = DateTimeFactory::$YmdHis;
                             break;
                         default :
                             $fmt = DateTimeFactory::$YMDHISe;
@@ -246,18 +245,19 @@ class DtBase extends TestCase
                     $comp->{$setMethod}([$value, $value], $params);
                 }
             } // end foreach
-        }
+        } // end foreach
 
         $this->parseCalendarTest($case, $c, $expectedString);
-
     }
 
     /**
      * Testing calendar parse and (-re-)create, case prefix '-3x'
      *
-     * @param int $case
+     * @param int|string $case
      * @param Vcalendar $calendar
      * @param string $expectedString
+     * @param mixed $theComp
+     * @param string $propName
      * @throws Exception
      */
     public function parseCalendarTest(
@@ -266,8 +266,9 @@ class DtBase extends TestCase
         $expectedString = null,
         $theComp = null,
         $propName = null
-    ) {
-        static $xmlStartChars = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<icalendar xmlns=\"urn:ietf:params:xml:ns:icalendar-2.0\"><!-- kigkonsult iCalcreator";
+    )
+    {
+        static $xmlStartChars = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<icalendar xmlns=\"urn:ietf:params:xml:ns:icalendar-2.0\"><!-- kigkonsult.se iCalcreator";
         static $xmlEndChars = "</icalendar>\n";
 
         // echo $case . ' ' . __FUNCTION__ . ' ' . $theComp . '::' . $propName . ' start' . PHP_EOL; // test ###
@@ -352,15 +353,15 @@ class DtBase extends TestCase
     public function getDateTimeAsArray(DateTime $dateTime)
     {
         $output = [
-            Util\RecurFactory::$LCYEAR => $dateTime->format('Y'),
-            Util\RecurFactory::$LCMONTH => $dateTime->format('m'),
-            Util\RecurFactory::$LCDAY => $dateTime->format('d'),
-            Util\RecurFactory::$LCHOUR => $dateTime->format('H'),
-            Util\RecurFactory::$LCMIN => $dateTime->format('i'),
-            Util\RecurFactory::$LCSEC => $dateTime->format('s'),
+            RecurFactory::$LCYEAR => $dateTime->format('Y'),
+            RecurFactory::$LCMONTH => $dateTime->format('m'),
+            RecurFactory::$LCDAY => $dateTime->format('d'),
+            RecurFactory::$LCHOUR => $dateTime->format('H'),
+            RecurFactory::$LCMIN => $dateTime->format('i'),
+            RecurFactory::$LCSEC => $dateTime->format('s'),
         ];
         if (DateTimeZoneFactory::isUTCtimeZone($dateTime->getTimezone()->getName())) {
-            $output[Util\RecurFactory::$LCtz] = 'Z';
+            $output[RecurFactory::$LCtz] = 'Z';
         }
         return $output;
     }
@@ -368,28 +369,16 @@ class DtBase extends TestCase
     /**
      * Return the datetime as (ical create-) long string
      *
-     * @param DateTime $dateTime
+     * @param DateTimeInterface $dateTime
      * @param string $tz
      * @return string
      */
-    public function getDateTimeAsCreateLongString(DateTime $dateTime, $tz = null)
+    public function getDateTimeAsCreateLongString(DateTimeInterface $dateTime, $tz = null)
     {
         static $FMT1 = ';TZID=%s:';
-        static $FMT2 = '%04d%02d%02dT%02d%02d%02d';
         $isUTCtimeZone = (empty($tz)) ? false : DateTimeZoneFactory::isUTCtimeZone($tz);
         $output = (empty($tz) || $isUTCtimeZone) ? Util::$COLON : sprintf($FMT1, $tz);
         $output .= $dateTime->format(DateTimeFactory::$YmdTHis);
-        /*
-        $output .= sprintf(
-            $FMT2,
-            $dateTime->format( 'Y' ),
-            $dateTime->format( 'm' ),
-            $dateTime->format( 'd' ),
-            $dateTime->format( 'H' ),
-            $dateTime->format( 'i' ),
-            $dateTime->format( 's' )
-        );
-        */
         if ($isUTCtimeZone) {
             $output .= 'Z';
         }
@@ -399,11 +388,11 @@ class DtBase extends TestCase
     /**
      * Return the datetime as (ical create-) short string
      *
-     * @param DateTime $dateTime
+     * @param DateTimeInterface $dateTime
      * @param bool $prefix
      * @return string
      */
-    public function getDateTimeAsCreateShortString(DateTime $dateTime, $prefix = true)
+    public function getDateTimeAsCreateShortString(DateTimeInterface $dateTime, $prefix = true)
     {
         static $FMT1 = ';VALUE=DATE:%d';
         static $FMT2 = ':%d';

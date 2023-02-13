@@ -33,7 +33,7 @@ class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
     public static $prefixDirsPsr4 = array(
         'Twilio\\' =>
             array(
-                0 => __DIR__ . '/..' . '/twilio/sdk/Twilio',
+                0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
             ),
         'Psr\\Log\\' =>
             array(
@@ -55,11 +55,16 @@ class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
             ),
     );
 
+    public static $classMap = array(
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d::$classMap;
 
         }, null, ClassLoader::class);
     }

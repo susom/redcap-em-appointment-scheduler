@@ -2,32 +2,30 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator\Util;
 
 use Kigkonsult\Icalcreator\DtBase;
@@ -38,7 +36,6 @@ use Exception;
 /**
  * class VtimezonePopulateFactoryTest
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
  * @since  2.27.14 - 2019-02-21
  */
 class VtimezonePopulateFactoryTest extends DtBase
@@ -128,7 +125,6 @@ class VtimezonePopulateFactoryTest extends DtBase
      */
     public function processTest3Provider()
     {
-
         $dataArr = [];
 
         $timezone = 'Europe/Stockholm';
@@ -137,8 +133,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             1,
             $timezone,
             null,
-            null,
-            null,  // from/to
+            null, null,  // from/to
             []
         ];
 
@@ -146,8 +141,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             2,
             $timezone,
             null,
-            null,
-            null,  // from/to
+            null, null,  // from/to
             ['20170312']
         ];
 
@@ -155,8 +149,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             3,
             $timezone,
             null,
-            null,
-            null,  // from/to
+            null, null,  // from/to
             ['20160912', '20181113']
         ];
 
@@ -164,8 +157,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             3,
             null,
             $timezone,
-            null,
-            null,  // from/to
+            null, null,  // from/to
             ['20170312']
         ];
 
@@ -173,8 +165,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             4,
             null,
             $timezone,
-            null,
-            null,  // from/to
+            null, null,  // from/to
             ['20170312']
         ];
 
@@ -182,8 +173,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             5,
             null,
             $timezone,
-            null,
-            null,  // from/to
+            null, null,  // from/to
             ['20160912', '20181113']
         ];
 
@@ -193,8 +183,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             6,
             $timezone,
             null,
-            $from,
-            null,  // from/to
+            $from, null,  // from/to
             []
         ];
 
@@ -203,8 +192,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             7,
             $timezone,
             null,
-            null,
-            $to,  // from/to
+            null, $to,  // from/to
             []
         ];
 
@@ -214,8 +202,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             8,
             $timezone,
             null,
-            $from,
-            $to,  // from/to
+            $from, $to,  // from/to
             []
         ];
 
@@ -225,8 +212,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             9,
             null,
             $timezone,
-            $from,
-            null,  // from/to
+            $from, null,  // from/to
             []
         ];
 
@@ -236,8 +222,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             10,
             null,
             $timezone,
-            null,
-            $to,  // from/to
+            null, $to,  // from/to
             []
         ];
 
@@ -247,8 +232,7 @@ class VtimezonePopulateFactoryTest extends DtBase
             11,
             null,
             $timezone,
-            $from,
-            $to,  // from/to
+            $from, $to,  // from/to
             []
         ];
 
@@ -271,7 +255,6 @@ class VtimezonePopulateFactoryTest extends DtBase
      */
     public function processTest3($case, $xParamTz, $mParamTz, $from, $to, $dtstarts)
     {
-
         $calendar1 = new Vcalendar();
 
         if (!empty($xParamTz)) {

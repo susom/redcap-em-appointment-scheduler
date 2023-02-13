@@ -2,32 +2,30 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator;
 
 use PHPUnit\Framework\TestCase;
@@ -38,7 +36,6 @@ use Exception;
 /**
  * class RecurTest, testing selectComponents
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
  * @since  2.27.20 - 2019-05-20
  */
 abstract class RecurBaseTest extends TestCase
@@ -73,8 +70,8 @@ abstract class RecurBaseTest extends TestCase
         $end,
         array $recur,
         array $expects,
-        $prepTime
-    ) {
+        $prepTime)
+    {
         $saveStartDate = clone $start;
         /*
 //        $e = Vcalendar::factory()->newVevent(); ??
@@ -91,7 +88,7 @@ abstract class RecurBaseTest extends TestCase
         $execTime1 = microtime(true) - $time1;
         $time2 = microtime(true);
         $result2 = [];
-        RecurFactory::Recur2date($result2, $recur, $start, (clone $start), $end);
+        RecurFactory::recur2date($result2, $recur, $start, (clone $start), $end);
         $execTime2 = microtime(true) - $time2;
 
         self::$totResultTime += $execTime1;
@@ -100,34 +97,43 @@ abstract class RecurBaseTest extends TestCase
 
         $strCase = str_pad($case, 12);
         echo PHP_EOL .  // test ###
-            $strCase . 'resultOld  time:' . number_format($execTime1, 6) . ' : ' . implode(' - ', array_keys($result1)
-            ) . PHP_EOL; // test ###
+            $strCase . 'resultOld  time:' . number_format($execTime1, 6) . ' : ' . implode(' - ', array_keys($result1)) . PHP_EOL; // test ###
         echo   // test ###
-            $strCase . 'resultNew  time:' . number_format($execTime2, 6) . ' : ' . implode(' - ', array_keys($result2)
-            ) . PHP_EOL; // test ###
+            $strCase . 'resultNew  time:' . number_format($execTime2, 6) . ' : ' . implode(' - ', array_keys($result2)) . PHP_EOL; // test ###
         echo
-            $strCase . 'expects    time:' . number_format($prepTime, 6) . ' : ' . implode(' - ', $expects
-            ) . PHP_EOL; // test ###
+            $strCase . 'expects    time:' . number_format($prepTime, 6) . ' : ' . implode(' - ', $expects) . PHP_EOL; // test ###
 
+        $recurDisp = str_replace([PHP_EOL, ' '], '', var_export($recur, true));
+        $result = array_keys($result1);
         $this->assertEquals(
             $expects,
-            array_keys($result1),
-            sprintf(self::$ERRFMT, __FUNCTION__, $case,
+            $result,
+            sprintf(
+                self::$ERRFMT,
+                __FUNCTION__,
+                $case . ' test #1',
                 $saveStartDate->format('Ymd'),
                 $end->format('Ymd'),
-                var_export($recur, true)
+                PHP_EOL . $recurDisp .
+                PHP_EOL . 'got : ' . implode(',', $result) .
+                PHP_EOL . 'exp : ' . implode(',', $expects)
             )
         );
+        $result = array_keys($result2);
         $this->assertEquals(
             $expects,
-            array_keys($result2),
-            sprintf(self::$ERRFMT, __FUNCTION__, $case,
+            $result,
+            sprintf(
+                self::$ERRFMT,
+                __FUNCTION__,
+                $case . ' test #2',
                 $saveStartDate->format('Ymd'),
                 $end->format('Ymd'),
-                var_export($recur, true)
+                $recurDisp .
+                PHP_EOL . 'exp : ' . implode(',', $expects) .
+                PHP_EOL . 'got : ' . implode(',', $result)
             )
         );
         return $result1;
     }
-
 }

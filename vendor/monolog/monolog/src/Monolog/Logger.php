@@ -234,8 +234,7 @@ class Logger implements LoggerInterface, ResettableInterface
     public function pushProcessor($callback)
     {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . var_export($callback,
-                    true) . ' given');
+            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . var_export($callback, true) . ' given');
         }
         array_unshift($this->processors, $callback);
 
@@ -322,7 +321,7 @@ class Logger implements LoggerInterface, ResettableInterface
         if ($this->microsecondTimestamps && PHP_VERSION_ID < 70100) {
             $ts = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)), static::$timezone);
         } else {
-            $ts = new \DateTime(null, static::$timezone);
+            $ts = new \DateTime('now', static::$timezone);
         }
         $ts->setTimezone(static::$timezone);
 
@@ -514,8 +513,7 @@ class Logger implements LoggerInterface, ResettableInterface
     public static function getLevelName($level)
     {
         if (!isset(static::$levels[$level])) {
-            throw new InvalidArgumentException('Level "' . $level . '" is not defined, use one of: ' . implode(', ',
-                    array_keys(static::$levels)));
+            throw new InvalidArgumentException('Level "' . $level . '" is not defined, use one of: ' . implode(', ', array_keys(static::$levels)));
         }
 
         return static::$levels[$level];
@@ -524,13 +522,18 @@ class Logger implements LoggerInterface, ResettableInterface
     /**
      * Converts PSR-3 levels to Monolog ones if necessary
      *
-     * @param string|int Level number (monolog) or name (PSR-3)
+     * @param string|int $level Level number (monolog) or name (PSR-3)
      * @return int
      */
     public static function toMonologLevel($level)
     {
-        if (is_string($level) && defined(__CLASS__ . '::' . strtoupper($level))) {
-            return constant(__CLASS__ . '::' . strtoupper($level));
+        if (is_string($level)) {
+            // Contains chars of all log levels and avoids using strtoupper() which may have
+            // strange results depending on locale (for example, "i" will become "İ")
+            $upper = strtr($level, 'abcdefgilmnortuwy', 'ABCDEFGILMNORTUWY');
+            if (defined(__CLASS__ . '::' . $upper)) {
+                return constant(__CLASS__ . '::' . $upper);
+            }
         }
 
         return $level;
@@ -566,8 +569,7 @@ class Logger implements LoggerInterface, ResettableInterface
     public function setExceptionHandler($callback)
     {
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Exception handler must be valid callable (callback or object with an __invoke method), ' . var_export($callback,
-                    true) . ' given');
+            throw new \InvalidArgumentException('Exception handler must be valid callable (callback or object with an __invoke method), ' . var_export($callback, true) . ' given');
         }
         $this->exceptionHandler = $callback;
 

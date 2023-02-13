@@ -59,28 +59,9 @@ class PushoverHandler extends SocketHandler
      * @var array
      */
     private $sounds = array(
-        'pushover',
-        'bike',
-        'bugle',
-        'cashregister',
-        'classical',
-        'cosmic',
-        'falling',
-        'gamelan',
-        'incoming',
-        'intermission',
-        'magic',
-        'mechanical',
-        'pianobar',
-        'siren',
-        'spacealarm',
-        'tugboat',
-        'alien',
-        'climb',
-        'persistent',
-        'echo',
-        'updown',
-        'none',
+        'pushover', 'bike', 'bugle', 'cashregister', 'classical', 'cosmic', 'falling', 'gamelan', 'incoming',
+        'intermission', 'magic', 'mechanical', 'pianobar', 'siren', 'spacealarm', 'tugboat', 'alien', 'climb',
+        'persistent', 'echo', 'updown', 'none',
     );
 
     /**
@@ -98,18 +79,8 @@ class PushoverHandler extends SocketHandler
      * @param int $retry The retry parameter specifies how often (in seconds) the Pushover servers will send the same notification to the user.
      * @param int $expire The expire parameter specifies how many seconds your notification will continue to be retried for (every retry seconds).
      */
-    public function __construct(
-        $token,
-        $users,
-        $title = null,
-        $level = Logger::CRITICAL,
-        $bubble = true,
-        $useSSL = true,
-        $highPriorityLevel = Logger::CRITICAL,
-        $emergencyLevel = Logger::EMERGENCY,
-        $retry = 30,
-        $expire = 25200
-    ) {
+    public function __construct($token, $users, $title = null, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $highPriorityLevel = Logger::CRITICAL, $emergencyLevel = Logger::EMERGENCY, $retry = 30, $expire = 25200)
+    {
         $connectionString = $useSSL ? 'ssl://api.pushover.net:443' : 'api.pushover.net:80';
         parent::__construct($connectionString, $level, $bubble);
 

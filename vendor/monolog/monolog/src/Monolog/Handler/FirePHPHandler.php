@@ -71,7 +71,7 @@ class FirePHPHandler extends AbstractProcessingHandler
      * Creates message header from record
      *
      * @param array $record
-     * @return string
+     * @return array
      * @see createHeader()
      */
     protected function createRecordHeader(array $record)
@@ -95,9 +95,9 @@ class FirePHPHandler extends AbstractProcessingHandler
     /**
      * Wildfire initialization headers to enable message parsing
      *
-     * @return array
-     * @see sendHeader()
      * @see createHeader()
+     * @see sendHeader()
+     * @return array
      */
     protected function getInitHeaders()
     {
@@ -125,9 +125,9 @@ class FirePHPHandler extends AbstractProcessingHandler
     /**
      * Creates & sends header for a record, ensuring init headers have been sent prior
      *
-     * @param array $record
-     * @see sendInitHeaders()
      * @see sendHeader()
+     * @see sendInitHeaders()
+     * @param array $record
      */
     protected function write(array $record)
     {

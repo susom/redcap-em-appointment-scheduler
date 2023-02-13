@@ -2,45 +2,44 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator;
 
-use DateTime;
 use Exception;
+use DateTime;
+use DateTimeImmutable;
 use Kigkonsult\Icalcreator\Util\DateTimeFactory;
+use Kigkonsult\Icalcreator\Util\RecurFactory;
 use Kigkonsult\Icalcreator\Util\StringFactory;
 use Kigkonsult\Icalcreator\Util\Util;
 
 /**
  * class DateTest, testing DTSTAMP, LAST_MODIFIED, CREATED, COMPLETED, DTSTART (VFREEBUSY)
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since  2.27.14 - 2019-01-24
+ * @since  2.29.16 - 2020-01-24
  */
 class DateTimeUTCTest extends DtBase
 {
@@ -89,10 +88,10 @@ class DateTimeUTCTest extends DtBase
             $comp->setDtstart($value, $params);
 
             foreach ($props as $x2 => $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
 
                 $recurSet = [
                     Vcalendar::FREQ => Vcalendar::YEARLY,
@@ -101,7 +100,7 @@ class DateTimeUTCTest extends DtBase
                     Vcalendar::BYSECOND => [1, 2, 3],
                     Vcalendar::BYMINUTE => [12, 23, 45],
                     Vcalendar::BYHOUR => [3, 5, 7],
-                    Vcalendar::BYDAY => [1, Vcalendar::MO],
+                    Vcalendar::BYDAY => [Vcalendar::DAY => Vcalendar::MO],
                     Vcalendar::BYMONTHDAY => [-1],
                     Vcalendar::BYYEARDAY => [100, 200, 300],
                     Vcalendar::BYWEEKNO => [20, 39, 40],
@@ -134,7 +133,7 @@ class DateTimeUTCTest extends DtBase
         $calendar1Str = $calendar1->createCalendar();
         $createString = str_replace([Util::$CRLF . ' ', Util::$CRLF], null, $calendar1Str);
         $createString = str_replace('\,', ',', $createString);
-        if (':' == $expectedString{0}) { // opt excl lead ':'
+        if (':' == substr($expectedString, 0, 1)) { // opt excl lead ':'
             $expectedString = substr($expectedString, 1);
         }
         $this->assertNotFalse(
@@ -169,10 +168,10 @@ class DateTimeUTCTest extends DtBase
             $newMethod = 'new' . $theComp;
             $comp = $calendar1->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 // error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
                 $comp->{$setMethod}(Vcalendar::BUSY, [$value, $value]);
 
@@ -230,10 +229,10 @@ class DateTimeUTCTest extends DtBase
             $newMethod = 'new' . $theComp;
             $comp = $calendar1->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 // error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
                 $comp->{$setMethod}(Vcalendar::BUSY, [$value, 'P1D']);
 
@@ -285,17 +284,18 @@ class DateTimeUTCTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
+    )
+    {
         $calendar1 = new Vcalendar();
         $e = $calendar1->newVevent();
         foreach ($compsProps as $theComp => $props) {
             $newMethod = 'new' . $theComp;
             $comp = $e->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 // error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
                 $comp->{$setMethod}($value, [Vcalendar::VALUE => Vcalendar::DATE_TIME]);
 
@@ -317,7 +317,7 @@ class DateTimeUTCTest extends DtBase
                 );
                 $comp->{$setMethod}($value, [Vcalendar::VALUE => Vcalendar::DATE_TIME]);
             }
-        }
+        } // end foreach
         $calendar1Str = $calendar1->createCalendar();
         $createString = str_replace([Util::$CRLF . ' ', Util::$CRLF], null, $calendar1Str);
         $createString = str_replace('\,', ',', $createString);
@@ -347,16 +347,13 @@ class DateTimeUTCTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
-        static $keys = null;
+    )
+    {
+        static $keys = [];
         if (empty($keys)) {
             $keys = [
-                Util\RecurFactory::$LCYEAR,
-                Util\RecurFactory::$LCMONTH,
-                Util\RecurFactory::$LCDAY,
-                Util\RecurFactory::$LCHOUR,
-                Util\RecurFactory::$LCMIN,
-                Util\RecurFactory::$LCSEC
+                RecurFactory::$LCYEAR, RecurFactory::$LCMONTH, RecurFactory::$LCDAY,
+                RecurFactory::$LCHOUR, RecurFactory::$LCMIN, RecurFactory::$LCSEC
             ];
         }
         $calendar1 = new Vcalendar();
@@ -365,17 +362,16 @@ class DateTimeUTCTest extends DtBase
             $newMethod = 'new' . $theComp;
             $comp = $e->{$newMethod}();
             foreach ($props as $propName) {
-                $getMethod = Vcalendar::getGetMethodName($propName);
-                $createMethod = Vcalendar::getCreateMethodName($propName);
-                $deleteMethod = Vcalendar::getDeleteMethodName($propName);
-                $setMethod = Vcalendar::getSetMethodName($propName);
+                $getMethod = StringFactory::getGetMethodName($propName);
+                $createMethod = StringFactory::getCreateMethodName($propName);
+                $deleteMethod = StringFactory::getDeleteMethodName($propName);
+                $setMethod = StringFactory::getSetMethodName($propName);
                 // error_log( __FUNCTION__ . ' #' . $case . ' <' . $theComp . '>->' . $propName . ' value : ' . var_export( $value, true )); // test ###
                 foreach ($keys as $key) {
                     ${$key} = (isset($value[$key])) ? $value[$key] : null;
                 }
-                $comp->{$setMethod}(${Util\RecurFactory::$LCYEAR}, ${Util\RecurFactory::$LCMONTH},
-                    ${Util\RecurFactory::$LCDAY},
-                    ${Util\RecurFactory::$LCHOUR}, ${Util\RecurFactory::$LCMIN}, ${Util\RecurFactory::$LCSEC},
+                $comp->{$setMethod}(${RecurFactory::$LCYEAR}, ${RecurFactory::$LCMONTH}, ${RecurFactory::$LCDAY},
+                    ${RecurFactory::$LCHOUR}, ${RecurFactory::$LCMIN}, ${RecurFactory::$LCSEC},
                     [Vcalendar::VALUE => Vcalendar::DATE_TIME]);
 
                 $getValue = $comp->{$getMethod}(true);
@@ -394,12 +390,11 @@ class DateTimeUTCTest extends DtBase
                     $comp->{$getMethod}(),
                     sprintf(self::$ERRFMT, '(after delete) ', $case, __FUNCTION__, $theComp, $getMethod)
                 );
-                $comp->{$setMethod}(${Util\RecurFactory::$LCYEAR}, ${Util\RecurFactory::$LCMONTH},
-                    ${Util\RecurFactory::$LCDAY},
-                    ${Util\RecurFactory::$LCHOUR}, ${Util\RecurFactory::$LCMIN}, ${Util\RecurFactory::$LCSEC},
+                $comp->{$setMethod}(${RecurFactory::$LCYEAR}, ${RecurFactory::$LCMONTH}, ${RecurFactory::$LCDAY},
+                    ${RecurFactory::$LCHOUR}, ${RecurFactory::$LCMIN}, ${RecurFactory::$LCSEC},
                     [Vcalendar::VALUE => Vcalendar::DATE_TIME]);
-            }
-        }
+            } // end foreach
+        } // end foreach
         $calendar1Str = $calendar1->createCalendar();
         $createString = str_replace([Util::$CRLF . ' ', Util::$CRLF], null, $calendar1Str);
         $createString = str_replace('\,', ',', $createString);
@@ -433,8 +428,9 @@ class DateTimeUTCTest extends DtBase
             $this->getDateTimeAsCreateLongString($dateTime2, Vcalendar::UTC)
         ];
 
-        $dateTime = DateTimeFactory::factory(DATEYmdTHis . ' ' . LTZ);
-        $dateTime2 = DateTimeFactory::setDateTimeTimeZone(clone $dateTime, Vcalendar::UTC);
+        $dateTime = new DateTimeImmutable(DATEYmdTHis . ' ' . LTZ);
+        $dateTime2 = clone $dateTime;
+        $dateTime2 = DateTimeFactory::setDateTimeTimeZone($dateTime2, Vcalendar::UTC);
         $dataArr[] = [
             11012,
             $dateTime,
@@ -472,7 +468,8 @@ class DateTimeUTCTest extends DtBase
             $this->getDateTimeAsCreateLongString($dateTime2, Vcalendar::UTC)
         ];
 
-        $dateTime2 = DateTimeFactory::factory(DATEYmdTHis, Vcalendar::UTC);
+        $dateTime = new DateTimeImmutable(DATEYmdTHis . ' ' . Vcalendar::UTC);
+        $dateTime2 = clone $dateTime;
         $dataArr[] = [
             11015,
             $dateTime2,
@@ -520,8 +517,9 @@ class DateTimeUTCTest extends DtBase
             $this->getDateTimeAsCreateLongString($dateTime2, Vcalendar::UTC)
         ];
 
-        $dateTime = DateTimeFactory::factory(DATEYmdTHis . OFFSET);
-        $dateTime2 = DateTimeFactory::setDateTimeTimeZone(clone $dateTime, Vcalendar::UTC);
+        $dateTime = new DateTimeImmutable(DATEYmdTHis . OFFSET);
+        $dateTime2 = clone $dateTime;
+        $dateTime2 = DateTimeFactory::setDateTimeTimeZone($dateTime2, Vcalendar::UTC);
         $dataArr[] = [
             11022,
             $dateTime,
@@ -592,12 +590,7 @@ class DateTimeUTCTest extends DtBase
     {
         static $compsProps = [
             Vcalendar::VEVENT => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED],
-            Vcalendar::VTODO => [
-                Vcalendar::DTSTAMP,
-                Vcalendar::LAST_MODIFIED,
-                Vcalendar::CREATED,
-                Vcalendar::COMPLETED
-            ],
+            Vcalendar::VTODO => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED, Vcalendar::COMPLETED],
             Vcalendar::VJOURNAL => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED],
             Vcalendar::VFREEBUSY => [Vcalendar::DTSTAMP, Vcalendar::DTSTART],
             Vcalendar::VTIMEZONE => [Vcalendar::LAST_MODIFIED],
@@ -923,12 +916,7 @@ class DateTimeUTCTest extends DtBase
     ) {
         static $compsProps = [
             Vcalendar::VEVENT => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED],
-            Vcalendar::VTODO => [
-                Vcalendar::DTSTAMP,
-                Vcalendar::LAST_MODIFIED,
-                Vcalendar::CREATED,
-                Vcalendar::COMPLETED
-            ],
+            Vcalendar::VTODO => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED, Vcalendar::COMPLETED],
             Vcalendar::VJOURNAL => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED],
             Vcalendar::VFREEBUSY => [Vcalendar::DTSTAMP, Vcalendar::DTSTART],
             Vcalendar::VTIMEZONE => [Vcalendar::LAST_MODIFIED],
@@ -981,7 +969,8 @@ class DateTimeUTCTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
+    )
+    {
         static $compsProps = [
             Vcalendar::VFREEBUSY => [Vcalendar::FREEBUSY],
         ];
@@ -1015,7 +1004,8 @@ class DateTimeUTCTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
+    )
+    {
         static $compsProps = [
             Vcalendar::VALARM => [Vcalendar::TRIGGER],
         ];
@@ -1266,12 +1256,7 @@ class DateTimeUTCTest extends DtBase
     ) {
         static $compsProps = [
             Vcalendar::VEVENT => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED],
-            Vcalendar::VTODO => [
-                Vcalendar::DTSTAMP,
-                Vcalendar::LAST_MODIFIED,
-                Vcalendar::CREATED,
-                Vcalendar::COMPLETED
-            ],
+            Vcalendar::VTODO => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED, Vcalendar::COMPLETED],
             Vcalendar::VJOURNAL => [Vcalendar::DTSTAMP, Vcalendar::LAST_MODIFIED, Vcalendar::CREATED],
             Vcalendar::VFREEBUSY => [Vcalendar::DTSTAMP, Vcalendar::DTSTART],
             Vcalendar::VTIMEZONE => [Vcalendar::LAST_MODIFIED],
@@ -1324,7 +1309,8 @@ class DateTimeUTCTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
+    )
+    {
         static $compsProps = [
             Vcalendar::VFREEBUSY => [Vcalendar::FREEBUSY],
         ];
@@ -1358,7 +1344,8 @@ class DateTimeUTCTest extends DtBase
         $params,
         $expectedGet,
         $expectedString
-    ) {
+    )
+    {
         static $compsProps = [
             Vcalendar::VALARM => [Vcalendar::TRIGGER],
         ];
@@ -1368,5 +1355,4 @@ class DateTimeUTCTest extends DtBase
             $this->theTriggerTestMethod($case, $compsProps, $value, $params, $expectedGet, $expectedString);
         }
     }
-
 }

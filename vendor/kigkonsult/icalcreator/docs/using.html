@@ -1,20 +1,22 @@
-<!DOCTYPE html><!--
- iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
+<!DOCTYPE html>
+<!--
+ iCalcreator, the PHP class package managing iCal (rfc2445/rfc5545) calendar information.
 
- copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- Link      https://kigkonsult.se
- Package   iCalcreator
- Version   2.29.14
- License   Subject matter of licence is the software iCalcreator.
+ This file is a part of iCalcreator.
+
+ author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ link      https://kigkonsult.se
+ license   Subject matter of licence is the software iCalcreator.
            The above copyright, link, package and version notices,
            this licence notice and the invariant [rfc5545] PRODID result use
            as implemented and invoked in iCalcreator shall be included in
            all copies or substantial portions of the iCalcreator.
 
            iCalcreator is free software: you can redistribute it and/or modify
-           it under the terms of the GNU Lesser General Public License as published
-           by the Free Software Foundation, either version 3 of the License,
-           or (at your option) any later version.
+           it under the terms of the GNU Lesser General Public License as
+           published by the Free Software Foundation, either version 3 of
+           the License, or (at your option) any later version.
 
            iCalcreator is distributed in the hope that it will be useful,
            but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,18 +25,16 @@
 
            You should have received a copy of the GNU Lesser General Public License
            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
-
- This file is a part of iCalcreator.
 -->
 <html lang="en">
 <head>
-    <title>iCalcreator 2.29.14 manual</title>
+    <title>iCalcreator 2.39 manual</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="author" content="Kjell-Inge Gustafsson, kigkonsult, All rights reserved">
-    <meta name="copyright" content="2007-2019 Kjell-Inge Gustafsson, kigkonsult">
+    <meta name="copyright" content="2007-2021 Kjell-Inge Gustafsson, kigkonsult">
     <meta name="keywords"
           content="ical, calendar, calender, xcal, xml, icalender, rfc2445, rfc5545, vcalender, php, create">
-    <meta name="description" content="using iCalcreator v2.29.14">
+    <meta name="description" content="using iCalcreator v2.39">
     <style type="text/css">
         * {
             FONT-FAMILY: "Bitstream Vera Sans", Helvetica, "Lucida Grande", "Lucida Sans Unicode", Lucida, Arial, Geneva, sans-serif;
@@ -181,10 +181,10 @@
 </head>
 <body>
 <a name="top"></a>
-<p class="header">iCalcreator v2.29.14</p>
+<p class="header">iCalcreator v2.39</p>
 <p>
-    iCalcreator v2.29.14<br>
-    Copyright &copy; 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved.<br>
+    iCalcreator v2.39<br>
+    Copyright &copy; 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved.<br>
     <a href="#Copyright_and_Licence">Copyright_and_Licence</a><br>
     <a href="https://kigkonsult.se" title="kigkonsult.se" target="_blank">kigkonsult.se</a><br>
     Contact iCal_at_kigkonsult_dot_se
@@ -195,7 +195,10 @@
     This document describes usage of iCalcreator, the <em>PHP</em> software implementation of standards
     <a href="https://tools.ietf.org/html/rfc5545" title="Download rfc5545" target="_blank">rfc5545</a>/
     <a href="https://tools.ietf.org/html/rfc5546" title="Download rfc5546" target="_blank">rfc5546</a>
-    (rfc2445/rfc2446) to manage calendar information.
+    <a href="https://tools.ietf.org/html/rfc6321" title="Download rfc6321" target="_blank">rfc6321</a>
+    <a href="https://tools.ietf.org/html/rfc7986" title="Download rfc7986" target="_blank">rfc7986</a>
+    to manage calendar information.
+    The fc5545/rfc5546 obsoletes rfc2445/rfc2446.
 </p>
 <p>
     This document is provided by kigkonsult for informational purposes
@@ -237,7 +240,11 @@
     components.
 </p>
 <p>
-    For iCalcreator 2.29.14 version (and later), <em>PHP</em> version &gt;= 5.6 is required.
+    For iCalcreator 2.39 version (and later), <em>PHP</em> version &gt;= 7.0 is required.
+    v2.29.25 and later asserts PHP 7+ compability using
+    <a href="https://github.com/PHPCompatibility/PHPCompatibility" title="PHPCompatibility">PHPCompatibility</a>
+    and (v2.39+)
+    <a href="https://github.com/phpstan/phpstan" title="PHPStan">PHPStan</a>.
 </p>
 <br>
 <a href="#INDEX">[index]</a> <a href="#top">[top]</a>
@@ -255,37 +262,29 @@
     The <strong>iCalendar</strong> format, <strong>iCal</strong>, are described in
 </p>
 <dl>
-    <dt><a href="https://tools.ietf.org/html/rfc5545" title="Download rfc5545" target="_blank">rfc5545</a>
-    <dd>&quot;Internet Calendaring and Scheduling Core Object Specification (<strong>iCalendar</strong>)&quot;
-    <dt><a href="https://tools.ietf.org/html/rfc5546" title="Download rfc5546" target="_blank">rfc5546</a>
+    <dt><a href="https://tools.ietf.org/html/rfc5545" title="Download rfc5545" target="_blank">rfc5545</a></dt>
+    <dd>&quot;Internet Calendaring and Scheduling Core Object Specification (<strong>iCalendar</strong>)&quot;</dd>
+    <dt><a href="https://tools.ietf.org/html/rfc5546" title="Download rfc5546" target="_blank">rfc5546</a></dt>
     <dd>&quot;iCalendar Transport-Independent Interoperability Protocol (iTIP)&quot;<br>Scheduling Events, BusyTime,
         To-dos and Journal Entries
         <p class="quotes">. ..allows for the capture and exchange of information normally stored
             within a calendaring and scheduling application.</p>
         and
         <p class="quotes">. ..is an exchange format between applications or systems.</p>
+    </dd>
+    <dt><a href="https://tools.ietf.org/html/rfc6321" title="Download rfc6321" target="_blank">rfc6321</a></dt>
+    <dd>xCal: The XML Format for iCalendar</dd>
+    <dt><a href="https://tools.ietf.org/html/rfc7986" title="Download rfc7986" target="_blank">rfc7986</a></dt>
+    <dd>New Properties for iCalendar</dd>
 </dl>
+
 <p><a href="https://tools.ietf.org/html/rfc5545" title="Download rfc5545" target="_blank">rfc5545</a> and
     <a href="https://tools.ietf.org/html/rfc5546" title="Download rfc5546" target="_blank">rfc5546</a>
     obsoletes, respectively,
     <a href="https://tools.ietf.org/html/rfc2445" title="Download rfc2445" target="_blank">rfc2445</a> and
     <a href="https://tools.ietf.org/html/rfc2446" title="Download rfc2446" target="_blank">rfc2446</a>.
 </p>
-<p>
-    Any references to rfc2445, below, corresponds to rfc5545.
-</p>
-<p>
-    The <a href="https://tools.ietf.org/html/rfc7986" title="Download rfc7986" target="_blank">rfc7986</a> &quot;iCalendar
-    Property Extensions&quot;
-    are supported but may NOT be supported by all calendaring software.
-</p>
 
-<h4>xCal</h4>
-<p>
-    iCalcreator also supports xCal (iCal xml),
-    <a href="https://tools.ietf.org/html/rfc6321" title="Download rfc6321" target="_blank">rfc6321</a>,
-    The XML Format for <strong>iCalendar</strong>.
-</p>
 <p>
     A short xCal description is found at <a href="http://en.wikipedia.org/wiki/XCal"
                                             title="xCal on Wikipedia, the free encyclopedia"
@@ -335,11 +334,11 @@
 <a name="Support"></a>
 <h2>1.4 Support</h2>
 <p>
-    For support report, use <a href="https://github.com/iCalcreator/iCalcreator/issues" title="kigkonsult.se issues"
-                               target="_blank"> github issues</a>.
+    For bug report or support request, use <a href="https://github.com/iCalcreator/iCalcreator/issues"
+                                              title="kigkonsult.se issues" target="_blank"> github issues</a>.
 </p>
 <p>
-    For non emergency issues, support upon (paid) request only.
+    For previous iCalcreator (master) releases or non-emergency issues, support upon (paid) request only.
 </p>
 <p>
     kigkonsult offer professional services for software support, design and new/re-development and unit tests
@@ -355,12 +354,9 @@
 <h2>1.5 Donate</h2>
 <p>
     You can show your appreciation for our free software,
-    and can support future development by making a donation to the kigkonsult project iCalcreator.
-</p>
-<p>
-    Make a donation of any size by clicking <a href="http://kigkonsult.se/index.php#Donate" title="Donate"
-                                               target="_blank">here</a>.
-    Thanks in advance!
+    and can support future development by making a donation to the kigkonsult project iCalcreator
+    using <a href="https://paypal.me/kigkonsult" rel="nofollow" target="_blank">paypal.me/kigkonsult</a>.
+    For invoice, <a href="mailto:ical@kigkonsult.se">please e-mail</a>.
 </p>
 
 <br>
@@ -377,11 +373,11 @@
     <dt>Or
     <dd> include the (download) iCalcreator folder to your include-path
     <dd>Add
-    <dd><span class="format">require_once &quot;[path/]iCalcreator-2.29.14/autoload.php&quot;;</span>
+    <dd><span class="format">require_once &quot;[path/]iCalcreator-2.39/autoload.php&quot;;</span>
     <dd>to your <em>PHP</em>-script.
 </dl>
 <p>
-    iCalcreator 2.29.14 is using namespace &quot;Kigkonsult\Icalcreator&quot;.
+    iCalcreator 2.39 is using namespace &quot;Kigkonsult\Icalcreator&quot;.
 </p>
 
 <br>
@@ -395,97 +391,26 @@
 </p>
 
 <ul>
-    <li>Removal of all set-methods date(time)/interval ARRAY arguments<br>
-        as well as get-methods return date(time)/interval ARRAY formats<br>
+
+    <li>PHP 7 (PHPStan/strict types)<br><br></li>
+
+    <li>iCalBase static methodName methods moved to StringFactory<br>
+        iCalBase Component multi-prop methods moved to CalendarComponent
+        <br><br>
+    </li>
+
+    <li>TRIGGERtrait : setTrigger() bug fix<br><br></li>
+
+    <li>CalAddressFactory::getCalAddresses() arg inclParams removed<br>
+        ATTENDEE/ORGANIZER (CalAddressFactory)
         <ul>
-            <li>DTSTART, DTEND, DUE, RECURRENCE_ID</li>
-            <li>CREATED, COMPLETED, DTSTAMP, LAST_MODIFIED</li>
+            <li>value MAILTO prefix</li>
+            <li>parameter EMAIL etc logic upd</li>
         </ul>
     </li>
+    <br><br>
 
-    <li>Removal of all set-methods DateInterval ARRAY arguments<br>
-        as well as (most) get-methods return DateInterval ARRAY formats
-        <ul>
-            <li>REFRESH_INTERVAL, DURATION, TRIGGER</li>
-            <li>RDATE, EXDATE</li>
-            <li>FREEBUSY, RRULE, EXRULE</li>
-        </ul>
-    </li>
-
-    <li>Rewrite Vcalendar::parse()<br>
-        only input string allowed, removing internal iCal file/url parse method
-    </li>
-
-    <li>Removing deprecated methods<br>
-        <ul>
-            <li>Vcalendar::saveCalendar()</li>
-            <li>Vcalendar::useCachedCalendar()</li>
-            <li>Vcalendar::deleteProperty()</li>
-            <li>Vcalendar::setProperty()</li>
-            <li>Vcalendar::addComponent()</li>
-            <li>CalendarComponent::deleteProperty()</li>
-            <li>CalendarComponent::getProperty()</li>
-            <li>CalendarComponent::setProperty()</li>
-            <li>VetComponent::newComponent()</li>
-            <li>IcalXMLFactory::XMLfile2iCal()</li>
-            <li>IcalXMLFactory::XMLstr2iCal()</li>
-            <li>Removal of deprecated config/keys<br>
-                DELIMITER, DIRECTORY, FILENAME, DIRFILE, FILESIZE, FILEINFO
-            </li>
-            <li>All keys and (fixed) property values as constants available in IcalInterface</li>
-        </ul>
-    </li>
-
-
-    <li>Implement rfc7968<br>
-        new properties;
-        <ul>
-            <li>COLOR, NAME, CONFERENCE, IMAGE, REFRESH-INTERVAL, SOURCE</li>
-        </ul>
-        allow calendar-properties;
-        <ul>
-            <li>UID, LAST-MODIFIED, URL, REFRESH-INTERVAL, SOURCE, COLOR,
-                NAME, DESCRIPTION, CATEGORIES, IMAGE
-            </li>
-        </ul>
-        Replace rfc5545 (date+unique_id) UID by rfc7986 guid UID.<br>
-        Note, calendar UID is auto-created !!
-    </li>
-
-    <li>Alter RRULE/EXRULE to single occurence</li>
-
-    <li>Allow iana-token (Other IANA-registered type) property PARAMETER names<br>
-        For ACTION and CLASS, iana-token / x-name VALUES are allowed<br>
-        However, IANA Properties still not supported
-    </li>
-
-    <li>Vcalendar::sort()
-        <ul>
-            <li>order adjustment</li>
-        </ul>
-    </li>
-
-    <li>Conformed method names for
-        <ul>
-            <li>Last-Modified, Request-Status, Related-to</li>
-        </ul>
-    </li>
-
-    <li>Timezone conversion
-        <ul>
-            <li>Fix other (Ms) timezones conversion to PHP timezones (ie map on offset)
-                in RegulateTimezoneFactory, to be used before Vcalendar::parse
-            </li>
-        </ul>
-    </li>
-
-    <li>Code reworks: StringFactory, SortFactory, CalAddressFactory, *Traits etc</li>
-
-    <li>Vtimezone::populate() moved to Util/VtimezonePopulateFactory::process()</li>
-
-    <li>CATEGORIES, RESOURCES no longer accepts array input</li>
-
-    <li>String asserts in set-methods for TEXT Valuetype properties</li>
+    <li>IcalvCard::iCal2vCards() arg bug</li>
 
 </ul>
 
@@ -2699,17 +2624,79 @@ Remove component with order number (1st=1, 2nd=2).
     - Kigkonsult\Icalcreator\Vcalendar::X_OCCURENCE<br>
     are available.
 </p>
+
 <p>
     Throws InvalidArgumentException on argument error, Exception on DateTime/DateInterval error.
 </p>
+<p>
+    The following recur rule sets has improved base selects :
+</p>
+<dl>
+    <dt>FREQ=DAILY
+    <dd>BYDAY opt, only fixed weekdays ex. &quot;TH&quot;, not &quot;-1TH&quot;</dd>
+    <dd>BYMONTH opt</dd>
+    <dd>BYMONTHDAY opt</dd>
+    <dd>BYSETPOS, only if BYMONTH or BYMONTHDAY is set</dd>
+    </dt>
+
+    <dt>FREQ=WEEKLY
+    <dd>1
+        <ul>
+            <li>BYMONTH opt</li>
+        </ul>
+    </dd>
+    <dd>2
+        <ul>
+            <li>BYDAY req, only fixed weekdays ex. &quot;TH&quot;, not &quot;-1TH&quot;</li>
+            <li>BYMONTH opt</li>
+        </ul>
+    </dd>
+    </dt>
+
+    <dt>FREQ=MONTHLY
+    <dd>1
+        <ul>
+            <li>BYDAY opt, only fixed weekdays ex. &quot;TH&quot;, not &quot;-1TH&quot;</li>
+            <li>BYMONTH opt, BYMONTHDAY opt</li>
+            <li>BYSETPOS opt, only if BYMONTHDAY is set</li>
+        </ul>
+    </dd>
+    <dd>2
+        <ul>
+            <li>BYDAY req</li>
+            <li>BYMONTH opt</li>
+            <li>BYSETPOS opt</li>
+        </ul>
+
+    </dd>
+    </dt>
+
+    <dt>FREQ=YEARLY - 1
+    <dd>1
+        <ul>
+            <li>BYMONTH opt</li>
+            <li>BYMONTHDAY opt</li>
+        </ul>
+    </dd>
+    <dd>2
+        <ul>
+            <li>BYMONTH opt</li>
+            <li>BYDAY req</li>
+            <li>BYSETPOS opt</li>
+        </ul>
+    </dd>
+    </dt>
+
+</dl>
+
 <p class="format">Vcalendar::selectComponents([ startYear, startMonth, startDay
     [, endYear, endMonth, endDay
     [, cType [, flat [, any [, split]]]]]])
 </p>
 <p class="comment">startYear : (int) start year (4*digit), default current year
-    (object) DateTime, start date<sup>*</sup>
+    (object) DateTimeInterface instance, start date<sup>*</sup>
     startMonth : (int) start month (1-2*digit), default current month
-    (object) DateTime, end date<sup>*</sup>
+    (object) DateTimeInterface instance, end date<sup>*</sup>
     startDay : (int) start day (1-2*digit), default current day
     endYear : (int) end year (4*digit), default startYear
     endMonth : (int) end month (1-2*digit), default startMonth
@@ -2726,7 +2713,7 @@ Remove component with order number (1st=1, 2nd=2).
     within the period
     false =&gt; one occurrence of component in output array,
     start date/recurrence (start) date
-    <sup>*</sup>When using datetime objects, other start/end arguments are ignored.
+    <sup>*</sup>When using DateTimeInterface instances, other start/end arguments are ignored.
 
     valid flat any split
     combinations (defaults in upper case)
@@ -2918,6 +2905,10 @@ Remove component with order number (1st=1, 2nd=2).
 <p>
     Non-standard iCal properties (except the <a href="#X-PROPERTY_PROP">X-properties</a>) are ignored.
 </p>
+<p>
+    For parsing an internet URL resource, <a href="https://github.com/iCalcreator/UrlRsrc" target="_blank"
+                                             title="download UrlRsrc">UrlRsrc</a> can be used.
+</p>
 <p class="label">Format</p>
 <p>
     The method returns the class instance (static).
@@ -2932,29 +2923,67 @@ Remove component with order number (1st=1, 2nd=2).
 <p class="label">parse example 1</p>
 <p class="example">use Kigkonsult\Icalcreator\Vcalendar;
 
-    $vcalendar = new Vcalendar( [ Vcalendar::UNIQUE_ID =&gt; &quot;kigkonsult.se&quot; ] );
-    $iCalContent = file_get_contents( &quot;file.ics&quot; );
+    // <span class="comment">set Your unique id, </span>
+    // <span class="comment">site info for the Vcalendar PRODID property</span>
+    $vcalendar = new Vcalendar( [ Vcalendar::UNIQUE_ID =&gt; &quot;kigkonsult.se&quot;, ] );
+
+    // <span class="comment">get iCal contents from file</span>
+    $iCalContent = file_get_contents( &quot;calendar.ics&quot; );
+
+    // <span class="comment">parse iCal contents</span>
     $vcalendar-&gt;parse( $iCalContent );
 
 </p>
 
 <p class="label">parse example 2</p>
+<p>
+    PHP <span class="example">file_get_contents</span> may work on external resources.
+</p>
 <p class="example">use Kigkonsult\Icalcreator\Vcalendar;
 
+    // <span class="comment">set Your unique id, </span>
+    // <span class="comment">site info for the Vcalendar PRODID property</span>
     $vcalendar = new Vcalendar( [ Vcalendar::UNIQUE_ID =&gt; &quot;kigkonsult.se&quot; ] );
+
+    // <span class="comment">get iCal contents from external resource</span>
     $iCalContent = file_get_contents( &quot;http://www.ical.net/calendars/calendar.ics&quot; );
+
+    // <span class="comment">parse iCal contents</span>
     $vcalendar-&gt;parse( $iCalContent );
 
 </p>
 
 <p class="label">parse example 3</p>
+<p>
+    Here using <a href="https://github.com/iCalcreator/UrlRsrc" target="_blank" title="download UrlRsrc">UrlRsrc</a> to
+    download an internet (URL) resource.
+</p>
+<p class="example">use Kigkonsult\Icalcreator\Vcalendar;
+    use Kigkonsult\Http\UrlRsrc;
+
+    // <span class="comment">set Your unique id, </span>
+    // <span class="comment">site info for the Vcalendar PRODID property</span>
+    $vcalendar = new Vcalendar( [ Vcalendar::UNIQUE_ID =&gt; &quot;kigkonsult.se&quot; ] );
+
+    // <span class="comment">get iCal contents from external resource</span>
+    $iCalContent = UrlRsrc::getContent( &quot;http://www.ical.net/calendars/calendar.ics&quot; );
+
+    // <span class="comment">parse iCal contents</span>
+    $vcalendar-&gt;parse( $iCalContent );
+
+</p>
+
+<p class="label">parse example 4</p>
+<p>
+    Parse an array with iCal formatted rows.
+</p>
 <p class="example">use Kigkonsult\Icalcreator\Vcalendar;
 
     $vcalendar = new Vcalendar( [ Vcalendar::UNIQUE_ID =&gt; &quot;kigkonsult.se&quot; ] );
 
     $str = [
     &quot;BEGIN:VCALENDAR&quot;,
-    &quot;PRODID:-//kigkonsult.se//NONSGML kigkonsult.se iCalcreator 2.29.14//&quot;,
+    &quot;PRODID:-//kigkonsult.se//NONSGML kigkonsult.se iCalcreator 2.39//&quot;,
     &quot;VERSION:2.0&quot;,
     &quot;BEGIN:VEVENT&quot;,
     &quot;DTSTART:20101224T190000Z&quot;,
@@ -2970,6 +2999,9 @@ Remove component with order number (1st=1, 2nd=2).
 </p>
 
 <p class="label">merge example</p>
+<p>
+    Parse two iCal files into one.
+</p>
 <p class="example">use Kigkonsult\Icalcreator\Vcalendar;
 
     $vcalendar = new Vcalendar( [ Vcalendar::UNIQUE_ID =&gt; &quot;kigkonsult.se&quot; ] );
@@ -3006,25 +3038,23 @@ Generate and return (string) <strong>calendar</strong>.
 <a name="returnCalendar"></a><h4>3.1.4.3 returnCalendar</h4>
 <p>
     Redirect the Vcalendar instance content to user browser.
-    Filename, addressed to browser, is automatically generated if missing or not set
-    and the filename will look like it is set using<br>
+    Filename, addressed to browser, is automatically generated if missing or not set,
+    the filename will look like it is set using<br>
 </p>
 <p class="example">$filename = date( &quot;YmdHis&quot; ).&quot;.ics&quot;</p>
 <p>
     The method do not stop PHP script (exit), returns (bool) true on success.
 </p>
-<p>
-    Note, the returnCalendar method is subject for change in future versions.
-</p>
 <p class="label">Format</p>
-<p class="format">Vcalendar::returnCalendar( [ utf8Encode [, gzip [, cdType ]]] )</p>
+<p class="format">Vcalendar::returnCalendar( [ utf8Encode [, gzip [, cdType [, fileName ]]]] )</p>
 <p class="comment">utf8Encode = (bool) true: utf8 encoded output,
     false: (default) no encoding
     gzip = (bool) true: gzip compressed output
     Header &quot;Content-Length&quot; only sent when gzip=true
     false: (default) no compressing
     cdType = (bool) true: (default) Content-Disposition: attachment
-    false: Content-Disposition: inline</p>
+    false: Content-Disposition: inline
+    fileName = (string) returned file Name</p>
 <p class="label">Example 1</p>
 <p class="example">use Kigkonsult\Icalcreator\Vcalendar;
 
@@ -3167,8 +3197,8 @@ Generate and return (string) <strong>calendar</strong>.
 <p class="format">Vcalendar::vtimezonePopulate( [ timezone [, xprops, [ start [, end ]]]] )</p>
 <p class="comment">timezone = (string) valid timezone, acceptable by <em>PHP</em> DateTimeZone
     xprops = (array) ( *[ x-propName =&gt; value ] ), timezone non-standard properties
-    from = DateTime | (int) timestamp, period start date<sup>*</sup>
-    to = DateTime | (int) timestamp, period end date<sup>*</sup>
+    from = DateTimeInterface | (int) timestamp, period start date<sup>*</sup>
+    to = DateTimeInterface | (int) timestamp, period end date<sup>*</sup>
 </p>
 <p>
 
@@ -3439,7 +3469,7 @@ Generate and return (string) <strong>calendar</strong>.
 <p>
     All iCalcreator component object property methods for get/set data.<br>
     For property format in detail, see
-    <a href="https://tools.ietf.org/html/rfc2445" title="RFC2445" target="_blank">RFC2445</a> - Internet Calendaring and
+    <a href="https://tools.ietf.org/html/rfc5545" title="RFC5545" target="_blank">RFC5545</a> - Internet Calendaring and
     Scheduling Core Object Specification (iCalendar).
 </p>
 
@@ -3450,7 +3480,7 @@ Generate and return (string) <strong>calendar</strong>.
 <a name="DATE_WITH_UTC_TIME"></a>
 <p>
     Notice for properties and VALUE=DATE-TIME in <b>UTC</b> timezone.
-<p class="quotes">RFC2445:
+<p class="quotes">RFC5545:
     The date with UTC time, or absolute time,
     is identified by a LATIN CAPITAL LETTER Z suffix character (US-ASCII decimal 90),
     the UTC designator, appended to the time value.
@@ -3964,7 +3994,7 @@ Deleting all ATTENDEE properties.
     propOrderNo = (int) order number // <span class="comment">1=1st, 2=2nd etc</span>
     lang<sup>*</sup> = as defined in [RFC5546]</p>
 <p>
-    See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2445" target="_blank">RFC2445</a> -
+    See rules in detail in <a href="https://tools.ietf.org/html/rfc5545" title="RFC5545" target="_blank">RFC5545</a> -
     Internet Calendaring and Scheduling Core Object Specification (iCalendar).
 </p>
 <p class="label">Example</p>
@@ -4068,7 +4098,7 @@ Deleting all ATTENDEE properties.
 <p class="format">calendarComponent::getCategories( propOrderNo/null , true )</p>
 <p class="comment">propOrderNo = (int) specific property value</p>
 <p class="comment">output = array( &quot;value&quot; =&gt; categories<sup>1</sup>
-    , &quot;params&quot; =&gt; params<sup>3</sup> )</p>
+    , &quot;params&quot; =&gt; params<sup>2</sup> )</p>
 <p class="label">Format 3</p>
 <p class="format">calendarComponent::getCategories( propOrderNo )</p>
 <p class="comment">propOrderNo = (int) specific property value</p>
@@ -4093,11 +4123,11 @@ Deleting all ATTENDEE properties.
 <p>Parameters will be ordered as prescribed in [RFC5545].</p>
 <p class="label">Format</p>
 <p class="format">calendarComponent::setCategories( categories [, params [, propOrderNo ]] )</p>
-<p class="comment">categories<sup>1</sup> = (string) categoryValue / (array) ( *categoryValue )
-    categoryValue<sup>2</sup> = (string) textual categories or subtypes of the <strong>calendar</strong> component,
+<p class="comment">categories<sup>1</sup> = (string) textual categories or subtypes of the <strong>calendar</strong>
+    component,
     can be specified as a list of categories
     separated by the COMMA character
-    params<sup>3</sup> = (array) ( [Vcalendar::LANGUAGE =&gt; (string) &quot;&lt;lang<sup>*</sup>&gt;&quot;] *[,
+    params<sup>2</sup> = (array) ( [Vcalendar::LANGUAGE =&gt; (string) &quot;&lt;lang<sup>*</sup>&gt;&quot;] *[,
     xparams] )
     xparams = (string) key =&gt; (string) value // <span class="comment">key prefix &quot;X-&quot;</span>
     propOrderNo = (int) order number // <span class="comment">1=1st, 2=2nd etc</span>
@@ -4462,7 +4492,7 @@ Deleting all ATTENDEE properties.
 <p class="label">Format</p>
 <p class="format">calendarComponent::setCreated( [ createdDate [, xparams ]] )</p>
 <p class="comment">
-    createdDate = (object) DateTime class instance, will be set to UTC if not UTC timezone
+    createdDate = (object) DateTimeInterface instance, will be set to UTC if not UTC timezone
     createdDate = (string) date/datetime string<sup>*</sup>
     xparams<sup>2</sup> = array( *[ (string) key =&gt; (string) value ] )
     <br>date/datetime string<sup>*</sup> please notice <a href="#date_restraints">date restraints</a>.
@@ -4671,7 +4701,7 @@ Deleting all ATTENDEE properties.
 <p class="label">Format</p>
 <p class="format">calendarComponent::setDtend( dtendDate [, params<sup>2</sup> ] )
 <p class="comment">
-    dtendDate = (object) DateTime class instance
+    dtendDate = (object) DateTimeInterface instance
     dtendDate = (string) date/datetime string<sup>*</sup>
     params<sup>2</sup> = (array) ([ tzidparam/datetimeparam/dateparam ] *[,xparams])
     tzidparam = Vcalendar::TZID =&gt; (string) &lt;timezone identifier&gt;
@@ -4821,7 +4851,7 @@ Deleting all ATTENDEE properties.
     <dd>it is OPTIONAL and MUST NOT occur more than once and MUST NOT occur in pair with DUE. If one occurs, so MUST NOT
         the other.<br>
     <dt>In a <a href="#VFREEBUSY">VFREEBUSY</a>
-    <dd>it is OPTIONAL and MUST NOT occur more than once. ([RFC2445])<br>
+    <dd>it is OPTIONAL and MUST NOT occur more than once. ([RFC5545])<br>
     <dd>it can not appear. ([RFC5545])<br>
     <dt>In a <a href="#VALARM">VALARM</a>
     <dd>it is OPTIONAL and MUST NOT occur more than once and MUST occur in pair with TRIGGER. If one occurs, so MUST the
@@ -5008,7 +5038,7 @@ Deleting all ATTENDEE properties.
 <p class="format">calendarComponent::setExdate( exdates [, params [, propOrderNo ]] )</p>
 <p class="comment">exdates<sup>1</sup> = date / (array) ( date *[, date ] )
 
-    date = (object) DateTime class instance
+    date = (object) DateTimeInterface instance
     date = (string) date/datetime string<sup>*</sup>
 
     params<sup>2</sup> = (array) ([(datetimeparam/dateparam)&nbsp;/ tzidparam] *[,xparams])
@@ -5159,7 +5189,7 @@ Deleting all ATTENDEE properties.
     periods<sup>2</sup> = (array) ( startdate, enddate/duration ) /
     (array) ( *[, (array) ( startdate, enddate/duration )] )
 
-    startdate/enddate = (object) DateTime class instance, will be set to UTC if not UTC timezone
+    startdate/enddate = (object) DateTimeInterface instance, will be set to UTC if not UTC timezone
     startdate/enddate = (string) datetime string<sup>*</sup>
 
     duration = (object) DateInterval class instance
@@ -5178,7 +5208,7 @@ Deleting all ATTENDEE properties.
     <sup>*</sup> please notice <a href="#date_restraints">date restraints</a>.
 </p>
 <p class="label">Example 1</p>
-See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2445" target="_blank">RFC2445</a> -
+See rules in detail in <a href="https://tools.ietf.org/html/rfc5545" title="RFC5545" target="_blank">RFC5545</a> -
 Internet Calendaring and Scheduling Core Object Specification (iCalendar).
 The recommended way.
 <p class="example">
@@ -5830,7 +5860,7 @@ Works, but...
     startdate = date
     enddate = date
 
-    date = (object) DateTime class instance
+    date = (object) DateTimeInterface instance
     date = (string) date/datetime string<sup>*</sup>
 
     duration = (object) DateInterval class instance
@@ -5860,7 +5890,7 @@ Works, but...
     <sup>*</sup> please notice <a href="#date_restraints">date restraints</a>.
 </p>
 <p class="label">Example</p>
-See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2445" target="_blank">RFC2445</a>
+See rules in detail in <a href="https://tools.ietf.org/html/rfc5545" title="RFC5545" target="_blank">RFC5545</a>
 - Internet Calendaring and Scheduling Core Object Specification (iCalendar).<br>
 <p class="example">use Kigkonsult\Icalcreator\Vcalendar;
 
@@ -6367,8 +6397,8 @@ See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2
 <p>Parameters will be ordered as prescribed in [RFC5545].</p>
 <p class="label">Format</p>
 <p class="format">calendarComponent::setResources( resources [, params [, propOrderNo ]] )</p>
-<p class="comment">resources<sup>1</sup> = (string) resource / (array) ( *resource )
-    resource = (string) textual resources or subtypes of the <strong>calendar</strong> component,
+<p class="comment">resources<sup>1</sup> = (string) textual resources or subtypes of the <strong>calendar</strong>
+    component,
     can be specified as a list of resources
     separated by the COMMA character.
     params<sup>2</sup> = (array) (
@@ -6395,7 +6425,7 @@ See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2
         href="#VTODO">TODOs</a>,
     <a href="#VTIMEZONE">STANDARD</a> or <a href="#VTIMEZONE">DAYLIGHT</a> definitions and is OPTIONAL and MAY occur
     more than once ([RFC2445]),
-    SHOULD NOT occur more than once ([RFC5545]).
+    SHOULD NOT occur more than once ([RFC5545]). iCalcreator allows only one in component.
 </p>
 <p>
     To ease up usage, constants<br>
@@ -6470,14 +6500,9 @@ See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2
 <p class="format">calendarComponent::getRrule()</p>
 <p class="comment">output = recur<sup>1</sup></p>
 <p class="label">Format 2</p>
-<p class="format">calendarComponent::getRrule( propOrderNo/null, true )</p>
-<p class="comment">propOrderNo = (int) specific property value</p>
+<p class="format">calendarComponent::getRrule( true )</p>
 <p class="comment">output = array( &quot;value&quot; =&gt; recur<sup>1</sup>
     , &quot;params&quot; =&gt; xparams<sup>2</sup> )</p>
-<p class="label">Format 3</p>
-<p class="format">calendarComponent::getRrule( propOrderNo )</p>
-<p class="comment">propOrderNo = (int) specific property value</p>
-<p class="comment">Get propOrderNo RRULE</p>
 <p class="label">Example</p>
 <p class="example">
     $rrules = $vtodo-&gt;getRrule();
@@ -6494,13 +6519,28 @@ See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2
     The method returns the class instance (static).
 </p>
 <p>
-    The method throws InvalidArgumentException on empty value and config ALLOWEMPTY is set to false (default true),
-    Exception on DateTime error.
+    The method throws
 </p>
+<ul>
+    <li>InvalidArgumentException on
+        <ul>
+            <li>empty value and config ALLOWEMPTY is set to false (default true)</li>
+            <li>basic recur rule errors (<a href="https://tools.ietf.org/html/rfc5545" title="RFC5545" target="_blank">RFC5545</a>)
+            </li>
+        </ul>
+    </li>
+</ul>
+<ul>
+    <li>Exception on
+        <ul>
+            <li>DateTime error</li>
+        </ul>
+    </li>
+</ul>
 <p>Parameters will be ordered as prescribed in [RFC5545].</p>
 <p class="label">Format</p>
 <p class="format">calendarComponent::setRrule( recur [, xparams [, propOrderNo ]] )</p>
-See rules in detail in <a href="https://tools.ietf.org/html/rfc2445" title="RFC2445" target="_blank">RFC2445</a> -
+See rules in detail in <a href="https://tools.ietf.org/html/rfc5545" title="RFC5545" target="_blank">RFC5545</a> -
 Internet Calendaring and Scheduling Core Object Specification (iCalendar).
 <p class="comment">recur<sup>1</sup> = (array) (
     Vcalendar::FREQ =&gt; freq,
@@ -6534,7 +6574,7 @@ Internet Calendaring and Scheduling Core Object Specification (iCalendar).
 
     enddate = date // <span class="comment">a DATE value or a <a href="#DATE_WITH_UTC_TIME">UTC</a> timezone DATE-TIME value</span>
 
-    date = (object) DateTime class instance, will be set to UTC if not UTC timezone
+    date = (object) DateTimeInterface instance, will be set to UTC if not UTC timezone
     date = (string) date/datetime string<sup>*</sup>
 
 
@@ -6598,11 +6638,11 @@ Internet Calendaring and Scheduling Core Object Specification (iCalendar).
     Vcalendar::BYWEEKNO =&gt; [ 2, -4, 6 ], // (*)
     Vcalendar::BYMONTH =&gt; 2, // (*)
     Vcalendar::BYSETPOS =&gt; [ 2, -4, 6 [, // (*)
-    Vcalendar::BYDAY =&gt; [ // (**)
-    [ -2, Vcalendar::DAY =&gt; Vcalendar::WE ],
-    [ 3, Vcalendar::DAY =&gt; Vcalendar::TH ],
-    [ 5, Vcalendar::DAY =&gt; Vcalendar::FR ],
-    [ Vcalendar::DAY =&gt; Vcalendar::MO ]
+    Vcalendar::BYDAY =&gt; [ //
+    [ -1, Vcalendar::DAY =&gt; Vcalendar::WE ], // last WE
+    [ 3, Vcalendar::DAY =&gt; Vcalendar::TH ], // third TH
+    [ 5, Vcalendar::DAY =&gt; Vcalendar::FR ], // fifth FR
+    [ Vcalendar::DAY =&gt; Vcalendar::MO ] // every MO
     ],
     [ &quot;x-key&quot; =&gt; &quot;xparamValue&quot; ]
     );
@@ -6624,13 +6664,14 @@ Internet Calendaring and Scheduling Core Object Specification (iCalendar).
     Vcalendar::BYWEEKNO =&gt; -2, // (*)
     Vcalendar::BYMONTH =&gt; [ 2, 4, -6 ], // (*)
     Vcalendar::BYSETPOS =&gt; -2, // (*)
-    Vcalendar::BYday =&gt; [ 5, Vcalendar::DAY; =&gt; Vcalendar::WE ], // (**)
+    // Vcalendar::BYday =&gt; Vcalendar::WE // one day
+    // Vcalendar::BYday =&gt; [ Vcalendar::WE, Vcalendar::TH ], // days
+    Vcalendar::BYday =&gt; [ 5, Vcalendar::DAY =&gt; Vcalendar::WE ], // pos. day
     ],
     [ &quot;x-key&quot; =&gt; &quot;xparamValue&quot; ]
     );
 
     // <span class="comment">(*)  single value/array of values</span>
-    // <span class="comment">(**) single value array /array of arrays</span>
 
 </p>
 <br>
@@ -7038,7 +7079,7 @@ Internet Calendaring and Scheduling Core Object Specification (iCalendar).
     dur-minute = 1*DIGIT &quot;M&quot; [dur-second]
     dur-second = 1*DIGIT &quot;S&quot;
 
-    date<sup>3</sup> = (object) DateTime class instance, will be set to UTC if not UTC timezone
+    date<sup>3</sup> = (object) DateTimeInterface instance, will be set to UTC if not UTC timezone
     date<sup>3</sup> = (string) datetime string<sup>*</sup>
 
     params<sup>4</sup> = (array) ( [[ reltype [, trigRelparam ]] / datetimeparam ] *[, xparams ] )
@@ -7698,6 +7739,9 @@ Internet Calendaring and Scheduling Core Object Specification (iCalendar).
 </p>
 <h5>Set URL</h5>
 <p>Set property value.</p>
+<p>
+    The non-rfc (opt urlencoded) value prefix/suffix &quot;&lt;&gt;&quot; (and parameter valuetype) is supported.
+</p>
 <p>
     The method throws InvalidArgumentException on empty value and config ALLOWEMPTY is set to false (default true),
     InvalidArgumentException on url error.
@@ -8542,8 +8586,8 @@ Add <strong>calendar</strong> component to the Vcalendar instance or replace/upd
 <p class="comment">calendar = (object) Vcalendar instance
     timezone = (string) valid timezone, acceptable by <em>PHP</em> DateTimeZone<sup>*</sup>
     xprops = (array) ( *[ x-propName =&gt; value ] ), timezone non-standard properties
-    from = Datime | (int) timestamp, period start date<sup>**</sup>
-    to = Datime | (int) timestamp, period end date<sup>**</sup>
+    from = DateTimeInterface | (int) timestamp, period start date<sup>**</sup>
+    to = DateTimeInterface | (int) timestamp, period end date<sup>**</sup>
 
     <sup>*</sup> If no argument timezone, the argument xProps is searched for &quot;X-WR-TIMEZONE&quot; and &quot;X-LIC-LOCATION&quot;
     keys.
@@ -8606,6 +8650,7 @@ Using the shortcut The Vcalendar::<a href="#valendarVtimezonePopulate">vtimezone
 <a href="#INDEX">[index]</a> <a href="#top">[top]</a> <a href="#iCalcreator_misc_methods">[up]</a>
 
 
+
 <a name="msTimezone2PHPtz"></a><h4>3.4.5 Review timezones, opt alter to PHP timezone</h4>
 <p>
     The Vcalendar::<a href="#parse_merge">parse</a> or component::<a href="#componentParse">parse</a>
@@ -8631,7 +8676,7 @@ Using the shortcut The Vcalendar::<a href="#valendarVtimezonePopulate">vtimezone
 <p>Return rfc5545 formatted calendar string.</p>
 <p class="label">Format</p>
 <p class="format">RegulateTimezoneFactory::process( iCalData )</p>
-<p class="comment">iCalData = string|array $iCal strict rfc2445 formatted calendar</p>
+<p class="comment">iCalData = string|array $iCal strict rfc5545 formatted calendar</p>
 <p class="example">use Kigkonsult\Icalcreator\Util\RegulateTimezoneFactory;
 
     $iCalStringToParse = RegulateTimezoneFactory::process( $iCalInput );
@@ -8780,7 +8825,7 @@ Using the shortcut The Vcalendar::<a href="#valendarVtimezonePopulate">vtimezone
 <table>
     <tr>
         <td>Copyright
-        <td>(c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+        <td>(c) 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
     <tr>
         <td>Link
         <td>https://kigkonsult.se
@@ -8789,7 +8834,7 @@ Using the shortcut The Vcalendar::<a href="#valendarVtimezonePopulate">vtimezone
         <td>iCalcreator
     <tr>
         <td>Version
-        <td>2.29.14
+        <td>2.39
     <tr>
         <td class="top">License
         <td>

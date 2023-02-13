@@ -13,6 +13,7 @@ namespace Monolog\Handler;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
+use Monolog\Utils;
 use Monolog\Handler\Slack\SlackRecord;
 
 /**
@@ -47,18 +48,8 @@ class SlackWebhookHandler extends AbstractProcessingHandler
      * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
      * @param array $excludeFields Dot separated list of fields to exclude from slack message. E.g. ['context.field1', 'extra.field2']
      */
-    public function __construct(
-        $webhookUrl,
-        $channel = null,
-        $username = null,
-        $useAttachment = true,
-        $iconEmoji = null,
-        $useShortAttachment = false,
-        $includeContextAndExtra = false,
-        $level = Logger::CRITICAL,
-        $bubble = true,
-        array $excludeFields = array()
-    ) {
+    public function __construct($webhookUrl, $channel = null, $username = null, $useAttachment = true, $iconEmoji = null, $useShortAttachment = false, $includeContextAndExtra = false, $level = Logger::CRITICAL, $bubble = true, array $excludeFields = array())
+    {
         parent::__construct($level, $bubble);
 
         $this->webhookUrl = $webhookUrl;
@@ -93,7 +84,7 @@ class SlackWebhookHandler extends AbstractProcessingHandler
     protected function write(array $record)
     {
         $postData = $this->slackRecord->getSlackData($record);
-        $postString = json_encode($postData);
+        $postString = Utils::jsonEncode($postData);
 
         $ch = curl_init();
         $options = array(

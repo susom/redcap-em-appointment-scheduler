@@ -36,12 +36,8 @@ class LineFormatter extends NormalizerFormatter
      * @param bool $allowInlineLineBreaks Whether to allow inline line breaks in log entries
      * @param bool $ignoreEmptyContextAndExtra
      */
-    public function __construct(
-        $format = null,
-        $dateFormat = null,
-        $allowInlineLineBreaks = false,
-        $ignoreEmptyContextAndExtra = false
-    ) {
+    public function __construct($format = null, $dateFormat = null, $allowInlineLineBreaks = false, $ignoreEmptyContextAndExtra = false)
+    {
         $this->format = $format ?: static::SIMPLE_FORMAT;
         $this->allowInlineLineBreaks = $allowInlineLineBreaks;
         $this->ignoreEmptyContextAndExtra = $ignoreEmptyContextAndExtra;
@@ -167,7 +163,7 @@ class LineFormatter extends NormalizerFormatter
             return $this->toJson($data, true);
         }
 
-        return str_replace('\\/', '/', @json_encode($data));
+        return str_replace('\\/', '/', $this->toJson($data, true));
     }
 
     protected function replaceNewlines($str)

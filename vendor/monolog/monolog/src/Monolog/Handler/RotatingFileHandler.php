@@ -12,6 +12,7 @@
 namespace Monolog\Handler;
 
 use Monolog\Logger;
+use Monolog\Utils;
 
 /**
  * Stores logs to files that are rotated every day and a limited number of files are kept.
@@ -43,15 +44,9 @@ class RotatingFileHandler extends StreamHandler
      * @param int|null $filePermission Optional file permissions (default (0644) are only for owner read/write)
      * @param bool $useLocking Try to lock log file before doing any writes
      */
-    public function __construct(
-        $filename,
-        $maxFiles = 0,
-        $level = Logger::DEBUG,
-        $bubble = true,
-        $filePermission = null,
-        $useLocking = false
-    ) {
-        $this->filename = $filename;
+    public function __construct($filename, $maxFiles = 0, $level = Logger::DEBUG, $bubble = true, $filePermission = null, $useLocking = false)
+    {
+        $this->filename = Utils::canonicalizePath($filename);
         $this->maxFiles = (int)$maxFiles;
         $this->nextRotation = new \DateTime('tomorrow');
         $this->filenameFormat = '{filename}-{date}';

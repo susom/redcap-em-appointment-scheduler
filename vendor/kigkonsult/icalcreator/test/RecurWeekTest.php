@@ -2,50 +2,45 @@
 /**
  * iCalcreator, the PHP class package managing iCal (rfc2445/rfc5445) calendar information.
  *
- * copyright (c) 2007-2019 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * Link      https://kigkonsult.se
- * Package   iCalcreator
- * Version   2.29.9
- * License   Subject matter of licence is the software iCalcreator.
- *           The above copyright, link, package and version notices,
- *           this licence notice and the invariant [rfc5545] PRODID result use
- *           as implemented and invoked in iCalcreator shall be included in
- *           all copies or substantial portions of the iCalcreator.
- *
- *           iCalcreator is free software: you can redistribute it and/or modify
- *           it under the terms of the GNU Lesser General Public License as published
- *           by the Free Software Foundation, either version 3 of the License,
- *           or (at your option) any later version.
- *
- *           iCalcreator is distributed in the hope that it will be useful,
- *           but WITHOUT ANY WARRANTY; without even the implied warranty of
- *           MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *           GNU Lesser General Public License for more details.
- *
- *           You should have received a copy of the GNU Lesser General Public License
- *           along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
- *
  * This file is a part of iCalcreator.
+ *
+ * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @link      https://kigkonsult.se
+ * @license   Subject matter of licence is the software iCalcreator.
+ *            The above copyright, link, package and version notices,
+ *            this licence notice and the invariant [rfc5545] PRODID result use
+ *            as implemented and invoked in iCalcreator shall be included in
+ *            all copies or substantial portions of the iCalcreator.
+ *
+ *            iCalcreator is free software: you can redistribute it and/or modify
+ *            it under the terms of the GNU Lesser General Public License as
+ *            published by the Free Software Foundation, either version 3 of
+ *            the License, or (at your option) any later version.
+ *
+ *            iCalcreator is distributed in the hope that it will be useful,
+ *            but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *            GNU Lesser General Public License for more details.
+ *
+ *            You should have received a copy of the GNU Lesser General Public License
+ *            along with iCalcreator. If not, see <https://www.gnu.org/licenses/>.
  */
-
 namespace Kigkonsult\Icalcreator;
 
-use PHPUnit\Framework\TestCase;
 use Kigkonsult\Icalcreator\Util\DateTimeFactory;
 use Kigkonsult\Icalcreator\Util\RecurFactory;
-use Kigkonsult\Icalcreator\Util\Util;
+use Kigkonsult\Icalcreator\Util\RecurFactory2;
 use DateTime;
 use Exception;
 
 /**
  * class RecurTest, testing selectComponents
  *
- * @author      Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since  2.27.20 - 2019-05-20
+ * @since  2.29.29 - 2020-09-11
  */
 class RecurWeekTest extends RecurBaseTest
 {
-
     /**
      * recur2dateTest3Weekly provider
      */
@@ -55,7 +50,7 @@ class RecurWeekTest extends RecurBaseTest
         $dataArr = [];
 
         $interval = 1;
-        for ($ix = 311; $ix <= 319; $ix++) {
+        for ($ix = 301; $ix <= 309; $ix++) {
             $time = microtime(true);
             $start = DateTimeFactory::factory('20190101T0900', 'Europe/Stockholm');
             $wDate = clone $start;
@@ -80,7 +75,36 @@ class RecurWeekTest extends RecurBaseTest
                 $execTime
             ];
             $interval += 2;
-        }
+        } // end for
+
+        // same as above but with BYDAY MO
+        $interval = 1;
+        $expects = [
+            311 => [20200914, 20200921, 20200928, 20201005],
+            312 => [20200928, 20201019, 20201109, 20201130],
+            313 => [20201012, 20201116, 20201221, 20210125],
+            314 => [20201026, 20201214, 20210201, 20210322],
+            315 => [20201109, 20210111, 20210315, 20210517]
+        ];
+        for ($ix = 311; $ix <= 315; $ix++) {
+            $time = microtime(true);
+            $start = DateTimeFactory::factory('20200909', 'Europe/Stockholm');
+            $count = 5;
+            $dataArr[] = [
+                $ix . '-' . $interval,
+                $start,
+                (clone $start)->modify(RecurFactory::EXTENDYEAR . ' year'),
+                [
+                    Vcalendar::FREQ => Vcalendar::WEEKLY,
+                    Vcalendar::COUNT => $count,
+                    Vcalendar::INTERVAL => $interval,
+                    Vcalendar::BYDAY => [[Vcalendar::DAY => Vcalendar::MO]]
+                ],
+                $expects[$ix],
+                0.0
+            ];
+            $interval += 2;
+        } // end for
 
         $interval = 1;
         for ($ix = 321; $ix <= 329; $ix++) {
@@ -124,7 +148,7 @@ class RecurWeekTest extends RecurBaseTest
                 $execTime
             ];
             $interval += 2;
-        }
+        } // end for
 
         $interval = 1;
         $byMonth = [12];
@@ -163,7 +187,7 @@ class RecurWeekTest extends RecurBaseTest
             $interval += 2;
             $byMonth[] = $interval;
             sort($byMonth);
-        }
+        } // end for
 
         $interval = 1;
         $byMonth = [1, 12];
@@ -187,7 +211,6 @@ class RecurWeekTest extends RecurBaseTest
                 switch (true) {
                     case($Ymd <= $startYmd) :
                         $wDate = $wDate->modify('1 day');
-                        continue;
                         break;
                     case($endYmd < $Ymd) :
                         break 2;
@@ -198,7 +221,7 @@ class RecurWeekTest extends RecurBaseTest
                             }
                         }
                         $wDate = $wDate->modify('1 day');
-                        continue;
+                        break;
                     default :
                         // now is the first day of next week
                         if (1 < $interval) {
@@ -228,11 +251,10 @@ class RecurWeekTest extends RecurBaseTest
             $interval += 3;
             $byMonth[] = $interval;
             sort($byMonth);
-        }
+        } // end for
 
         return $dataArr;
     }
-
 
     /**
      * Testing recur2date
@@ -254,28 +276,36 @@ class RecurWeekTest extends RecurBaseTest
         array $recur,
         array $expects,
         $prepTime
-    ) {
+    )
+    {
         $saveStartDate = clone $start;
 
-        $result = $this->recur2dateTest(
-            $case,
-            $start,
-            $end,
-            $recur,
-            $expects,
-            $prepTime
-        );
+        $case3 = substr($case, 0, 3);
+        if (('311' <= $case3) && ('319' >= $case3)) {
+            $result = array_flip($expects);
+        } else {
+            $result = $this->recur2dateTest(
+                $case,
+                $start,
+                $end,
+                $recur,
+                $expects,
+                $prepTime
+            );
+        }
 
         if (!isset($recur[Vcalendar::INTERVAL])) {
             $recur[Vcalendar::INTERVAL] = 1;
         }
-        if (RecurFactory::isSimpleWeeklyRecur1($recur)) {
+        $strCase = str_pad($case, 12);
+        $recurDisp = str_replace([PHP_EOL, ' '], '', var_export($recur, true));
+        if (RecurFactory2::isRecurWeekly1($recur)) {
             $time = microtime(true);
-            $resultX = RecurFactory::recurWeeklySimple1($recur, $start, clone $start, $end);
+            $resultX = RecurFactory2::recurWeekly1($recur, $start, clone $start, $end);
             $execTime = microtime(true) - $time;
-            $strCase = str_pad($case, 12);
             echo $strCase . 'week smpl1 time:' . number_format($execTime, 6) . ' : ' .
                 implode(' - ', array_keys($resultX)) . PHP_EOL; // test ###
+            echo $recurDisp . PHP_EOL; // test ###
             $this->assertEquals(
                 array_keys($result),
                 array_keys($resultX),
@@ -285,13 +315,13 @@ class RecurWeekTest extends RecurBaseTest
                     var_export($recur, true)
                 )
             );
-        } elseif (RecurFactory::isSimpleWeeklyRecur2($recur)) {
+        } elseif (RecurFactory2::isRecurWeekly2($recur)) {
             $time = microtime(true);
-            $resultX = RecurFactory::recurWeeklySimple2($recur, $start, clone $start, $end);
+            $resultX = RecurFactory2::recurWeekly2($recur, $start, clone $start, $end);
             $execTime = microtime(true) - $time;
-            $strCase = str_pad($case, 12);
             echo $strCase . 'week smpl2 time:' . number_format($execTime, 6) . ' : ' .
                 implode(' - ', array_keys($resultX)) . PHP_EOL; // test ###
+            echo $recurDisp . PHP_EOL; // test ###
             $this->assertEquals(
                 array_keys($result),
                 array_keys($resultX),
@@ -301,7 +331,9 @@ class RecurWeekTest extends RecurBaseTest
                     var_export($recur, true)
                 )
             );
+        } else {
+            echo $strCase . ' NOT isRecurWeekly1/2 ' . $recurDisp . PHP_EOL;
+            $this->assertTrue(false);
         }
     }
-
 }

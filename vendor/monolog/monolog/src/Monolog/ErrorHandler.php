@@ -14,7 +14,6 @@ namespace Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Monolog\Handler\AbstractHandler;
-use Monolog\Registry;
 
 /**
  * Monolog error handler
@@ -58,15 +57,12 @@ class ErrorHandler
      * @param int|false $fatalLevel a LogLevel::* constant, or false to disable fatal error handling
      * @return ErrorHandler
      */
-    public static function register(
-        LoggerInterface $logger,
-        $errorLevelMap = array(),
-        $exceptionLevel = null,
-        $fatalLevel = null
-    ) {
+    public static function register(LoggerInterface $logger, $errorLevelMap = array(), $exceptionLevel = null, $fatalLevel = null)
+    {
         //Forces the autoloader to run for LogLevel. Fixes an autoload issue at compile-time on PHP5.3. See https://github.com/Seldaek/monolog/pull/929
         class_exists('\\Psr\\Log\\LogLevel', true);
 
+        /** @phpstan-ignore-next-line */
         $handler = new static($logger);
         if ($errorLevelMap !== false) {
             $handler->registerErrorHandler($errorLevelMap);
@@ -90,12 +86,8 @@ class ErrorHandler
         }
     }
 
-    public function registerErrorHandler(
-        array $levelMap = array(),
-        $callPrevious = true,
-        $errorTypes = -1,
-        $handleOnlyReportedErrors = true
-    ) {
+    public function registerErrorHandler(array $levelMap = array(), $callPrevious = true, $errorTypes = -1, $handleOnlyReportedErrors = true)
+    {
         $prev = set_error_handler(array($this, 'handleError'), $errorTypes);
         $this->errorLevelMap = array_replace($this->defaultErrorLevelMap(), $levelMap);
         if ($callPrevious) {
@@ -142,8 +134,7 @@ class ErrorHandler
     {
         $this->logger->log(
             $this->uncaughtExceptionLevel === null ? LogLevel::ERROR : $this->uncaughtExceptionLevel,
-            sprintf('Uncaught Exception %s: "%s" at %s line %s', Utils::getClass($e), $e->getMessage(), $e->getFile(),
-                $e->getLine()),
+            sprintf('Uncaught Exception %s: "%s" at %s line %s', Utils::getClass($e), $e->getMessage(), $e->getFile(), $e->getLine()),
             array('exception' => $e)
         );
 
@@ -166,8 +157,7 @@ class ErrorHandler
         // fatal error codes are ignored if a fatal error handler is present as well to avoid duplicate log entries
         if (!$this->hasFatalErrorHandler || !in_array($code, self::$fatalErrors, true)) {
             $level = isset($this->errorLevelMap[$code]) ? $this->errorLevelMap[$code] : LogLevel::CRITICAL;
-            $this->logger->log($level, self::codeToString($code) . ': ' . $message,
-                array('code' => $code, 'message' => $message, 'file' => $file, 'line' => $line));
+            $this->logger->log($level, self::codeToString($code) . ': ' . $message, array('code' => $code, 'message' => $message, 'file' => $file, 'line' => $line));
         } else {
             // http://php.net/manual/en/function.debug-backtrace.php
             // As of 5.3.6, DEBUG_BACKTRACE_IGNORE_ARGS option was added.
@@ -196,13 +186,7 @@ class ErrorHandler
             $this->logger->log(
                 $this->fatalLevel === null ? LogLevel::ALERT : $this->fatalLevel,
                 'Fatal Error (' . self::codeToString($lastError['type']) . '): ' . $lastError['message'],
-                array(
-                    'code' => $lastError['type'],
-                    'message' => $lastError['message'],
-                    'file' => $lastError['file'],
-                    'line' => $lastError['line'],
-                    'trace' => $this->lastFatalTrace
-                )
+                array('code' => $lastError['type'], 'message' => $lastError['message'], 'file' => $lastError['file'], 'line' => $lastError['line'], 'trace' => $this->lastFatalTrace)
             );
 
             if ($this->logger instanceof Logger) {

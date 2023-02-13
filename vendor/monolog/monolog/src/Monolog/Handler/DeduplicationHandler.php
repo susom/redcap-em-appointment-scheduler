@@ -62,17 +62,11 @@ class DeduplicationHandler extends BufferHandler
      * @param int $time The period (in seconds) during which duplicate entries should be suppressed after a given log is sent through
      * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(
-        HandlerInterface $handler,
-        $deduplicationStore = null,
-        $deduplicationLevel = Logger::ERROR,
-        $time = 60,
-        $bubble = true
-    ) {
+    public function __construct(HandlerInterface $handler, $deduplicationStore = null, $deduplicationLevel = Logger::ERROR, $time = 60, $bubble = true)
+    {
         parent::__construct($handler, 0, Logger::DEBUG, $bubble, false);
 
-        $this->deduplicationStore = $deduplicationStore === null ? sys_get_temp_dir() . '/monolog-dedup-' . substr(md5(__FILE__),
-                0, 20) . '.log' : $deduplicationStore;
+        $this->deduplicationStore = $deduplicationStore === null ? sys_get_temp_dir() . '/monolog-dedup-' . substr(md5(__FILE__), 0, 20) . '.log' : $deduplicationStore;
         $this->deduplicationLevel = Logger::toMonologLevel($deduplicationLevel);
         $this->time = $time;
     }
@@ -170,8 +164,6 @@ class DeduplicationHandler extends BufferHandler
 
     private function appendRecord(array $record)
     {
-        file_put_contents($this->deduplicationStore,
-            $record['datetime']->getTimestamp() . ':' . $record['level_name'] . ':' . preg_replace('{[\r\n].*}', '',
-                $record['message']) . "\n", FILE_APPEND);
+        file_put_contents($this->deduplicationStore, $record['datetime']->getTimestamp() . ':' . $record['level_name'] . ':' . preg_replace('{[\r\n].*}', '', $record['message']) . "\n", FILE_APPEND);
     }
 }
