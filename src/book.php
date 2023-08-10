@@ -56,7 +56,7 @@ try {
         $completed = preg_grep('/_complete$/', $labels);
         $second = array_slice($completed, 1, 1);  // array("status" => 1)
 
-        $data[$second] = REDCAP_COMPLETE;
+        $data[end($second)] = REDCAP_COMPLETE;
 
         $data['redcap_event_name'] = $module->getUniqueEventName($reservationEventId);
         if (!isset($_POST['survey_record_id']) || (isset($_POST['survey_record_id']) && $_POST['survey_record_id'] == "")) {
