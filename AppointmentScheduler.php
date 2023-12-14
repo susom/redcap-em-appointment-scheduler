@@ -889,7 +889,8 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
     public function getNextRecordsId($eventId, $projectId)
     {
-        $sql = sprintf("SELECT max(cast(record as SIGNED)) as record_id from redcap_data WHERE project_id = '$projectId' AND event_id = '$eventId'");
+        $data_table = method_exists('\REDCap', 'getDataTable') ? \REDCap::getDataTable($projectId) : "redcap_data";
+        $sql = sprintf("SELECT max(cast(record as SIGNED)) as record_id from $data_table WHERE project_id = '$projectId' AND event_id = '$eventId'");
 
         $this->emLog("SQL Statement:", $sql);
         $result = db_query($sql);
