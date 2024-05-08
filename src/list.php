@@ -40,7 +40,7 @@ if (!empty($data)) {
         $counter = $module->getParticipant()->getSlotActualCountReservedSpots($slot['record_id'],
             $reservationEventId, $suffix, $module->getProjectId());
 
-        $available = (int)($slot['number_of_participants' . $suffix] - $counter['counter']);;
+        $available = (int)($slot['number_of_participants' . $suffix]?:0 - $counter['counter']);;
 
         if ($available <= 0) {
             continue;
