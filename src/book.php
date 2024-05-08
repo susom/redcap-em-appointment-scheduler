@@ -52,11 +52,8 @@ try {
          * let mark it as complete so we can send the survey if needed.
          * Complete status has different naming convention based on the instrument name. so you need to get instrument name and append _complete to it.
          */
-        $labels = \REDCap::getValidFieldsByEvents($module->getProjectId(), array($reservationEventId));
-        $completed = preg_grep('/_complete$/', $labels);
-        $second = array_slice($completed, 1, 1);  // array("status" => 1)
-
-        $data[end($second)] = REDCAP_COMPLETE;
+         $reservation = end($module->getProject()->eventsForms[$reservationEventId]);
+         $data[$reservation . '_complete'] = REDCAP_COMPLETE;
 
         $data['redcap_event_name'] = $module->getUniqueEventName($reservationEventId);
         if (!isset($_POST['survey_record_id']) || (isset($_POST['survey_record_id']) && $_POST['survey_record_id'] == "")) {
