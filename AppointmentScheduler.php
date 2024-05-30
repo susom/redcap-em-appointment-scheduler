@@ -160,6 +160,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
 
 
     private $surveyField;
+
     /**
      * AppointmentScheduler constructor.
      */
@@ -210,7 +211,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
              * Initiate Email Client
              */
             $this->setEmailClient();
-
 
 
             /**
@@ -536,6 +536,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         }
         return $result;
     }
+
     /**
      * @param $eventId
      * @param null $month
@@ -886,7 +887,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
 
-
     public function getNextRecordsId($eventId, $projectId)
     {
         $data_table = method_exists('\REDCap', 'getDataTable') ? \REDCap::getDataTable($projectId) : "redcap_data";
@@ -945,7 +945,8 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         $survey_hash,
         $response_id = null,
         $repeat_instance = 1
-    ) {
+    )
+    {
         /*$instances = $this->getInstances();
         $survey = filter_var($_GET['page'], FILTER_SANITIZE_STRING);
         $uri = '';
@@ -1170,7 +1171,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
         // check if the instrument is defined as survey instrument in EM
         $surveyInstruments = $this->getProjectSetting("instrument_id_for_complementary_appointment");
 
-        if (in_array($instrument, $surveyInstruments)) {
+        if (!empty($surveyInstruments) && in_array($instrument, $surveyInstruments)) {
             $this->setInstances();
             $this->setRecordId($record);
             $this->setMainSurveyId($instrument);
@@ -1181,7 +1182,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
             echo '<style>';
             require __DIR__ . '/src/css/types.css';
             echo '</style>';
-
             require __DIR__ . '/src/survey.php';
         }
 
@@ -1292,7 +1292,7 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      */
     public static function isUserHasManagePermission()
     {
-        if (defined('PROJECT_ID') AND (!defined('NOAUTH') || NOAUTH == false)) {
+        if (defined('PROJECT_ID') && (!defined('NOAUTH') || NOAUTH == false)) {
 
             //this function return right for main user when hit it with survey respondent!!!!!
             $right = REDCap::getUserRights();
