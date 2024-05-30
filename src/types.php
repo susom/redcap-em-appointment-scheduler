@@ -108,6 +108,6 @@ require_once 'urls.php';
 
     <!-- LOAD MODALS -->
     <?php
-require_once 'models.php';
+require_once 'modals.php';
 ?>
 <div class="loader"><!-- Place at bottom of page --></div>

@@ -14,7 +14,7 @@ $url = $module->getUrl('src/list.php', false, true, true);
 try {
     require_once 'urls.php';
 
-    require_once 'models.php';
+    require_once 'modals.php';
 
     ?>
     <input type="hidden" value="<?php echo $module->getSlotsEventId() ?>" name="slots-events-id" id="slots-events-id">
