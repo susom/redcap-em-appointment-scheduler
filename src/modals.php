@@ -8,7 +8,7 @@ if (!isset($module)) {
 <!-- Generic Modal -->
 
 <div class="modal " id="generic-modal">
-    <div class="modal-dialog modal-lg modal-sm" style="width 100% !important; max-width: 1250px !important;">
+    <div class="modal-dialog modal-xl modal-sm" >
         <div class="modal-content">
 
             <!-- Modal Header -->
