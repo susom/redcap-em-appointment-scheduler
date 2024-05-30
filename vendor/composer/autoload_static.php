@@ -6,56 +6,56 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
 {
-    public static $files = array(
+    public static $files = array (
         '47b18101462cdeb25f661813113e3182' => __DIR__ . '/..' . '/kigkonsult/icalcreator/autoload.php',
     );
 
-    public static $prefixLengthsPsr4 = array(
-        'T' =>
-            array(
-                'Twilio\\' => 7,
-            ),
-        'P' =>
-            array(
-                'Psr\\Log\\' => 8,
-                'PHPMailer\\PHPMailer\\' => 20,
-            ),
-        'M' =>
-            array(
-                'Monolog\\' => 8,
-            ),
-        'K' =>
-            array(
-                'Kigkonsult\\Icalcreator\\' => 23,
-            ),
+    public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'Twilio\\' => 7,
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
+        ),
+        'K' => 
+        array (
+            'Kigkonsult\\Icalcreator\\' => 23,
+        ),
     );
 
-    public static $prefixDirsPsr4 = array(
-        'Twilio\\' =>
-            array(
-                0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
-            ),
-        'Psr\\Log\\' =>
-            array(
-                0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
-            ),
-        'PHPMailer\\PHPMailer\\' =>
-            array(
-                0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-            ),
-        'Monolog\\' =>
-            array(
-                0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-            ),
-        'Kigkonsult\\Icalcreator\\' =>
-            array(
-                0 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src',
-                1 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src/Util',
-                2 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src/Traits',
-            ),
+    public static $prefixDirsPsr4 = array (
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Kigkonsult\\Icalcreator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src',
+            1 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src/Util',
+            2 => __DIR__ . '/..' . '/kigkonsult/icalcreator/src/Traits',
+        ),
     );
 
-    public static $classMap = array(
+    public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
