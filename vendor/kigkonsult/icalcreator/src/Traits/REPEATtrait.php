@@ -5,7 +5,7 @@
  * This file is a part of iCalcreator.
  *
  * @author    Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
- * @copyright 2007-2021 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
+ * @copyright 2007-2024 Kjell-Inge Gustafsson, kigkonsult AB, All rights reserved
  * @link      https://kigkonsult.se
  * @license   Subject matter of licence is the software iCalcreator.
  *            The above copyright, link, package and version notices,
@@ -29,24 +29,22 @@
 declare( strict_types = 1 );
 namespace Kigkonsult\Icalcreator\Traits;
 
+use Kigkonsult\Icalcreator\Formatter\Property\IntProperty;
+use Kigkonsult\Icalcreator\Pc;
 use Kigkonsult\Icalcreator\Util\StringFactory;
 use Kigkonsult\Icalcreator\Util\Util;
-use Kigkonsult\Icalcreator\Util\ParameterFactory;
-use InvalidArgumentException;
-
-use function is_numeric;
 
 /**
  * REPEAT property functions
  *
- * @since 2.27.3 2018-12-22
+ * @since 2.41.85 2024-01-18
  */
 trait REPEATtrait
 {
     /**
-     * @var array component property REPEAT value
+     * @var null|Pc component property REPEAT value
      */
-    protected $repeat = null;
+    protected ? Pc $repeat = null;
 
     /**
      * Return formatted output for calendar component property repeat
@@ -56,19 +54,12 @@ trait REPEATtrait
     public function createRepeat() : string
     {
         if( empty( $this->repeat )) {
-            return Util::$SP0;
+            return self::$SP0;
         }
-        if( ! isset( $this->repeat[Util::$LCvalue] ) ||
-            ( empty( $this->repeat[Util::$LCvalue] ) &&
-                ! is_numeric( $this->repeat[Util::$LCvalue] ))) {
-            return $this->getConfig( self::ALLOWEMPTY )
-                ? StringFactory::createElement( self::REPEAT )
-                : Util::$SP0;
-        }
-        return StringFactory::createElement(
+        return IntProperty::format(
             self::REPEAT,
-            ParameterFactory::createParams( $this->repeat[Util::$LCparams] ),
-            $this->repeat[Util::$LCvalue]
+            $this->repeat,
+            $this->getConfig( self::ALLOWEMPTY )
         );
     }
 
@@ -87,41 +78,56 @@ trait REPEATtrait
     /**
      * Get calendar component property repeat
      *
-     * @param bool   $inclParam
-     * @return bool|array
-     * @since  2.27.1 - 2018-12-13
+     * @param null|bool   $inclParam
+     * @return bool|int|string|Pc
+     * @since 2.41.85 2024-01-18
      */
-    public function getRepeat( $inclParam = false )
+    public function getRepeat( ? bool $inclParam = false ) : bool | int | string | Pc
     {
         if( empty( $this->repeat )) {
             return false;
         }
-        return ( $inclParam ) ? $this->repeat : $this->repeat[Util::$LCvalue];
+        if( ! $this->repeat->isset()) {
+            $this->repeat->setValue( self::$SP0 );
+        }
+        return $inclParam ? clone $this->repeat : $this->repeat->getValue();
+    }
+
+    /**
+     * Return bool true if set (and ignore empty property)
+     *
+     * @return bool
+     * @since 2.41.88 2024-01-19
+     */
+    public function isRepeatSet() : bool
+    {
+        return self::isIntPropSet( $this->repeat );
     }
 
     /**
      * Set calendar component property repeat
      *
-     * @param string $value
-     * @param array  $params
+     * defines the number of times an alarm should be repeated after its initial trigger.
+     * Default 0 (zero).
+     *
+     * @param null|int|string|Pc $value
+     * @param null|mixed[] $params
      * @return static
-     * @throws InvalidArgumentException
-     * @since 2.27.3 2018-12-22
+     * @since 2.41.85 2024-01-18
      */
-    public function setRepeat( $value = null, $params = [] ) : self
+    public function setRepeat( null|int|string|Pc $value = null, ? array $params = [] ) : static
     {
-        if( empty( $value ) && ( Util::$ZERO != $value )) {
-            $this->assertEmptyValue( $value, self::REPEAT );
-            $value  = Util::$SP0;
-            $params = [];
+        $pc      = Pc::factory( $value, $params );
+        $pcValue = $pc->getValue() ?: null;
+        if(( null === $pcValue ) || ( StringFactory::$SP0 === $pcValue )) {
+            $this->assertEmptyValue( $pcValue, self::REPEAT );
+            $pc->setEmpty();
         }
         else {
-            Util::assertInteger( $value, self::REPEAT );
+            Util::assertInteger( $pcValue, self::REPEAT, 0 );
+            $pc->setValue((int) $pcValue );
         }
-        $this->repeat = [
-            Util::$LCvalue  => $value,
-            Util::$LCparams => ParameterFactory::setParams( $params ?? [] ),
-        ];
+        $this->repeat = $pc;
         return $this;
     }
 }
