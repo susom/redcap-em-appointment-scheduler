@@ -35,7 +35,7 @@ class SMTP
      *
      * @var string
      */
-    const VERSION = '6.7.1';
+    const VERSION = '6.9.1';
 
     /**
      * SMTP line break constant.
@@ -50,6 +50,13 @@ class SMTP
      * @var int
      */
     const DEFAULT_PORT = 25;
+
+    /**
+     * The SMTPs port to use if one is not specified.
+     *
+     * @var int
+     */
+    const DEFAULT_SECURE_PORT = 465;
 
     /**
      * The maximum line length allowed by RFC 5321 section 4.5.3.1.6,
@@ -187,7 +194,20 @@ class SMTP
         'SendGrid' => '/[\d]{3} Ok: queued as (.*)/',
         'CampaignMonitor' => '/[\d]{3} 2.0.0 OK:([a-zA-Z\d]{48})/',
         'Haraka' => '/[\d]{3} Message Queued \((.*)\)/',
+        'ZoneMTA' => '/[\d]{3} Message queued as (.*)/',
         'Mailjet' => '/[\d]{3} OK queued as (.*)/',
+    ];
+
+    /**
+     * Allowed SMTP XCLIENT attributes.
+     * Must be allowed by the SMTP server. EHLO response is not checked.
+     *
+     * @see https://www.postfix.org/XCLIENT_README.html
+     *
+     * @var array
+     */
+    public static $xclient_allowed_attributes = [
+        'NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'
     ];
 
     /**
@@ -247,8 +267,8 @@ class SMTP
     /**
      * Output debugging info via a user-selected method.
      *
-     * @param string $str Debug string to output
-     * @param int $level The debug level of this message; see DEBUG_* constants
+     * @param string $str   Debug string to output
+     * @param int    $level The debug level of this message; see DEBUG_* constants
      *
      * @see SMTP::$Debugoutput
      * @see SMTP::$do_debug
@@ -286,12 +306,12 @@ class SMTP
             case 'echo':
             default:
                 //Normalize line breaks
-            $str = preg_replace('/\r\n|\r/m', "\n", $str);
+                $str = preg_replace('/\r\n|\r/m', "\n", $str);
                 echo gmdate('Y-m-d H:i:s'),
                 "\t",
                     //Trim trailing space
                 trim(
-                //Indent for readability, except for trailing break
+                    //Indent for readability, except for trailing break
                     str_replace(
                         "\n",
                         "\n                   \t                  ",
@@ -305,10 +325,10 @@ class SMTP
     /**
      * Connect to an SMTP server.
      *
-     * @param string $host SMTP server IP or host name
-     * @param int $port The port number to connect to
-     * @param int $timeout How long to wait for the connection to open
-     * @param array $options An array of options for stream_context_create()
+     * @param string $host    SMTP server IP or host name
+     * @param int    $port    The port number to connect to
+     * @param int    $timeout How long to wait for the connection to open
+     * @param array  $options An array of options for stream_context_create()
      *
      * @return bool
      */
@@ -364,10 +384,10 @@ class SMTP
     /**
      * Create connection to the SMTP server.
      *
-     * @param string $host SMTP server IP or host name
-     * @param int $port The port number to connect to
-     * @param int $timeout How long to wait for the connection to open
-     * @param array $options An array of options for stream_context_create()
+     * @param string $host    SMTP server IP or host name
+     * @param int    $port    The port number to connect to
+     * @param int    $timeout How long to wait for the connection to open
+     * @param array  $options An array of options for stream_context_create()
      *
      * @return false|resource
      */
@@ -415,7 +435,7 @@ class SMTP
             $this->setError(
                 'Failed to connect to server',
                 '',
-                (string)$errno,
+                (string) $errno,
                 $errstr
             );
             $this->edebug(
@@ -471,12 +491,14 @@ class SMTP
         );
         restore_error_handler();
 
-        return (bool)$crypto_ok;
+        return (bool) $crypto_ok;
     }
 
     /**
      * Perform SMTP authentication.
      * Must be run after hello().
+     *
+     * @see    hello()
      *
      * @param string $username The user name
      * @param string $password The password
@@ -484,8 +506,6 @@ class SMTP
      * @param OAuthTokenProvider $OAuth An optional OAuthTokenProvider instance for XOAUTH2 authentication
      *
      * @return bool True if successfully authenticated
-     * @see    hello()
-     *
      */
     public function authenticate(
         $username,
@@ -556,18 +576,18 @@ class SMTP
                 if (
                     //Format from https://tools.ietf.org/html/rfc4616#section-2
                     //We skip the first field (it's forgery), so the string starts with a null byte
-                !$this->sendCommand(
-                    'User & Password',
-                    base64_encode("\0" . $username . "\0" . $password),
-                    235
-                )
+                    !$this->sendCommand(
+                        'User & Password',
+                        base64_encode("\0" . $username . "\0" . $password),
+                        235
+                    )
                 ) {
                     return false;
                 }
                 break;
             case 'LOGIN':
                 //Start authentication
-            if (!$this->sendCommand('AUTH', 'AUTH LOGIN', 334)) {
+                if (!$this->sendCommand('AUTH', 'AUTH LOGIN', 334)) {
                     return false;
                 }
                 if (!$this->sendCommand('Username', base64_encode($username), 334)) {
@@ -617,7 +637,7 @@ class SMTP
      * in case that function is not available.
      *
      * @param string $data The data to hash
-     * @param string $key The key to hash with
+     * @param string $key  The key to hash with
      *
      * @return string
      */
@@ -696,7 +716,7 @@ class SMTP
      * Send an SMTP DATA command.
      * Issues a data command and sends the msg_data to the server,
      * finalizing the mail transaction. $msg_data is the message
-     * that is to be send with the headers. Each header needs to be
+     * that is to be sent with the headers. Each header needs to be
      * on a single line followed by a <CRLF> with the message headers
      * and the message body being separated by an additional <CRLF>.
      * Implements RFC 821: DATA <CRLF>.
@@ -724,7 +744,7 @@ class SMTP
         $lines = explode("\n", str_replace(["\r\n", "\r"], "\n", $msg_data));
 
         /* To distinguish between a complete RFC822 message and a plain message body, we check if the first field
-         * of the first line (':' separated) does not contain a space then it _should_ be a header and we will
+         * of the first line (':' separated) does not contain a space then it _should_ be a header, and we will
          * process all lines before a blank line as headers.
          */
 
@@ -818,7 +838,7 @@ class SMTP
      * Low-level implementation used by hello().
      *
      * @param string $hello The HELO string
-     * @param string $host The hostname to say we are
+     * @param string $host  The hostname to say we are
      *
      * @return bool
      *
@@ -930,7 +950,7 @@ class SMTP
      * Implements from RFC 821: RCPT <SP> TO:<forward-path> <CRLF>.
      *
      * @param string $address The address the message is being sent to
-     * @param string $dsn Comma separated list of DSN notifications. NEVER, SUCCESS, FAILURE
+     * @param string $dsn     Comma separated list of DSN notifications. NEVER, SUCCESS, FAILURE
      *                        or DELAY. If you specify NEVER all other notifications are ignored.
      *
      * @return bool
@@ -964,6 +984,25 @@ class SMTP
     }
 
     /**
+     * Send SMTP XCLIENT command to server and check its return code.
+     *
+     * @return bool True on success
+     */
+    public function xclient(array $vars)
+    {
+        $xclient_options = "";
+        foreach ($vars as $key => $value) {
+            if (in_array($key, SMTP::$xclient_allowed_attributes)) {
+                $xclient_options .= " {$key}={$value}";
+            }
+        }
+        if (!$xclient_options) {
+            return true;
+        }
+        return $this->sendCommand('XCLIENT', 'XCLIENT' . $xclient_options, 250);
+    }
+
+    /**
      * Send an SMTP RSET command.
      * Abort any transaction that is currently in progress.
      * Implements RFC 821: RSET <CRLF>.
@@ -978,9 +1017,9 @@ class SMTP
     /**
      * Send a command to an SMTP server and check its return code.
      *
-     * @param string $command The command name - not sent to the server
-     * @param string $commandstring The actual command to send
-     * @param int|array $expect One or more expected integer success codes
+     * @param string    $command       The command name - not sent to the server
+     * @param string    $commandstring The actual command to send
+     * @param int|array $expect        One or more expected integer success codes
      *
      * @return bool True on success
      */
@@ -1003,7 +1042,7 @@ class SMTP
         //Fetch SMTP code and possible error code explanation
         $matches = [];
         if (preg_match('/^([\d]{3})[ -](?:([\d]\\.[\d]\\.[\d]{1,2}) )?/', $this->last_reply, $matches)) {
-            $code = (int)$matches[1];
+            $code = (int) $matches[1];
             $code_ex = (count($matches) > 2 ? $matches[2] : null);
             //Cut off error code from each response line
             $detail = preg_replace(
@@ -1014,14 +1053,14 @@ class SMTP
             );
         } else {
             //Fall back to simple parsing if regex fails
-            $code = (int)substr($this->last_reply, 0, 3);
+            $code = (int) substr($this->last_reply, 0, 3);
             $code_ex = null;
             $detail = substr($this->last_reply, 4);
         }
 
         $this->edebug('SERVER -> CLIENT: ' . $this->last_reply, self::DEBUG_SERVER);
 
-        if (!in_array($code, (array)$expect, true)) {
+        if (!in_array($code, (array) $expect, true)) {
             $this->setError(
                 "$command command failed",
                 $detail,
@@ -1106,7 +1145,7 @@ class SMTP
     /**
      * Send raw data to the server.
      *
-     * @param string $data The data to send
+     * @param string $data    The data to send
      * @param string $command Optionally, the command this is part of, used only for controlling debug output
      *
      * @return int|bool The number of bytes sent to the server or false on error
@@ -1316,9 +1355,9 @@ class SMTP
     /**
      * Set error messages and codes.
      *
-     * @param string $message The error message
-     * @param string $detail Further detail on the error
-     * @param string $smtp_code An associated SMTP error code
+     * @param string $message      The error message
+     * @param string $detail       Further detail on the error
+     * @param string $smtp_code    An associated SMTP error code
      * @param string $smtp_code_ex Extended SMTP code
      */
     protected function setError($message, $detail = '', $smtp_code = '', $smtp_code_ex = '')
@@ -1394,10 +1433,10 @@ class SMTP
     /**
      * Reports an error number and string.
      *
-     * @param int $errno The error number returned by PHP
-     * @param string $errmsg The error message returned by PHP
+     * @param int    $errno   The error number returned by PHP
+     * @param string $errmsg  The error message returned by PHP
      * @param string $errfile The file the error occurred in
-     * @param int $errline The line number the error occurred on
+     * @param int    $errline The line number the error occurred on
      */
     protected function errorHandler($errno, $errmsg, $errfile = '', $errline = 0)
     {
@@ -1405,7 +1444,7 @@ class SMTP
         $this->setError(
             $notice,
             $errmsg,
-            (string)$errno
+            (string) $errno
         );
         $this->edebug(
             "$notice Error #$errno: $errmsg [$errfile line $errline]",
