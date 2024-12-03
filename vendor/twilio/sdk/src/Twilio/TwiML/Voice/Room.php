@@ -11,16 +11,14 @@ namespace Twilio\TwiML\Voice;
 
 use Twilio\TwiML\TwiML;
 
-class Room extends TwiML
-{
+class Room extends TwiML {
     /**
      * Room constructor.
      *
      * @param string $name Room name
      * @param array $attributes Optional attributes
      */
-    public function __construct($name, $attributes = array())
-    {
+    public function __construct($name, $attributes = []) {
         parent::__construct('Room', $name, $attributes);
     }
 
@@ -29,10 +27,8 @@ class Room extends TwiML
      *
      * @param string $participantIdentity Participant identity when connecting to
      *                                    the Room
-     * @return static $this.
      */
-    public function setParticipantIdentity($participantIdentity)
-    {
+    public function setParticipantIdentity($participantIdentity): self {
         return $this->setAttribute('participantIdentity', $participantIdentity);
     }
 }

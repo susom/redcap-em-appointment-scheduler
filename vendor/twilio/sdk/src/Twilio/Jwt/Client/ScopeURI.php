@@ -15,24 +15,21 @@ namespace Twilio\Jwt\Client;
  * For example:
  * scope:client:incoming?name=jonas
  */
-class ScopeURI
-{
+class ScopeURI {
     public $service;
     public $privilege;
     public $params;
 
-    public function __construct($service, $privilege, $params = array())
-    {
+    public function __construct(string $service, string $privilege, array $params = []) {
         $this->service = $service;
         $this->privilege = $privilege;
         $this->params = $params;
     }
 
-    public function toString()
-    {
+    public function toString(): string {
         $uri = "scope:{$this->service}:{$this->privilege}";
         if (\count($this->params)) {
-            $uri .= "?" . \http_build_query($this->params, '', '&');
+            $uri .= '?' . \http_build_query($this->params, '', '&');
         }
         return $uri;
     }
@@ -44,8 +41,7 @@ class ScopeURI
      * @return ScopeURI The parsed scope uri
      * @throws \UnexpectedValueException
      */
-    public static function parse($uri)
-    {
+    public static function parse(string $uri): ScopeURI {
         if (\strpos($uri, 'scope:') !== 0) {
             throw new \UnexpectedValueException(
                 'Not a scope URI according to scheme');
@@ -60,12 +56,12 @@ class ScopeURI
 
         $parts = \explode(':', $parts[0], 2);
 
-        if (\count($parts) != 3) {
+        if (\count($parts) !== 3) {
             throw new \UnexpectedValueException(
                 'Not enough parts for scope URI');
         }
 
-        list($scheme, $service, $privilege) = $parts;
+        [$scheme, $service, $privilege] = $parts;
         return new ScopeURI($service, $privilege, $params);
     }
 }

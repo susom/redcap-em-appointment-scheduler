@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '4777dfa30c5884fa5ae28d5474ff5badcdbeaf63',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '331828c4c53fa8bb66e5ae7fd65811ca49c2c095',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '4777dfa30c5884fa5ae28d5474ff5badcdbeaf63',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '331828c4c53fa8bb66e5ae7fd65811ca49c2c095',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
-            'pretty_version' => 'v6.9.1',
-            'version' => '6.9.1.0',
-            'reference' => '039de174cd9c17a8389754d3b877a2ed22743e18',
+            'pretty_version' => 'v6.9.3',
+            'version' => '6.9.3.0',
+            'reference' => '2f5c94fe7493efc213f643c23b1b1c249d40f47e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
@@ -47,9 +47,9 @@
             'dev_requirement' => false,
         ),
         'twilio/sdk' => array(
-            'pretty_version' => '5.42.2',
-            'version' => '5.42.2.0',
-            'reference' => '0cfcb871b18a9c427dd9e8f0ed7458d43009b48a',
+            'pretty_version' => '8.3.8',
+            'version' => '8.3.8.0',
+            'reference' => 'd05c08d0b9ed017f61ebbc31bc4e5f4d758a0326',
             'type' => 'library',
             'install_path' => __DIR__ . '/../twilio/sdk',
             'aliases' => array(),

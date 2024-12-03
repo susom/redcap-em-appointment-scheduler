@@ -11,15 +11,13 @@ namespace Twilio\TwiML\Voice;
 
 use Twilio\TwiML\TwiML;
 
-class Siprec extends TwiML
-{
+class Siprec extends TwiML {
     /**
      * Siprec constructor.
      *
      * @param array $attributes Optional attributes
      */
-    public function __construct($attributes = array())
-    {
+    public function __construct($attributes = []) {
         parent::__construct('Siprec', null, $attributes);
     }
 
@@ -29,8 +27,7 @@ class Siprec extends TwiML
      * @param array $attributes Optional attributes
      * @return Parameter Child element.
      */
-    public function parameter($attributes = array())
-    {
+    public function parameter($attributes = []): Parameter {
         return $this->nest(new Parameter($attributes));
     }
 
@@ -38,10 +35,8 @@ class Siprec extends TwiML
      * Add Name attribute.
      *
      * @param string $name Friendly name given to SIPREC
-     * @return static $this.
      */
-    public function setName($name)
-    {
+    public function setName($name): self {
         return $this->setAttribute('name', $name);
     }
 
@@ -49,10 +44,8 @@ class Siprec extends TwiML
      * Add ConnectorName attribute.
      *
      * @param string $connectorName Unique name for Connector
-     * @return static $this.
      */
-    public function setConnectorName($connectorName)
-    {
+    public function setConnectorName($connectorName): self {
         return $this->setAttribute('connectorName', $connectorName);
     }
 
@@ -60,10 +53,26 @@ class Siprec extends TwiML
      * Add Track attribute.
      *
      * @param string $track Track to be streamed to remote service
-     * @return static $this.
      */
-    public function setTrack($track)
-    {
+    public function setTrack($track): self {
         return $this->setAttribute('track', $track);
+    }
+
+    /**
+     * Add StatusCallback attribute.
+     *
+     * @param string $statusCallback Status Callback URL
+     */
+    public function setStatusCallback($statusCallback): self {
+        return $this->setAttribute('statusCallback', $statusCallback);
+    }
+
+    /**
+     * Add StatusCallbackMethod attribute.
+     *
+     * @param string $statusCallbackMethod Status Callback URL method
+     */
+    public function setStatusCallbackMethod($statusCallbackMethod): self {
+        return $this->setAttribute('statusCallbackMethod', $statusCallbackMethod);
     }
 }

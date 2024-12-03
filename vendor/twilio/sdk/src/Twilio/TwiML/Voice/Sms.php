@@ -11,16 +11,14 @@ namespace Twilio\TwiML\Voice;
 
 use Twilio\TwiML\TwiML;
 
-class Sms extends TwiML
-{
+class Sms extends TwiML {
     /**
      * Sms constructor.
      *
      * @param string $message Message body
      * @param array $attributes Optional attributes
      */
-    public function __construct($message, $attributes = array())
-    {
+    public function __construct($message, $attributes = []) {
         parent::__construct('Sms', $message, $attributes);
     }
 
@@ -28,10 +26,8 @@ class Sms extends TwiML
      * Add To attribute.
      *
      * @param string $to Number to send message to
-     * @return static $this.
      */
-    public function setTo($to)
-    {
+    public function setTo($to): self {
         return $this->setAttribute('to', $to);
     }
 
@@ -39,10 +35,8 @@ class Sms extends TwiML
      * Add From attribute.
      *
      * @param string $from Number to send message from
-     * @return static $this.
      */
-    public function setFrom($from)
-    {
+    public function setFrom($from): self {
         return $this->setAttribute('from', $from);
     }
 
@@ -50,10 +44,8 @@ class Sms extends TwiML
      * Add Action attribute.
      *
      * @param string $action Action URL
-     * @return static $this.
      */
-    public function setAction($action)
-    {
+    public function setAction($action): self {
         return $this->setAttribute('action', $action);
     }
 
@@ -61,10 +53,8 @@ class Sms extends TwiML
      * Add Method attribute.
      *
      * @param string $method Action URL method
-     * @return static $this.
      */
-    public function setMethod($method)
-    {
+    public function setMethod($method): self {
         return $this->setAttribute('method', $method);
     }
 
@@ -72,10 +62,8 @@ class Sms extends TwiML
      * Add StatusCallback attribute.
      *
      * @param string $statusCallback Status callback URL
-     * @return static $this.
      */
-    public function setStatusCallback($statusCallback)
-    {
+    public function setStatusCallback($statusCallback): self {
         return $this->setAttribute('statusCallback', $statusCallback);
     }
 }
