@@ -11,16 +11,14 @@ namespace Twilio\TwiML\Voice;
 
 use Twilio\TwiML\TwiML;
 
-class SsmlPhoneme extends TwiML
-{
+class SsmlPhoneme extends TwiML {
     /**
      * SsmlPhoneme constructor.
      *
      * @param string $words Words to speak
      * @param array $attributes Optional attributes
      */
-    public function __construct($words, $attributes = array())
-    {
+    public function __construct($words, $attributes = []) {
         parent::__construct('phoneme', $words, $attributes);
     }
 
@@ -28,10 +26,8 @@ class SsmlPhoneme extends TwiML
      * Add Alphabet attribute.
      *
      * @param string $alphabet Specify the phonetic alphabet
-     * @return static $this.
      */
-    public function setAlphabet($alphabet)
-    {
+    public function setAlphabet($alphabet): self {
         return $this->setAttribute('alphabet', $alphabet);
     }
 
@@ -39,10 +35,8 @@ class SsmlPhoneme extends TwiML
      * Add Ph attribute.
      *
      * @param string $ph Specifiy the phonetic symbols for pronunciation
-     * @return static $this.
      */
-    public function setPh($ph)
-    {
+    public function setPh($ph): self {
         return $this->setAttribute('ph', $ph);
     }
 }
