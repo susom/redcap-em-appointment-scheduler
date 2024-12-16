@@ -26,6 +26,8 @@ $noAuth = '';
 if (!defined('USERID') || USERID == '[survey respondent]') {
     $noAuth = '&NOAUTH';
 }
+
+$header  = $module->getProjectSetting("survey-scheduler-header");
 ?>
 
 <!--
@@ -83,7 +85,7 @@ if (!defined('USERID') || USERID == '[survey respondent]') {
 <input type="hidden" id="user-email" value="<?php echo $user_email ?>" class="hidden"/>
 <input type="hidden" id="complementary-suffix" value="<?php echo $module->getSuffix() ?>" class="hidden"/>
 <input type="hidden" id="survey-scheduler-header"
-       value="<?php echo(isset($_GET['pid']) ? end($module->getProjectSetting("survey-scheduler-header")) : '') ?>"
+       value="<?php echo(isset($_GET['pid']) and is_array($header)? end($header) : '') ?>"
        class="hidden"/>
 <input type="hidden" value="<?php echo $module->getReservationEventId() ?>" name="reservation-events-id"
        id="survey-reservation-event-id">
