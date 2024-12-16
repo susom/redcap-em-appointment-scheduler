@@ -11,10 +11,6 @@ class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
     );
 
     public static $prefixLengthsPsr4 = array (
-        'T' => 
-        array (
-            'Twilio\\' => 7,
-        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -27,10 +23,6 @@ class ComposerStaticInit0ca2fe265bd983ef5c7398b78614ba2d
     );
 
     public static $prefixDirsPsr4 = array (
-        'Twilio\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
-        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',

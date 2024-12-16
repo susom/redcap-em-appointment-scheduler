@@ -362,7 +362,7 @@ class CalendarEmail extends Message
             $result = $this->send();
         } catch (\LogicException $e) {
         } catch (\Exception $e) {
-            $e->getMessage();
+            echo $e->getMessage();
         }
     }
 

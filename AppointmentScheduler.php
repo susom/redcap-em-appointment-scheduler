@@ -13,7 +13,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require __DIR__ . '/vendor/autoload.php';
 }
 
-use Twilio\Rest\Client;
+
 
 /**
  * Constants where appointment  is located
@@ -80,7 +80,6 @@ define("DEFAULT_NAME", "REDCap Admin");
  * Class AppointmentScheduler
  * @package Stanford\AppointmentScheduler
  * @property \CalendarEmail $emailClient
- * @property Client $twilioClient
  * @property  array $instances
  * @property int $eventId
  * @property array $eventInstance
@@ -104,11 +103,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
      * @var \CalendarEmail|null
      */
     private $emailClient = null;
-
-    /**
-     * @var Client|null
-     */
-    private $twilioClient = null;
 
     /**
      * @var array of all instances in the project
@@ -181,12 +175,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                  */
                 $this->setInstances();
 
-                // Initiate Twilio Client
-                $sid = $this->getProjectSetting('twilio_sid', $this->getProjectId());
-                $token = $this->getProjectSetting('twilio_token', $this->getProjectId());
-                if ($sid != '' && $token != '') {
-                    $this->setTwilioClient(new Client($sid, $token));
-                }
 
                 $this->setProject(new \Project($this->getProjectId()));
 
@@ -290,21 +278,6 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
     }
 
 
-    /**
-     * @return Client
-     */
-    public function getTwilioClient()
-    {
-        return $this->twilioClient;
-    }
-
-    /**
-     * @param Client $twilioClient
-     */
-    public function setTwilioClient($twilioClient)
-    {
-        $this->twilioClient = $twilioClient;
-    }
 
     /**
      * @return array
@@ -694,51 +667,9 @@ class AppointmentScheduler extends \ExternalModules\AbstractExternalModule
                 true
             );
         }
-        if ($user['mobile'] && $this->getTwilioClient()) {
-            $message = array(
-                'from' => '+' . $instance['phone_number_country_code'] . $instance['twilio_sender_number'],
-                'body' => '--CONFIRMATION-- This message to confirm your appointment at ' . date('m/d/Y',
-                        strtotime($this->calendarParams['calendarDate'])) . ' from ' . date('h:i',
-                        strtotime($this->calendarParams['calendarStartTime'])) . ' to ' . date('h:i',
-                        strtotime($this->calendarParams['calendarEndTime']))
-            );
-            return $this->sendTextMessage($user, $message);
-        }
+
     }
 
-    /**
-     * @param $user
-     * @param $message
-     * @throws \Twilio\Exceptions\TwilioException
-     */
-    private function sendTextMessage($user, $message)
-    {
-        try {
-            $result = $this->twilioClient->messages->create(
-                $user['mobile'],
-                $message
-            );
-            /**
-             * log sent message.
-             */
-            if ($result->errorCode == null) {
-                $this->log('Text message sent to ' . $result->to, array(
-                    'user_id' => UI_ID,
-                    'from' => $result->from,
-                    'to' => $result->to,
-                    'body' => $result->body,
-                    'time' => time()
-                ));
-            } elseif ($result->errorCode) {
-                throw new \Twilio\Exceptions\TwilioException('Cant send message');
-            }
-            return array('status' => 'success', 'message' => 'Message sent successfully');
-        } catch (\LogicException $e) {
-            return array('status' => 'error', 'message' => $e->getMessage());
-        } catch (\Twilio\Exceptions\TwilioException $e) {
-            return array('status' => 'error', 'message' => $e->getMessage());
-        }
-    }
 
     /**
      * send calendar or regular emails

@@ -263,36 +263,6 @@
       ]
     },
     {
-      "key": "twilio_config",
-      "name": "<b>Twilio Config</b>",
-      "required": false,
-      "type": "descriptive"
-    },
-    {
-      "key": "phone_number_country_code",
-      "name": "<b>Country Phone code</b>",
-      "required": false,
-      "type": "text"
-    },
-    {
-      "key": "twilio_sender_number",
-      "name": "<b>Twilio Phone number to send from(Numbers only)</b>",
-      "required": false,
-      "type": "text"
-    },
-    {
-      "key": "twilio_sid",
-      "name": "<b>Twilio SID(You can find it in your Twilio dashboard)</b>",
-      "required": false,
-      "type": "text"
-    },
-    {
-      "key": "twilio_token",
-      "name": "<b>Twilio Token(You can find it in your Twilio dashboard)</b>",
-      "required": false,
-      "type": "text"
-    },
-    {
       "key": "enable-project-debug-logging",
       "name": "<b>Enable Debug Logging</b></h6><i> (Requires emLogger)</i><br>If you have questions enabling debugging, please contact the REDCap team for help.",
       "required": false,
